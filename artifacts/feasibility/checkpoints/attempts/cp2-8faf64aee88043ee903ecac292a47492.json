@@ -1,0 +1,123 @@
+{
+  "status": "AMBER",
+  "batch_id": "3a6c54358f5e4927a7b531f477ba92e1",
+  "planned": 3,
+  "completed_and_verified": 2,
+  "runs": [
+    {
+      "schema_version": 1,
+      "status": "COMPLETED",
+      "mode": "autonomous",
+      "source_sha256": "a6fc22d817f8c11f03c0a149e9caad32c5ec400a3fd8be4af7ebe275bd901379",
+      "browser_version": "Chrome/153.0.8010.52",
+      "child_credentials_absent": true,
+      "agent_status": "done",
+      "actions": 7,
+      "decisions": 8,
+      "actor_elapsed_ms": 5814,
+      "text_entry": "NOT_TESTED",
+      "evidence_complete": true,
+      "budget": {
+        "limit_usd": "0.10",
+        "attempts_this_checkpoint": 8,
+        "accounted_input_tokens_including_history": 222199,
+        "accounted_usd": "0.009332358",
+        "billing": "Published-rate estimate; non-success/unknown requests retain maximum reservation."
+      },
+      "resources_closed": true,
+      "profile_removed": true,
+      "cleanup_retries": 0,
+      "cleanup_events": [],
+      "cleanup_errors": [],
+      "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-3db41fdfdc1a45beab7ae408615330d4",
+      "exit_code": 0,
+      "worker_wall_ms": 19740,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "artifacts_secret_free": true,
+      "passed": true,
+      "timing": {
+        "through_first_report_persistence_ms": 19746
+      }
+    },
+    {
+      "schema_version": 1,
+      "status": "COMPLETED",
+      "mode": "autonomous",
+      "source_sha256": "a6fc22d817f8c11f03c0a149e9caad32c5ec400a3fd8be4af7ebe275bd901379",
+      "browser_version": "Chrome/153.0.8010.52",
+      "child_credentials_absent": true,
+      "agent_status": "done",
+      "actions": 7,
+      "decisions": 8,
+      "actor_elapsed_ms": 5144,
+      "text_entry": "NOT_TESTED",
+      "evidence_complete": true,
+      "budget": {
+        "limit_usd": "0.10",
+        "attempts_this_checkpoint": 8,
+        "accounted_input_tokens_including_history": 235225,
+        "accounted_usd": "0.009879450",
+        "billing": "Published-rate estimate; non-success/unknown requests retain maximum reservation."
+      },
+      "resources_closed": true,
+      "profile_removed": true,
+      "cleanup_retries": 0,
+      "cleanup_events": [],
+      "cleanup_errors": [],
+      "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-1b9d3baa23aa4c0a83c82a8dbae6b813",
+      "exit_code": 0,
+      "worker_wall_ms": 18254,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "artifacts_secret_free": true,
+      "passed": true,
+      "timing": {
+        "through_first_report_persistence_ms": 18282
+      }
+    },
+    {
+      "schema_version": 1,
+      "status": "ERROR",
+      "mode": "autonomous",
+      "source_sha256": "a6fc22d817f8c11f03c0a149e9caad32c5ec400a3fd8be4af7ebe275bd901379",
+      "browser_version": "Chrome/153.0.8010.52",
+      "child_credentials_absent": true,
+      "error": "_IPCResponseTimeout: Emulation.setDeviceMetricsOverride timed out after 15s waiting for the daemon",
+      "resources_closed": true,
+      "profile_removed": true,
+      "cleanup_retries": 0,
+      "cleanup_events": [],
+      "cleanup_errors": [
+        "daemon did not exit: TimeoutExpired: Command '['C:\\\\source\\\\projects\\\\jev-test\\\\.venv\\\\Scripts\\\\python.exe', '-m', 'browser_harness.daemon']' timed out after 5 seconds"
+      ],
+      "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-2609bf7c17a8407ea4b45f506cd38e7b",
+      "exit_code": 1,
+      "worker_wall_ms": 30789,
+      "independent_verifier": {
+        "passed": false,
+        "failures": [
+          "Expected exactly one booking"
+        ],
+        "booking_count": 0
+      },
+      "artifacts_secret_free": true,
+      "passed": false,
+      "timing": {
+        "through_first_report_persistence_ms": 30798
+      }
+    }
+  ],
+  "text_entry": "NOT_TESTED",
+  "source_sha256": "a6fc22d817f8c11f03c0a149e9caad32c5ec400a3fd8be4af7ebe275bd901379",
+  "schema_version": 1,
+  "checkpoint": "cp2",
+  "timestamp": "2026-09-18T11:43:52.643078+00:00",
+  "attempt_id": "8faf64aee88043ee903ecac292a47492"
+}

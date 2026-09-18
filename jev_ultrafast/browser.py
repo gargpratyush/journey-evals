@@ -2,12 +2,15 @@
 
 import hashlib
 import json
+import os
 import sys
 import time
 from pathlib import Path
 
-from browser_harness.admin import ensure_daemon
+from browser_harness.admin import ensure_daemon, require_existing_daemon
 from browser_harness.helpers import cdp
+
+from .feasibility import SLOW_MACHINE_TIMEOUT, VIEWPORT
 
 # Atomically read visible content and controls, preserving actual DOM node identity.
 READ_STATE = Path(__file__).with_name("snapshot.js").read_text()
@@ -18,19 +21,44 @@ class StalePage(ValueError):
 
 
 class Browser:
-    def __init__(self, url):
-        ensure_daemon()
-        self.target = cdp("Target.createTarget", url="about:blank", background=True)["targetId"]
-        self.session = cdp("Target.attachToTarget", targetId=self.target, flatten=True)["sessionId"]
-        self.call("Emulation.setDeviceMetricsOverride", width=1120, height=780, deviceScaleFactor=1, mobile=False)
-        # Keep rAF/menus rendering in an owned background tab, without activating the user's Chrome tab.
-        self.call("Emulation.setFocusEmulationEnabled", enabled=True)
-        self.call("Page.navigate", url=url)
-        deadline = time.monotonic() + 15
-        while time.monotonic() < deadline:
-            if self.evaluate("document.readyState") == "complete":
-                break
-            time.sleep(0.02)
+    def __init__(self, url, *, before_navigate=None, foreground=False):
+        owned = os.environ.get("JEV_OWNED_SESSION") == "1"
+        self.capture_timeout = 15 if foreground or owned else 5
+        if owned:
+            require_existing_daemon()
+        else:
+            ensure_daemon()
+        self.target = cdp("Target.createTarget", url="about:blank", background=not foreground)["targetId"]
+        try:
+            self.session = cdp("Target.attachToTarget", targetId=self.target, flatten=True)["sessionId"]
+            # These are the first frame-dependent calls against a brand-new renderer, so they carry the
+            # startup bound rather than the operational one.
+            self.call("Emulation.setDeviceMetricsOverride", width=VIEWPORT[0], height=VIEWPORT[1],
+                      deviceScaleFactor=1, mobile=False, _response_timeout=SLOW_MACHINE_TIMEOUT)
+            # Keep rAF/menus rendering without activating a normal user's Chrome tab.
+            self.call("Emulation.setFocusEmulationEnabled", enabled=True,
+                      _response_timeout=SLOW_MACHINE_TIMEOUT)
+            if foreground:
+                self.call("Page.bringToFront", _response_timeout=SLOW_MACHINE_TIMEOUT)
+            if before_navigate:
+                before_navigate(self)
+            self.call("Page.navigate", url=url)
+            deadline = time.monotonic() + 15
+            while time.monotonic() < deadline:
+                try:
+                    ready = self.evaluate("({ready:document.readyState,url:location.href})")
+                    if ready and ready["ready"] == "complete" and (
+                        url == "about:blank" or ready["url"] != "about:blank"
+                    ):
+                        break
+                except StalePage:
+                    pass
+                time.sleep(0.02)
+            else:
+                raise TimeoutError("Initial document did not finish loading")
+        except Exception:
+            self.close()
+            raise
 
     def call(self, method, **params):
         return cdp(method, session_id=self.session, **params)
@@ -77,7 +105,8 @@ class Browser:
         for attempt in range(10):
             try:
                 return browser_operation(
-                    {"operation": "observe", "session": self.session, "screenshot": screenshot}
+                    {"operation": "observe", "session": self.session, "screenshot": screenshot,
+                     "capture_timeout": self.capture_timeout}
                 )
             except StalePage:
                 if attempt == 9:
@@ -190,5 +219,8 @@ def browser_operation(request):
         raise StalePage("Document is navigating")
     info["fingerprint"] = fingerprint(info)
     if request.get("screenshot", True):
-        info["screenshot"] = call("Page.captureScreenshot", format="jpeg", quality=72)["data"]
+        info["screenshot"] = call(
+            "Page.captureScreenshot", format="jpeg", quality=72,
+            _response_timeout=request.get("capture_timeout", 5),
+        )["data"]
     return info

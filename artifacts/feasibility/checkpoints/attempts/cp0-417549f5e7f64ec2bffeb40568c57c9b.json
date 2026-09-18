@@ -1,0 +1,30 @@
+{
+  "status": "GREEN",
+  "model": "jev-1.13.0",
+  "upstream_revision": "452c1ad2dd628008f1d5608f28158d76e49e6cc0",
+  "privacy": "Only synthetic text to TypeSafe; keys stay server-side; local artifacts; no production access.",
+  "target_scope": "Owned loopback fixture only; no real transaction endpoints.",
+  "python": "3.12.10",
+  "packages": {
+    "browser-harness": "0.1.13",
+    "httpx": "0.28.1"
+  },
+  "capabilities": {
+    "jev_configured": true,
+    "helper_configured": false,
+    "helper_enabled": false,
+    "vision_enabled": false
+  },
+  "returned_model": "jev-1.13.0",
+  "typed_answers_validated": 2,
+  "budget": {
+    "limit_usd": "0.10",
+    "attempts_this_checkpoint": 1,
+    "accounted_input_tokens_including_history": 43391,
+    "accounted_usd": "0.001822422",
+    "billing": "Published-rate estimate; non-success/unknown requests retain maximum reservation."
+  },
+  "checkpoint": "cp0",
+  "timestamp": "2026-09-18T10:36:57.751941+00:00",
+  "attempt_id": "417549f5e7f64ec2bffeb40568c57c9b"
+}

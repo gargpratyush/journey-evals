@@ -1,0 +1,797 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Jev Eval: feasibility first, framework second</title>
+<style>
+:root {color-scheme:light dark; --wf-ink:CanvasText; --wf-muted:GrayText; --wf-line:GrayText; --wf-paper:Canvas; --wf-card:Canvas; --wf-accent:LinkText;}
+* {box-sizing:border-box} body {margin:0;font:16px/1.65 system-ui,sans-serif;color:CanvasText;background:Canvas}
+main {max-width:1120px;margin:auto;padding:38px 36px 100px}
+h1,h2,h3 {line-height:1.3;scroll-margin-top:24px} h1 {font-size:2.25rem} h2 {margin-top:3rem;padding-top:1rem;border-top:1px solid GrayText}
+table {width:100%;border-collapse:collapse;display:block;overflow:auto;margin:1.4rem 0;font-size:14px}
+th,td {border:1px solid GrayText;padding:10px 12px;text-align:left;vertical-align:top;min-width:125px}
+pre {padding:18px;border:1px solid GrayText;border-radius:6px;overflow:auto;line-height:1.5;font-size:13px}
+code {font-family:ui-monospace,monospace;overflow-wrap:anywhere} pre code {overflow-wrap:normal}
+blockquote {margin:24px 0;padding:8px 22px;border-left:4px solid LinkText}
+a {color:LinkText} .diagram-panel,.diagram-card {border:1px solid GrayText;border-radius:6px}
+.diagram-card p {font-size:14px} details {padding:16px;border:1px solid GrayText;border-radius:6px}
+.notice {color:GrayText;font-size:14px} @media(max-width:700px){main{padding:20px 16px}h1{font-size:1.7rem}}
+@media print{details{display:none}main{max-width:none;padding:0}pre,table{break-inside:avoid}}
+</style></head><body><main>
+<p class="notice">Local reading copy. Canonical structured source: plan.mdx. No remote assets or analytics.</p>
+<details><summary>Contents: 14 sections</summary><ol><li><a href="#section-1">1. What we are trying to prove</a></li><li><a href="#section-2">2. Checkpoint map and the meaning of green</a></li><li><a href="#section-3">3. Checkpoint 0 - access, credentials, and experimental boundaries</a></li><li><a href="#section-4">4. Checkpoint 1 - browser and evidence without AI</a></li><li><a href="#section-5">5. Checkpoint 2 - autonomous clean journey</a></li><li><a href="#section-6">6. Checkpoint 3 - one useful semantic finding, then three checks</a></li><li><a href="#section-7">7. Checkpoint 4 - prove the complete repair loop early</a></li><li><a href="#section-8">8. Checkpoint 5 - repeatability, false positives, and economics</a></li><li><a href="#section-9">9. Checkpoint 6 - transfer to a second application</a></li><li><a href="#section-10">10. Checkpoint 7 - when we start framework design</a></li><li><a href="#section-11">11. What &amp;quot;sure enough&amp;quot; does and does not mean</a></li><li><a href="#section-12">12. Budgets, boundaries, and checkpoint receipts</a></li><li><a href="#section-13">13. Concrete implementation order and reuse</a></li><li><a href="#section-14">14. Sources and current limitations</a></li></ol></details>
+<h1>Jev Eval: feasibility first, framework second</h1>
+<p><strong>Objective:</strong> demonstrate the complete loop on owned test software: <strong>run a user journey, discover a useful defect, preserve evidence, give the report to a coding agent, repair the application, and rerun unchanged checks</strong>. Then establish enough reliability, economic value, and transfer to a second application to justify extracting a reusable framework.</p>
+<p><strong>Current status, 18 September 2026: implementation exists; CP0 through CP4 are GREEN and CP5 is AMBER, all on measured source revisions.</strong> The fixed three-run clean cohort verified 3/3 bookings with no abandoned browser stalls, and CP3's live trio was revalidated on the current runtime without rescoring the exposed holdout. CP4 closed the defect-to-repair loop on two separately constructed defects, each injected as a real application-source edit and repaired on the first of two permitted attempts by a coding agent that was never told what had been injected. The intermittent Chrome stall that previously blocked CP2 was diagnosed to Chrome itself and is now bounded and recorded rather than hidden. <strong>CP5 ran all four arms and did not clear the bar</strong>: held-out quality and collector overhead are GREEN, but the cost advantage is 7.27x against a declared 10x gate, and 7 of 60 live journeys were reported passing while the browser actor had silently abandoned the journey. The demonstrated advantage is latency, 14.0x, not cost and not quality. CP6-7 have not run; CP6's text-entry credential is resolved by reusing the <code>gpt-5.6-luna</code> deployment and now needs only a second application. The campaign uses a cumulative USD 0.40 Jev estimate cap, raised from USD 0.10 on the owner's explicit authorisation, and has spent about USD 0.060 of it. The larger proposed budgets below remain unapproved.</p>
+<p>This is the execution plan to follow before the broader <a href="../jev-eval/plan.html">architecture roadmap</a>. Its checkpoints take precedence over that roadmap's initial phase ordering: a thin repair loop and second-application transfer happen <strong>before framework extraction</strong>, not after building all five evaluator families.</p>
+<p><strong>Yes, we are using <code>jev-ultrafast</code> as the execution runtime.</strong> The initial spike imported the unchanged reference clone. The approved implementation seeded <code>jev-test</code> from the pinned source using WSL Git and now extends its loop, browser adapter, snapshots, and model transport. <code>jev-eval</code> is installed from this owned fork, not the neighboring reference checkout. Section 13 specifies when, where, and how each upstream component participates.</p>
+<h2 id="section-1">1. What we are trying to prove</h2>
+<p>A useful first demonstration is a synthetic flight-booking app. A user searches, selects a fare, chooses a test passenger, and completes a sandbox booking. The booking succeeds, but the fare increases silently during checkout. The runner identifies the measured price change, distinguishes a legitimate disclosure from an unexplained change, and supplies the relevant before/after evidence.</p>
+<p>A coding agent receives that report, fixes the actual application, and reruns the same journey. The clean app is no longer flagged. Restoring the original defect makes it detectable again. A happy-path booking test alone would not have asserted the quality of the disclosure.</p>
+<p><strong>This is a controlled experiment, not a promise to notice every detail of arbitrary applications.</strong> Jev is text-only. The initial evidence is DOM state, events, timing, and screenshots for human inspection. Actual screenshot interpretation requires a separate vision model and is not silently included.</p>
+<blockquote>
+<p><strong>Decision:</strong> Build the smallest working loop first. Use three checks, one local app, one owned browser, and local artifacts. Do not start with a plugin API, generic journey language, dashboard, automatic repair service, or all five evaluator families. Start framework design only after the explicit admission gate in Checkpoint 7.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Hypothesis</th>
+<th>What would support it</th>
+<th>What would falsify or narrow it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>H1: the execution plumbing works</td>
+<td>An isolated browser reaches declared states; a separate verifier confirms the result; failures never become success.</td>
+<td>Unsupported controls, event loss, duplicate mutations, or unreliable reachability dominate the run.</td>
+</tr>
+<tr>
+<td>H2: the observations are sufficient</td>
+<td>Relevant facts and transition timing survive into the report, including partial-evidence markers.</td>
+<td>The evaluator needs information the observation builder never captured.</td>
+</tr>
+<tr>
+<td>H3: Jev adds useful judgment</td>
+<td>It detects a semantic defect and rejects legitimate lookalikes, beyond the frozen deterministic baseline.</td>
+<td>It mostly repeats exact rules, misses the target defects, or flags normal behavior.</td>
+</tr>
+<tr>
+<td>H4: the report enables repair</td>
+<td>An agent repairs the application from the report, without weakening tests or evaluator policy.</td>
+<td>Reports need undocumented explanation, hallucinate evidence, or lead to unrelated repairs.</td>
+</tr>
+<tr>
+<td>H5: the economics are worthwhile</td>
+<td>Matched-quality comparisons show a meaningful cost advantage within an acceptable run time.</td>
+<td>Retries, helper calls, uncertainty, or vision costs remove the advantage.</td>
+</tr>
+<tr>
+<td>H6: the core transfers</td>
+<td>A second app works with journey/test-data bindings rather than rewritten evaluator logic.</td>
+<td>Everything depends on flight-specific prompts, labels, or state extraction.</td>
+</tr>
+</tbody>
+</table>
+<h3>Current implementation receipts</h3>
+<table>
+<thead>
+<tr>
+<th>Gate</th>
+<th>Latest admission state</th>
+<th>Evidence and limits</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CP0</td>
+<td>GREEN</td>
+<td>Pinned <code>jev-1.13.0</code>; two typed answers in one batched request; secret-safe configuration and persistent reservations. <a href="..../artifacts/feasibility/checkpoints/cp0.json">Receipt</a>.</td>
+</tr>
+<tr>
+<td>CP1</td>
+<td>GREEN for its declared checks</td>
+<td>80 offline tests, 21 native guards, ten capture-delay-action-capture rounds, transient events, console/HTTP errors, navigation gaps, profile isolation, and cooperative cancellation. No model calls. <a href="..../artifacts/feasibility/checkpoints/cp1.json">Receipt</a>. This is not a statistical reliability claim.</td>
+</tr>
+<tr>
+<td>CP2</td>
+<td>GREEN, 3/3</td>
+<td>Three exact independently verified bookings in one predeclared cohort; worker wall times 9.5, 17.8 and 17.6 seconds, zero abandoned browser stalls. All profiles/processes cleaned up. <a href="..../artifacts/feasibility/checkpoints/cp2.json">Fixed cohort receipt</a>.</td>
+</tr>
+<tr>
+<td>CP3</td>
+<td>GREEN for its declared scope</td>
+<td>Frozen screening: 9/9 defects detected, 0/9 false positives, 9/9 definitive controls; all six missing-evidence cases UNKNOWN. The live clean/broken/disclosed trio was rerun on the current runtime. Evaluators and holdout were not retuned or rescored. <a href="..../artifacts/feasibility/checkpoints/cp3.json">Current admission receipt</a>.</td>
+</tr>
+<tr>
+<td>CP4</td>
+<td>GREEN, 2/2 targets, one repair attempt each</td>
+<td>Two separately constructed defects injected as real application-source edits, found from journey evidence, repaired by a coding agent that was never told what was injected, then reverified with a paired legitimate control and the byte-identical defect restored. <a href="..../artifacts/feasibility/checkpoints/cp4.json">Receipt</a>.</td>
+</tr>
+<tr>
+<td>CP5</td>
+<td>AMBER</td>
+<td>Four arms on source <code>7c74bb07fea91f5d</code>. A GREEN: Jev 90/90 and baseline 90/90 on an unexposed 90-case corpus, deterministic code 10/90. B AMBER: 59/59 usable live journeys classified correctly with 0 spurious findings, but 7 reported passing while the actor had abandoned the journey. C AMBER: 7.27x cheaper and 14.0x faster, below the declared 10x gate. D GREEN: 4.79 ms per step. <a href="..../artifacts/feasibility/checkpoints/cp5.json">Receipt</a>.</td>
+</tr>
+<tr>
+<td>CP6-7</td>
+<td>NOT RUN</td>
+<td>No second-app transfer or framework admission. The <code>TEXT_MODEL_API_KEY</code> blocker is resolved by reusing the <code>gpt-5.6-luna</code> deployment for the <code>TYPE_TEXT</code> helper; CP6 still needs a second synthetic application.</td>
+</tr>
+</tbody>
+</table>
+<p>The owned runtime uses Python 3.12.10, <code>browser-harness==0.1.13</code>, and Chrome for Testing <strong>153.0.8010.52</strong>. It preserves consumed-once mutations and journals execution before capture. Windows setup now preserves <code>SYSTEMDRIVE</code> without passing inference keys; cleanup stops the actual daemon via its private IPC endpoint and closes Chrome through a browser-root CDP client. Cleanup failures preserve the primary error and produce failed receipts instead of leaving a stale GREEN. This uses the installed CDP library, not a new transport implementation.</p>
+<p>Earlier failed attempts remain under <code>runs</code> and immutable <code>checkpoints\attempts</code>. They include an initial viewport timeout, a Windows-held profile file, a shutdown failure that originally escaped checkpoint receipt writing, and an aborted 60-journey live run whose harness bug is retained under <code>live-aborted-harness-bug</code>. Successful cohorts on earlier source revisions remain historical. The CP1/CP2/CP3/CP4 admission fingerprint is <code>1833d9bdd281e84ac270f52fe3124a033d159a8c75b12a515c52a3b95d01eb19</code>; CP5 ran on <code>7c74bb07fea91f5d047b3385b4b39d5c58cd4078d0bf869a6d8c2951abbec5d6</code>, which differs only in <code>fixture.py</code>, <code>browser_checks.py</code> and <code>feasibility.py</code>. After CP5 closed, the cap raise and the Azure text dialect moved the fingerprint again, to <code>d528f6df8dddc2c12274882f619db3909e75959331671a8c4dfdf8e1f89f7763</code>; CP6 will run on that revision, and no earlier measurement is reattributed to it. The frozen evaluators and screening corpus are byte-identical across all three (<a href="..../artifacts/feasibility/checkpoints/cp1-cp4-revalidation.json">revalidation</a>, <a href="..../artifacts/feasibility/cp4-source-revalidation.json">earlier split</a>).</p>
+<p><strong>Resolved blocker: the intermittent startup stall was in Chrome, not in this code.</strong> Fixed comparisons ruled out the obvious explanations in turn: command ordering (<code>Runtime.enable</code> or navigation first), foreground versus background target creation, launching at a fixed window size, and reusing the daemon's already-warmed tab all still stalled, and reusing the daemon's tab was worse. Chrome's anti-throttling flags reduced stalls from 10/40 to 1/40 in one run but only 5/60 in the next, and that arm crashed the browser, so they were not adopted. Two observations settled it: a stalled request was answered <strong>9.5 seconds late</strong>, and a py-spy stack dump of a wedged daemon showed its event loop <strong>idle and correctly waiting</strong> for a reply Chrome never sent. <a href="..../artifacts/feasibility/raw-cdp-probe-681c4ddab1324df0b0d51931f404857a.json">Ordering and creation-mode</a>, <a href="..../artifacts/feasibility/flags-probe-47e668023f514d2eb99d20ee5c70653e.json">flags</a>, <a href="..../artifacts/feasibility/stall-verdict-aa51802daf614e1a89a689b388939f66.json">late answer</a> and <a href="..../artifacts/feasibility/viewport-fix-d1adb8af5b0a484e9037fc53d9c38a34.json">startup</a> manifests are retained.</p>
+<p><strong>What shipped instead:</strong> startup and shutdown carry a generous 60-second bound, and a browser stall may be retried on a fresh session only while the budget ledger proves byte-for-byte that no inference has occurred, capped at three attempts, with every abandoned attempt recorded in the receipt. A stall after inference begins fails the run outright, and a worker killed for exceeding its wall clock is never retried because its browser could not be verified clean. The admitted CP2 cohort needed no retries. This preserves the rule that no judgement is ever resampled; the declared Playwright transport contingency was therefore not required.</p>
+<p><strong>Next permitted work:</strong> CP6 second-application transfer. The value proposition is restated around latency and journey throughput per the owner's decision on the CP5 AMBER result; the remaining prerequisite is a second synthetic application.</p>
+<p><strong>Cumulative accounting:</strong> 862 successful HTTP requests including the 24-request initial spike, 1,422,283 reported input tokens including history, <strong>USD 0.059735886</strong> at the published rate, against the USD 0.40 cap, leaving USD 0.340264. There are no unresolved billing reservations. This includes exploratory runs and failed-cohort attempts, not just admitted results. Browser time, the separately billed <code>gpt-5.6-luna</code> baseline and text-helper calls, and this coding session are not included in the Jev inference estimate.</p>
+<h3>Initial upstream investigation (historical)</h3>
+<p>The investigation used the public <code>Agent</code> API from the editable installation of the unchanged reference clone at <code>452c1ad2dd628008f1d5608f28158d76e49e6cc0</code>. It ran on Windows with Python 3.12.10, <code>browser-harness==0.1.13</code>, and installed Chrome 153.0.8010.36 in a new, separately owned headless profile. It did <strong>not</strong> run the Google Flights demo or the inspector UI; those are not necessary to exercise the same actor, and the Flights journey needs a separate text helper.</p>
+<p>A loopback-only synthetic app offered native destination/cabin/passenger dropdowns, review, and confirmation. Jev selected each operation and observed target from one natural-language goal; there was no scripted click sequence or hardcoded generated field text. The fake server independently recorded the submitted destination, cabin, passenger, fare, and booking count. Origin/date were fixed by the fixture, not independently validated variable fields. Each attempt used a new tab and reset fake backend within one dedicated browser profile; this is not the fresh-profile-per-run Checkpoint 2 cohort.</p>
+<table>
+<thead>
+<tr>
+<th>Attempt</th>
+<th>Actual result</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Screenshot-enabled clean run</td>
+<td>Initial screenshot succeeded; first post-action screenshot timed out after the harness's 5-second response limit. No booking.</td>
+<td>Retained execution failure, not a successful run.</td>
+</tr>
+<tr>
+<td>Screenshot-enabled faulty run</td>
+<td>Same failure point; no booking.</td>
+<td>Retained execution failure. Screenshot reliability remains unresolved.</td>
+</tr>
+<tr>
+<td>Default screenshot-free clean run</td>
+<td><code>DONE</code>; one matching USD 100 booking; 8 actions, 9 Jev decisions; 4.657 s actor time, 4.737 s including agent setup and tab cleanup.</td>
+<td>A real, narrow autonomous click/select path works.</td>
+</tr>
+<tr>
+<td>Default screenshot-free faulty run</td>
+<td><code>DONE</code>; one matching booking, but USD 120 charged after USD 100 was selected; 7 actions, 8 decisions; 3.743 s actor time, 3.883 s including agent setup and tab cleanup.</td>
+<td>Task completion does not imply good UX or a passing price invariant. Upstream has no disclosure evaluator.</td>
+</tr>
+</tbody>
+</table>
+<p>The actor made three premature review submissions in the clean run and two in the faulty run, despite the prompt's instruction to fill required fields first. It recovered after validation feedback. Both timing measures exclude final independent-verifier calculations and artifact writes; they are descriptive, not a complete-loop speed/reliability benchmark. Screenshot-free operation was an explicit diagnostic change, not evidence that required screenshots can be omitted from Checkpoint 1.</p>
+<p>A separate finite-choice Jev rubric classified the actual faulty checkout text as unexplained, a hand-written explicit-disclosure control as explained, and a vague &quot;prices may vary&quot; control as unexplained. These are <strong>three exposed exploratory cases, not a holdout</strong>. All returned confidence 1.0, which is not evidence of perfect accuracy. The completeness flag came from the controlled fixture/case construction, not an implemented continuous collector. The stored missing-evidence <code>UNKNOWN</code> example illustrates the intended code policy; it is not a validated missing-evidence detector.</p>
+<p>Across both batches, <strong>24 HTTP requests returned 200 using <code>jev-1.13.0</code>, reporting 43,000 input tokens</strong>. At the documented USD 0.042/M input-token rate, this is <strong>USD 0.001806 estimated Jev inference cost</strong>, not an invoice or the total development-loop cost. The cumulative safety cap was 25 attempts, reserving the documented maximum request tokens, or about USD 0.068813 at that rate. No helper, vision, comparator, or repair model was called.</p>
+<p>The persisted <a href="evidence/upstream-smoke.json">investigation receipt</a> links the original attempts, full actor requests/responses, DOM traces, native probes, and diagnostic screenshots under <code>evidence\raw</code>. Raw receipts are local and ignored by Git; no secrets are embedded. The reference checkout remains unchanged.</p>
+<h3>Observed limits versus missing product work</h3>
+<table>
+<thead>
+<tr>
+<th>Surface</th>
+<th>Evidence from this investigation</th>
+<th>What follows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Common DOM controls and safety guards</td>
+<td>31 upstream offline tests and 21 actual-browser guard checks passed. Native dropdowns/clicks completed both screenshot-free tasks.</td>
+<td>Reuse this foundation; do not rewrite it based on speculation.</td>
+</tr>
+<tr>
+<td>Typed field generation</td>
+<td><code>field_text</code> explicitly rejects execution without <code>TEXT_MODEL_API_KEY</code>; only <code>JEV_API_KEY</code> was configured.</td>
+<td>Normal text-entry and Google Flights remain untested. Jev cannot replace the generative helper.</td>
+</tr>
+<tr>
+<td>Transient feedback</td>
+<td>A fixture pulse requested for 30 ms was actually visible for about 58.6 ms in the successful batch; neither endpoint snapshot contained it.</td>
+<td>Install continuous observation before navigation. Do not infer &quot;no loading feedback&quot; from snapshots alone.</td>
+</tr>
+<tr>
+<td>Disabled controls</td>
+<td>Disabled button text was visible, but no executable action represented the button.</td>
+<td>Keep it non-actionable; add a separate evaluation projection with disabled state/geometry.</td>
+</tr>
+<tr>
+<td>Shadow roots, iframes, canvas</td>
+<td>Shadow/frame buttons and canvas-drawn text were absent from the action/text projection.</td>
+<td>Unsupported by this reader, not fundamentally impossible with other browser adapters. Defer or explicitly extend scope.</td>
+</tr>
+<tr>
+<td>Screenshot capture</td>
+<td>Two live attempts failed after initial capture; later no-model captures on simple and exact fixture pages, including an inference-length delay, succeeded.</td>
+<td>Intermittent failure not yet explained. Neither blanket &quot;headless screenshots do not work&quot; nor &quot;fixed by activation&quot; is supported. CP1 needs a repeated capture regression and truthful failure handling.</td>
+</tr>
+<tr>
+<td>Native SELECT fidelity</td>
+<td>Selecting changed the native value, but the resulting change event had <code>isTrusted=false</code>.</td>
+<td>Upstream assigns <code>select.value</code> and dispatches events; it does not drive the OS dropdown. Custom widgets or trust-sensitive handlers need separate support.</td>
+</tr>
+<tr>
+<td>Semantic QA</td>
+<td>An external rubric recognized the silent-fare issue in the captured text; upstream itself returned <code>DONE</code>.</td>
+<td>Add an evaluation pipeline and independent outcome policy. Reusing the actor alone does not build the proposed product.</td>
+</tr>
+<tr>
+<td>Visual judgment and repair</td>
+<td>No visual model or coding-agent repair was exercised. Official Jev docs specify text-only, non-generative behavior.</td>
+<td>Jev cannot directly judge pixels/video or write application patches. DOM-derived facts and a separate coding agent cover different parts of the loop.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Evidence accounting:</strong> the initial spike is exploratory; current checkpoint states are listed above. No protected repair, matched quality/cost comparison, second-app transfer, or framework-admission exercise has run. Keep the spike examples and exposed CP3 corpus out of future scored holdouts.</p>
+<h2 id="section-2">2. Checkpoint map and the meaning of green</h2>
+<table>
+<thead>
+<tr>
+<th>Checkpoint</th>
+<th>Primary question</th>
+<th>Exit evidence</th>
+<th>What it permits</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0. Access and boundaries</td>
+<td>Can we run safely with bounded cost and known capabilities?</td>
+<td>Redacted preflight manifest and one small synthetic API smoke.</td>
+<td>Local implementation experiments.</td>
+</tr>
+<tr>
+<td>1. Instrumented browser</td>
+<td>Can we observe and verify without model dependence?</td>
+<td>Offline/browser contracts, complete or explicitly partial telemetry, isolated cleanup.</td>
+<td>Testing the actor against the fixture.</td>
+</tr>
+<tr>
+<td>2. Autonomous clean journey</td>
+<td>Can the actor complete the intended task?</td>
+<td>Three fresh clean runs and independent booking checks.</td>
+<td>Adding one useful defect detector.</td>
+</tr>
+<tr>
+<td>3. Evidence-backed detection</td>
+<td>Does the evaluator distinguish defects from legitimate behavior?</td>
+<td>Blind positive/negative examples, matching evidence, initial holdout results.</td>
+<td>Attempting the repair loop.</td>
+</tr>
+<tr>
+<td>4. Report-driven repair</td>
+<td>Does the entire code-test-fix-retest loop work?</td>
+<td>Two repair demonstrations with unchanged oracles and restored-defect checks.</td>
+<td>Claiming a narrow end-to-end demonstration.</td>
+</tr>
+<tr>
+<td>5. Repeatability and economics</td>
+<td>Is the loop useful beyond a selected successful run?</td>
+<td>Frozen holdout, live repeat matrix, cost/latency ablation, retained failures.</td>
+<td>A credible single-app feasibility claim.</td>
+</tr>
+<tr>
+<td>6. Second-app transfer</td>
+<td>Is there a reusable core, including normal text entry?</td>
+<td>A frozen-core pilot on a different app with measured results.</td>
+<td>A framework-design review.</td>
+</tr>
+<tr>
+<td>7. Framework admission</td>
+<td>Is a reusable framework now justified?</td>
+<td>All required gates, evidence manifest, explicit limitations, extraction proposal.</td>
+<td>Designing and implementing the small shared framework.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>GREEN:</strong> the predeclared required checks pass and their artifacts exist. This authorizes the next experiment, not production deployment. <strong>AMBER:</strong> a useful partial result, missing capability, unrun comparison, inconclusive evidence, or a failed quantitative gate. Fix or narrow the claim; do not silently promote it. <strong>RED:</strong> invalid experiment, safety/data failure, systematically unusable quality, or no useful semantic contribution.</p>
+<p>Each checkpoint ends with one short receipt: verdict, exact versions, runs/cases attempted, passed/failed/unknown counts, actual and estimated cost, artifact locations, unresolved limitations, and the next permitted action. A missing result is <code>NOT RUN</code>, not green.</p>
+<p>After a failed checkpoint, allow one bounded corrective iteration with a specific hypothesis and new evidence. If the same gate still fails, pause expansion and record a pivot decision. Do not rerun until lucky, change thresholds after seeing holdout results, or discard provider/browser failures.</p>
+<p>For Checkpoints 3, 5, and 6, any scored results used to change extraction, prompts, models, thresholds, retries, or execution policy retire that scoring set from admission use. Keep it for diagnosis/regression; freeze the revised candidate and use a fresh, equivalently constructed holdout or live matrix for the affected gate. Repeating an exposed set is not new admission evidence.</p>
+<h3>Decision boundaries</h3>
+<style>.gate-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+.gate-grid section { padding:16px; }
+.gate-grid h3 { margin:0 0 14px; color:var(--wf-ink); }
+.gate-grid .diagram-card { padding:14px; margin:10px 0; }
+.gate-grid p { color:var(--wf-muted); }
+@media(max-width:720px) { .gate-grid { grid-template-columns:1fr; } }</style>
+<div class="gate-grid">
+  <section class="diagram-panel" data-rough><h3>Technical demonstration</h3><div class="diagram-card"><strong>Checkpoints 0-4</strong><p>One safe, instrumented journey finds a real defect and enables a verified repair.</p></div><p>Allowed claim: this narrow loop works.</p></section>
+  <section class="diagram-panel" data-rough><h3>Framework justification</h3><div class="diagram-card"><strong>Checkpoints 5-7</strong><p>Quality, cost, repeatability, and a second app reveal genuinely shared mechanisms.</p></div><p>Allowed decision: extract the proven core.</p></section>
+  <section class="diagram-panel" data-rough><h3>Production confidence</h3><div class="diagram-card"><strong>Separate later programme</strong><p>Broader holdouts, shadow CI, operational reliability, and risk-specific thresholds.</p></div><p>Not granted by this demonstration.</p></section>
+</div>
+<h2 id="section-3">3. Checkpoint 0 - access, credentials, and experimental boundaries</h2>
+<p><strong>Implement only the minimum preflight.</strong> Reuse the inspected <code>jev-ultrafast</code> revision <code>452c1ad2dd628008f1d5608f28158d76e49e6cc0</code>, its <code>httpx</code> transport, and response validation. Keep <code>C:\source\projects\jev-ultrafast</code> as an unchanged reference. Any Git cloning, initialization, worktree, diff, or commit operations use WSL. No commit or push is implied by executing this plan.</p>
+<p>At execution time, load the local env file without printing values, hashing secrets into public artifacts, copying it into fixtures, or sending it to an agent. The existing runtime expects <code>TYPESAFE_API_KEY</code>; inspect names only if mapping is necessary and map in process rather than rewriting the secret. Add <code>.env</code>, <code>.env.*</code> except the placeholder example, run artifacts, and temporary profiles to ignore rules before any repository staging.</p>
+<p><strong>A Jev key does not necessarily enable text generation.</strong> Upstream's <code>TYPE_TEXT</code> calls require <code>TEXT_MODEL_API_KEY</code> and an appropriate endpoint/model. Never assume the Jev credential is interchangeable. Report the capabilities as separate booleans: Jev available, helper available, vision available. Do not print credential-bearing URLs or raw error bodies.</p>
+<p>To avoid stalling the cheapest first experiment, the initial fixture can use native selections and a pre-provisioned synthetic passenger. That proves click/select navigation, not text entry. The full framework-admission gate later requires a real text-entry journey using a configured helper, unless the user explicitly narrows the product scope. Do not silently hardcode typed answers or change upstream helper behavior to pretend that capability was tested.</p>
+<p>After implementation approval, issue at most three tiny requests containing synthetic state only: validate the configured model/typed response, exercise the intended batched question shape, and record latency/usage. Record the returned versioned model ID, not just a moving alias. Use the same pinned ID in the experiment; capability/price drift forces a documented baseline change.</p>
+<p><strong>Gate:</strong> valid typed responses; a usable model ID; declared privacy boundary; non-secret artifact configuration; explicit helper capability; confirmed cost controls; and a target that is an owned local fixture with no real transaction endpoints. Authentication failure is an access blocker, not evidence against the product.</p>
+<p><strong>Implemented receipt:</strong> <code>artifacts\feasibility\checkpoints\cp0.json</code>, plus its immutable attempt record, with capabilities, versions, and budget accounting. The supplied <code>JEV_API_KEY</code> is mapped to <code>TYPESAFE_API_KEY</code> in process; no helper key is available. This gate passed.</p>
+<p><strong>Effort guide:</strong> a few hours if the environment works. No automatic unlimited setup/debugging.</p>
+<h2 id="section-4">4. Checkpoint 1 - browser and evidence without AI</h2>
+<p>Before judging Jev, prove that the system can measure the facts it will send. Reuse <code>Browser</code>, <code>snapshot.js</code>, <code>browser_operation</code>, and the local checks in <code>scripts\check_guards.py</code>.</p>
+<p>Launch an owned Chrome for Testing process with a fresh non-default profile and loopback endpoint. Configure the pinned harness explicitly before imports. Run only the synthetic app; never attach to a normal signed-in browser. If the pinned transport cannot meet isolation and event requirements after one bounded spike, use Playwright for that transport instead of inventing a CDP library. Record the change and rerun this checkpoint.</p>
+<p>The preliminary run proved the explicit <code>BU_CDP_URL</code> path with installed Chrome and a dedicated <code>BU_NAME</code>/harness home; it did not pin Chrome for Testing or prove profile separation across runs. Add a regression for <strong>initial capture -&gt; inference-length pause -&gt; native action -&gt; post-action capture</strong>, retaining timeouts. Test any proposed activation, timeout, or browser-version change before calling the screenshot issue fixed. Do not silently drop required evidence or retry the already executed action when capture fails.</p>
+<p>Create the smallest fixture: search, a flight choice, a test-passenger choice, checkout, confirmation, and a resettable fake booking store. Keep the independent booking verifier outside the actor's observation. A script may drive this checkpoint through trusted observed controls; label it <strong>scripted instrumentation validation</strong>, not autonomous capability.</p>
+<p>Implement only the first needed evidence:</p>
+<ul>
+<li>Immutable before/action/after states with step and document IDs.</li>
+<li>Action attempt and execution acknowledgement, with no mutation retries after uncertain execution.</li>
+<li>Selected fare and checkout total with currency/fare identity; exact arithmetic in code.</li>
+<li>Input, loading-feedback, and results timestamps; relevant console/network failures.</li>
+<li>Initial, failure, and final screenshots as local evidence, not Jev input.</li>
+<li>Versioned JSON result, an append-only event journal, and a fresh independent booking verification.</li>
+</ul>
+<p>Install collection before navigation. Use one owner for the harness's draining event queue. Export document-scoped events and sequence watermarks through a runtime binding; represent a navigation tail without an acknowledged closing boundary as partial. Never infer absence of feedback across a partial window.</p>
+<p><strong>Required checks:</strong> isolated profiles do not share fixture state; a normal booking creates exactly one matching record; a wrong route/date or missing record fails independently; stale targets do not execute; an ambiguous mutation stops; executed actions survive failed observations; missing mandatory evidence cannot pass; cancellation closes owned resources; secrets do not appear in artifacts.</p>
+<p>Exercise immediate navigation during a simulated slow inference interval. The required result is either retained evidence or an explicit gap, not an impossible promise of perfect unload delivery. Also capture a brief loading indicator that starts and ends between endpoint snapshots; this tests the continuous collector rather than just the final DOM.</p>
+<p><strong>Gate:</strong> every required invariant passes without a paid model call. These are correctness conditions, not percentage targets. Retain the journal and verifier output so the next checkpoint is testing the actor, not hidden plumbing.</p>
+<p><strong>Defer:</strong> full motion profiling, pixel diffs, all-element overlap scans, HTML polish, and generalized observation adapters.</p>
+<p><strong>Effort guide:</strong> 1-2 days, with a shorter timebox for transport selection.</p>
+<h2 id="section-5">5. Checkpoint 2 - autonomous clean journey</h2>
+<p>Enable the existing Jev operation/target policy against the clean fixture. Supply one natural-language task with exact synthetic route/date/passenger facts. The policy must choose controls from observations; no prepared site-specific click sequence, answer extraction from fault flags, or hidden task script.</p>
+<p>For each attempt, reset the fake backend and create a fresh browser profile. Record setup separately from the timed journey, but report end-to-end elapsed time through final artifact persistence too.</p>
+<p>Run <strong>three planned clean attempts</strong>, not &quot;until three passes.&quot; A success requires the correct independent booking record, required checkpoints visited, no uncertain mutation, and no missing required evidence. <code>DONE</code> alone is insufficient.</p>
+<p>Record premature submissions and redundant actions as well as final success: the upstream smoke completed but made several avoidable review clicks. Use a fresh formal batch after the instrumented runner is ready; the earlier screenshot-free run is not one of these three evidence-complete attempts.</p>
+<p><strong>Gate:</strong> all three attempts verify, with no manual rescue, duplicate booking, or fabricated input. This establishes only a first autonomous happy path. A failed attempt is retained, diagnosed, and rerun only as a new declared batch after a specific fix.</p>
+<p>If text-helper credentials are unavailable, this checkpoint may be green only for its declared click/select task; its receipt must say <code>text_entry: NOT_TESTED</code>. Checkpoint 6 cannot silently inherit a broader claim.</p>
+<p><strong>Receipt:</strong> three complete run folders, aggregate completion count, model usage/latency, and independent final outcomes.</p>
+<p><strong>Effort guide:</strong> 0.5-1 day after Checkpoint 1.</p>
+<h2 id="section-6">6. Checkpoint 3 - one useful semantic finding, then three checks</h2>
+<p>Start with <strong>fare-change disclosure</strong>. Code establishes that the selected and checkout fares increased on the same basis. Jev judges only whether the observed message explains the change and clearly asks for acknowledgement. Render a report from evidence and templates; do not ask Jev to generate arbitrary bug descriptions or source locations.</p>
+<p>For increased-fare legitimate cases, independently verify an actual acknowledgement after the relevant disclosure and before booking. A message asking for acknowledgement is not proof that acknowledgement occurred. Keep that event/order check separate from Jev's interpretation of the message; missing required evidence means <code>UNKNOWN</code>.</p>
+<p>Create paired cases:</p>
+<table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Correct behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Same fare throughout</td>
+<td>No price-change finding.</td>
+</tr>
+<tr>
+<td>Increased fare with no explanation</td>
+<td>Evidence-backed candidate defect.</td>
+</tr>
+<tr>
+<td>Increased fare clearly disclosed and acknowledged</td>
+<td>No unexplained-change finding.</td>
+</tr>
+<tr>
+<td>Increased fare disclosed, but booking proceeds without the required acknowledgement</td>
+<td>Not a legitimate control: record the independent acknowledgement-check failure, or <code>UNKNOWN</code> if its required evidence is missing.</td>
+</tr>
+<tr>
+<td>Different currency, passenger count, tax basis, or ambiguous amount association</td>
+<td><code>UNKNOWN</code> or a different explicitly measured fact; do not compare incompatible amounts.</td>
+</tr>
+<tr>
+<td>Missing/partial disclosure observation window</td>
+<td><code>UNKNOWN</code>, not &quot;no disclosure.&quot;</td>
+</tr>
+<tr>
+<td>Page text instructing the evaluator to pass</td>
+<td>Treat as untrusted data; cannot alter policy or the independent verifier.</td>
+</tr>
+</tbody>
+</table>
+<p>Then add two adjacent checks using the same pipeline: <strong>interaction effect observed</strong> and <strong>loading feedback during a delayed response</strong>. The latter depends on Checkpoint 1's timeline; it cannot be substantiated with post-action screenshots alone.</p>
+<p>Faults are injected through a test-side control channel with opaque run identifiers. Do not expose the active fault in task text, URLs, DOM attributes, model requests, or result IDs available to the evaluator. Keep fixture ground truth and labels separate.</p>
+<h3>Small screening corpus</h3>
+<p>Create 36 independently labeled evidence windows: 12 for each of the three checks, evenly split between real defects and clean/legitimate controls. For each check, reserve six windows for development and six for holdout, keeping near-duplicate scenarios together. That gives a screening holdout of nine positives and nine negatives. Add separate missing-evidence cases; they must abstain and are not counted as ordinary clean negatives.</p>
+<p>Freeze extraction, question wording, model ID, and decision thresholds before the holdout. The developer can label fixture cases from their known construction, but the model must not see those labels. If the scored results inform a correction, apply the fresh-holdout rule in Section 2.</p>
+<p><strong>Screening gate:</strong> at least 8/9 held-out defects correctly identified, at most 1/9 false actionable findings on held-out clean controls, at least 8/9 controls receive definitive evaluations supported by complete evidence, and all deliberately missing required-evidence cases abstain. A finding counts only if its category, subject, and evidence match the labeled defect. Unknowns are not correct negatives; report them in the original attempted-case denominators. This tiny gate screens obvious failure; it does not calibrate production confidence.</p>
+<p>Also run a live clean/broken/disclosed-fare trio and inspect the actual report evidence. All three must produce the expected definitive target evaluations with complete required evidence; <code>UNKNOWN</code> does not pass this trio. A frozen-corpus success does not prove the browser reaches or records the right state.</p>
+<p><strong>Important:</strong> semantic findings remain advisory/review-required. Human confirmation of this demonstration's finding permits a repair experiment; it does not promote the general evaluator to a blocking CI rule.</p>
+<p><strong>Receipt:</strong> versioned rubrics, split manifest, confusion counts including unknowns, live trio, and a report with resolvable evidence links.</p>
+<p><strong>Effort guide:</strong> 1-2 days. If the semantic result adds nothing beyond exact rules, stop expanding and revise the product hypothesis.</p>
+<h2 id="section-7">7. Checkpoint 4 - prove the complete repair loop early</h2>
+<p>Run this before completing the five-family product, a CI integration, or a plugin API.</p>
+<p>Use <strong>two separately constructed application defects</strong>, one of which exercises a genuinely semantic judgment such as unexplained fare change. Materialize actual faulty source variants for the repair task; simply switching off a fault-injection flag is not a repair.</p>
+<p>For each defect:</p>
+<ol>
+<li>Freeze and hash the evaluator, journey, independent acceptance checks, and test-side fixture controls. Include a target-specific repair acceptance criterion and its required evidence, covering the user-facing defect rather than booking success alone. Hash non-secret inputs only.</li>
+<li>Capture a reproducible pre-fix finding with evidence. Review its validity before asking an agent to repair it.</li>
+<li>Give a coding agent the task, the report, the permitted application source, and evidence. Do not add an undocumented diagnosis or reveal the injected-fault answer.</li>
+<li>Permit at most two repair attempts. The agent may change application implementation, not the oracle, evaluator, budgets, ground-truth labels, or fault-selection infrastructure.</li>
+<li>Rerun the unchanged journey and clean/legitimate controls from reset state. Independently check post-fix evidence against the frozen target-specific acceptance criterion; documented human review is sufficient here. Where required, confirm actual acknowledgement after disclosure and before booking.</li>
+<li>Restore the exact original defect in a separate disposable application copy and show that the unchanged evaluator catches it again.</li>
+</ol>
+<p>This can be orchestrated through the current coding-agent session or a small documented invocation. Do not build unattended <code>--fix</code>, a vendor-specific multi-agent service, or GitHub integration to prove it. Use a separate worktree/copy where necessary, preserve user changes, and perform Git operations through WSL. No automatic commit/push.</p>
+<p><strong>Gate:</strong> both defects produce valid pre-fix evidence, both are repaired within the bound without changing protected test inputs, both post-fix journeys independently verify, both target-specific repair criteria independently pass, paired legitimate controls receive definitive clean evaluations, and both restored defects reproduce. Save patches and hashes so an external reader can audit the claim.</p>
+<p>For the semantic defect, a post-fix report may still honestly say <code>WARN</code> for unrelated advisory findings. The gate requires a definitive clean target evaluation plus independent confirmation of the repair, not disappearance of every warning. A target <code>UNKNOWN</code>, missing evidence, or mere absence of the original finding never counts as resolution.</p>
+<p><strong>Receipt:</strong> paired before/after/restored run IDs, application patch, protected-input hashes, frozen target-specific acceptance criterion and independent post-fix review, evidence used by the agent, repair attempts, and measured cost/time.</p>
+<h3>Implemented result: CP4 GREEN, 2/2 targets</h3>
+<p>The application under test was first separated from the harness so a defect could be a real source edit rather than a runtime flag. <code>jev_ultrafast/app/booking.html</code> and <code>jev_ultrafast/app/pricing.py</code> are now the entire application; the oracle, evaluators, journey and fixture controls live outside it and are hashed before the repair task is handed over. <code>repair-prepare</code> copies that source into <code>artifacts\feasibility\repair\&lt;target&gt;-&lt;case-id&gt;\app</code>, edits it, keeps the byte-identical injected copy as <code>as-injected</code>, and writes <code>freeze.json</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Target</th>
+<th>Injected source defect</th>
+<th>Pre-fix finding</th>
+<th>Repair the agent made</th>
+<th>Verification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fare-surcharge</code> (semantic)</td>
+<td>an undisclosed peak surcharge added in <code>pricing.py</code></td>
+<td><code>fare</code> defect, confidence 0.99</td>
+<td>deleted the surcharge so checkout charges the selected fare</td>
+<td>post-fix clean; disclosed-and-acknowledged control clean at confidence 1.0; restored defect caught again at 0.99</td>
+</tr>
+<tr>
+<td><code>silent-confirmation</code> (user-facing)</td>
+<td><code>booking.html</code> built the confirmation markup but never rendered it</td>
+<td><code>effect</code> defect, confidence 0.95</td>
+<td>rendered the confirmation after the booking succeeds</td>
+<td>post-fix clean at 0.97; pristine control clean; restored defect caught again at 0.95</td>
+</tr>
+</tbody>
+</table>
+<p>Both defects were chosen so the booking itself still succeeded: the independent verifier <strong>passed before the repair in both cases</strong>, and the actor reported <code>done</code> in both cases. Only the evaluator caught the user-facing problem, which is exactly the &quot;covering the user-facing defect rather than booking success alone&quot; requirement.</p>
+<p>Establishing &quot;the declared response deadline elapsed&quot; required a real measurement rather than an assumption, so the journey now takes one deliberate settle observation 1200 ms after the last action; the confirm-to-evidence interval was 103 ms before that change, which cannot distinguish a missing effect from a pending one.</p>
+<p>Each repair was performed by a coding sub-agent in its own context, given only the brief, the journey evidence and the two application files, and told not to read the harness. It was never told which fault was injected; both diagnosed it correctly and unaided. Both passed on the <strong>first</strong> of the two permitted attempts. After each repair, <code>repair-verify</code> reconfirmed that every protected input hash and the whole source fingerprint were unchanged, that only application files differed, and stored the unified diff.</p>
+<p>CP4 used <strong>63 Jev requests, 96,048 accounted tokens, about USD 0.004</strong> at the documented rate, and 28.5 s of total inference latency across 8 live journeys. Cumulative campaign spend is about <strong>USD 0.021</strong> of the USD 0.10 cap.</p>
+<p><strong>Limits.</strong> This is two defects in one small synthetic application, both repaired on the first attempt. It demonstrates that the loop closes; it is not evidence of repair reliability, of difficulty coverage, or of behaviour on defects whose repair is ambiguous. The instruction not to read the harness was not technically enforced, only instructed and then checked by hashes after the fact.</p>
+<p><strong>What we can now say:</strong> a narrow end-to-end code-test-fix-retest loop has been demonstrated, on two defects in one synthetic application. We still cannot claim a generally reliable framework.</p>
+<p><strong>Effort guide:</strong> 0.5-1.5 days after detection works.</p>
+<h2 id="section-8">8. Checkpoint 5 - repeatability, false positives, and economics</h2>
+<p>No public 10x claim or framework investment based on a selected video. Freeze the candidate and run two complementary evaluations.</p>
+<h3>A. Frozen observation holdout</h3>
+<p>Build a <strong>new holdout of 90 labeled evidence windows</strong>: 30 per check, including 15 defects and 15 clean/legitimate cases per check. Do not reuse Checkpoint 3's development or exposed holdout cases. Vary copy, component layout, legitimate feedback, and relevant amounts/timing. Add at least 12 missing/partial-evidence cases outside the 90. Once these results inform candidate changes, retire this set and score a fresh holdout under Section 2's rule.</p>
+<p><strong>Provisional investment gates:</strong> at least 12/15 true defects detected per check; at most two false actionable findings across the 45 controls and at most one per check; at least 90% precision among actionable semantic findings; at least 80% decision coverage on complete-evidence cases, including at least 12/15 definitive control evaluations per check; all deliberately missing required-evidence cases abstain.</p>
+<p>Report every denominator. Unknowns on known positive cases count as missed detections; unknowns on negatives are reported as abstentions, not correct negatives. Coverage and recall prevent a model that abstains on everything from looking accurate.</p>
+<p>These are project investment thresholds, not claims that model confidence values are calibrated to them.</p>
+<h3>B. Live runs</h3>
+<p>Run <strong>60 planned journeys</strong>: ten fault-injected and ten paired clean/legitimate runs for each of the three checks. Randomize their order, reset browser/backend state, vary predeclared fixture inputs and timing, and retain every attempt.</p>
+<p><strong>Gate:</strong> at least 27/30 clean journeys independently complete; at least 8/10 target defects detected per check; at most two clean runs out of 30 receive a spurious actionable finding, with at most one in each ten-run control group; at least 8/10 planned controls per check receive definitive target evaluations supported by complete evidence; and no false <code>PASS</code> where a declared acceptance condition actually failed.</p>
+<p>Failure to reach a defect is a missed end-to-end detection plus an execution/coverage failure, not a removed sample. Browser/provider outages remain visible. Control unknowns and execution failures remain in the ten-attempt control denominators, not counted as correct negatives. Record complete results separately from the all-attempt rates so reliability and evaluator quality are not conflated.</p>
+<h3>C. Matched baselines and cost accounting</h3>
+<p>Use the same frozen evidence and held-out labels for:</p>
+<table>
+<thead>
+<tr>
+<th>Arm</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Frozen deterministic checks alone</td>
+<td>Show what requires no model.</td>
+</tr>
+<tr>
+<td>The same checks plus Jev</td>
+<td>Measure incremental semantic value and total overhead.</td>
+</tr>
+<tr>
+<td>The same checks plus one conventional structured-output text LLM</td>
+<td>Compare equivalent semantic work at measured quality and coverage. Requires its own authorized provider access.</td>
+</tr>
+</tbody>
+</table>
+<p>Before scoring, predeclare a representative, cost-conscious conventional text model from the authorized providers and document the selection rationale. Choose its model version, prompt, batching, and retry policy using development cases only; freeze both arms before opening the scoring holdout. Do not choose an expensive comparator after seeing the results. A changed arm requires fresh admission data under Section 2's rule.</p>
+<p>Batch the conventional LLM's questions fairly; do not compare one Jev batch against deliberately unbatched LLM calls. Use each provider's supported request shape and record its actual version, token usage, retries, and pricing. Do not compare text-only Jev against a vision model performing extra work.</p>
+<p><strong>Semantic value gate:</strong> at least one useful semantic defect category meets the quality gates and detects held-out cases the frozen exact-rule baseline does not, without exceeding the false-alarm budget. This demonstrates practical value for these rubrics, not an assertion that no deterministic program could ever implement them.</p>
+<p><strong>Economic gate for the Jev-centered framework:</strong> target at least <strong>10x lower semantic-inference cost per correctly resolved complete-evidence case</strong> than the matched text-LLM baseline, with precision and recall no more than five percentage points worse and decision coverage no more than five points lower. Both arms must meet the quality floor. Show raw cost, correctly resolved count, false findings, and abstentions beside the ratio. Attribute the measured advantage to this named comparator/version and workload, not to conventional LLMs in general.</p>
+<p>If the comparator cannot meet the quality floor, the 10x comparison is inconclusive rather than a Jev victory. If no baseline credential is available, mark economics <code>NOT RUN</code>; do not replace measured comparison with advertised token-price ratios.</p>
+<p>Also report total journey cost including actor, helper, retries, repair calls, and browser time. A 10x improvement in the inexpensive evaluator alone is not a 10x reduction in the complete development loop.</p>
+<h3>D. Latency and collector overhead</h3>
+<p>Provisional target for this small fixture: at least 95% of planned live journeys terminate with a persisted result within a 90-second run budget; failures remain failures even if they terminate quickly. Track provider/runner errors, not just elapsed time.</p>
+<p>For collector overhead, run ten matched scripted pairs with instrumentation off/on in randomized order, without model calls. Report native interaction times and collector CPU/elapsed work. Investigate a median slowdown greater than 10% or 20 ms per scripted step, whichever tolerance is larger. This is a diagnostic gate on this fixture, not a browser-wide performance guarantee.</p>
+<p>For evaluation overhead, report the added model/capture wall time separately; if median overhead exceeds 25% of the actor-only journey, try batched next-decision evaluation only after validating equivalence. Freeze the revised loop, retain exposed cases as regressions, and score affected admission comparisons on fresh cases under Section 2's rule.</p>
+<p><strong>Checkpoint gate:</strong> quality and live-repeatability requirements pass; the semantic contribution is demonstrable; economics are measured; latency fits the declared budget. Below-10x but otherwise useful results are AMBER and require an explicit investment/pivot decision, not automatic framework admission.</p>
+<p><strong>Effort guide:</strong> 1-3 days for cases, runs, and analysis, excluding open-ended prompt tuning.</p>
+<h3>Measured result: CP5 AMBER</h3>
+<p>All four arms ran on source revision <code>7c74bb07fea91f5d</code>. Receipt: <code>artifacts/feasibility/checkpoints/cp5.json</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Arm</th>
+<th>Status</th>
+<th>Measured</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A, held-out quality</td>
+<td>GREEN</td>
+<td>Jev 90/90, <code>gpt-5.6-luna</code> 90/90, deterministic code alone 10/90, over two independent runs</td>
+</tr>
+<tr>
+<td>B, live repeatability</td>
+<td>AMBER</td>
+<td>59/59 usable journeys classified correctly, 0 spurious findings, 1 runner error in 60; the <code>no_false_pass</code> gate failed on 7 journeys</td>
+</tr>
+<tr>
+<td>C, economics</td>
+<td>AMBER</td>
+<td>7.27x cheaper and 14.0x faster per correctly resolved case; the declared 10x gate is not met</td>
+</tr>
+<tr>
+<td>D, collector overhead</td>
+<td>GREEN</td>
+<td>4.79 ms per step and 20.09% median slowdown over 9 usable pairs, inside the larger tolerance</td>
+</tr>
+</tbody>
+</table>
+<p>Arm A saturated: both model arms scored 100%, so the corpus bounds quality from below but cannot rank the two. Arm C is an estimate from reported usage at two published/authorised rates, not an invoice, and is attributable to this comparator, version and workload only.</p>
+<p><strong>Why arm B is AMBER.</strong> All seven failures are the same case, and the separation is total. Of the ten loading controls, the seven whose search took longer than 1.2 s produced 0 bookings; the three that answered in under 0.25 s produced 3. In each of the seven, the loading check correctly returned <code>clean</code> while the actor had silently abandoned the journey, so the run would have been reported as passing while the user goal was never reached. Jev classified all seven correctly; the fault is in the browser actor, which gives up on a page that takes about a second to respond even when that page shows visible progress feedback. The runs were retained as measured and the delay range was not lowered to make the gate pass.</p>
+<p><strong>Consequence for the framework.</strong> Journey completion must be gated and reported separately from the check verdict, because a green check does not mean the journey succeeded. Any framework built on this actor must also either tolerate or fix the sub-two-second abandonment behaviour, since real applications routinely take that long.</p>
+<p><strong>Decision this forces.</strong> The demonstrated advantage on this workload is latency, not cost and not quality. Under the AMBER clause above, CP5 does not admit the framework automatically. Proceeding to CP6 and CP7 requires an explicit decision to restate the value proposition around latency and journey throughput, or to pivot.</p>
+<p><strong>Invariants rechecked.</strong> The frozen evaluators and screening corpus are byte-identical to their CP4 hashes, no worker held parent credentials across 162 runs, and no key material appears in source or receipts. One worker in 162 could not delete its own profile because Windows held a lock on its log; the orphan was verified and removed, and the failure is recorded rather than suppressed. Receipt: <code>artifacts/feasibility/checkpoints/cp1-cp4-revalidation.json</code>.</p>
+<p><strong>Cumulative spend.</strong> USD 0.0597 at the time CP5 closed. The cap was then raised from USD 0.10 to USD 0.40 on the owner's authorisation, leaving USD 0.3403 for CP6 and CP7.</p>
+<p><strong>CP6 unblocked.</strong> The <code>TEXT_MODEL_API_KEY</code> blocker is resolved: the <code>gpt-5.6-luna</code> Azure deployment already used by the CP5 baseline arm also drives the <code>TYPE_TEXT</code> helper. This required a dialect fix, because Azure's v1 chat/completions surface rejects both <code>max_tokens</code> and the OpenRouter-style <code>reasoning</code> object, requiring <code>max_completion_tokens</code> and <code>reasoning_effort</code>. Verified live: the helper produced <code>Zurich</code> and <code>London</code> for the departure and destination fields, and correctly produced nothing for a passenger name the goal does not determine. A second synthetic application is still required.</p>
+<h2 id="section-9">9. Checkpoint 6 - transfer to a second application</h2>
+<p>Use a small, differently structured <strong>subscription/signup app</strong> as the default second pilot, or an owned app with equivalent resettable synthetic data. Exercise plan selection, ordinary text entry, validation, subscription confirmation, and a clearly disclosed versus unexplained price change.</p>
+<p>This must not be the same flight page with different labels. Change component organization and data flow. Reuse the same detector logic and event/observation contracts. A new journey, trusted test-data bindings, and independent app-specific verifier are expected; arbitrary zero-configuration discovery is not the gate.</p>
+<p><strong>Credential dependency:</strong> configure a supported text helper for this checkpoint. It must generate appropriate field values from supplied synthetic facts under the existing strict JSON contract. If only the Jev key is available, the click/select experiment may continue earlier, but text-entry and framework admission remain incomplete. No vision key is required for the scoped product.</p>
+<p>Freeze the core before the first scored pilot. Run <strong>20 declared cases: ten defects and ten clean/legitimate controls</strong>, spanning the supported checks. Maintain holdout isolation from prior tuning.</p>
+<p><strong>Gate:</strong> at least 8/10 defects detected with matching evidence, at most 1/10 false actionable findings on controls, at least 9/10 clean journeys independently completed, at least 8/10 planned controls receive definitive target evaluations supported by complete evidence, and no unsupported requirement misreported as covered. Unknowns and execution failures remain in the original denominators, not counted as correct negatives. Record actual setup/binding time and any core change.</p>
+<p>First try adaptation through journey/test-data/verifier configuration only. If a general extraction bug demands a core fix, document it, rerun the flight regression matrix, and score a fresh second-app holdout. Do not call a specially rewritten evaluator a successful transfer.</p>
+<p>The evidence should reveal which pieces really repeat: observation envelope, event collection, evaluator request/response handling, outcome policy, and reports. Domain acceptance rules remain application-owned.</p>
+<p><strong>Receipt:</strong> second-app run matrix, configuration diff, setup effort, core changes if any, helper model identity, and first-app non-regression evidence.</p>
+<p><strong>Effort guide:</strong> 1-2 days for an intentionally small pilot, longer for an unfamiliar real application.</p>
+<h2 id="section-10">10. Checkpoint 7 - when we start framework design</h2>
+<p>We can never be certain a probabilistic tester will find all defects. The decision here is narrower: <strong>is there enough reproducible evidence to invest in a reusable core?</strong></p>
+<h3>Framework admission checklist</h3>
+<ul>
+<li>[ ] Checkpoints 0-2: bounded inference, isolated browser, native input, and independently verified clean journeys</li>
+<li>[ ] Checkpoint 3: useful semantic finding with legitimate lookalikes rejected and missing evidence handled honestly</li>
+<li>[ ] Checkpoint 4: two audited repairs with frozen defect-specific acceptance, independent post-fix confirmation, unchanged oracles, and restored-defect reproduction</li>
+<li>[ ] Checkpoint 5: held-out quality, live repeatability, measured cost advantage, and latency/overhead gates</li>
+<li>[ ] Checkpoint 6: second-application transfer, real text entry, and first-app regression evidence</li>
+<li>[ ] Every gate has persisted artifacts, versions, denominators, failed attempts, and an explicit verdict</li>
+</ul>
+<p><strong>All required items green:</strong> move to a short framework-design pass. Extract only mechanisms used by both applications. Define the smallest stable <code>Observation</code>, <code>Evaluation</code>, <code>RunResult</code>, and trusted <code>JourneySpec</code> contracts from actual artifacts; separate domain verifiers; keep one browser transport and Jev backend unless demonstrated needs require another.</p>
+<p><strong>Loop works but economics or transfer is amber:</strong> keep a local experimental CLI. Resolve that specific uncertainty before committing to a general framework. The user can explicitly choose a different value proposition or a lower economic bar; record the changed decision rather than declaring the original hypothesis proved.</p>
+<p><strong>Semantic judgment remains noisy or unnecessary:</strong> retain useful deterministic instrumentation if valuable, but do not ship a Jev-centered framework solely because the API is cheap.</p>
+<p><strong>Actor fails while evaluation succeeds:</strong> pivot to evaluation of existing Playwright journeys, then rerun the end-to-end and transfer gates for that product. State plainly that autonomous journey execution is no longer proved.</p>
+<h3>The first framework design deliverable</h3>
+<p>Produce a concise extraction proposal grounded in the two implementations: shared files/functions, app-specific adapters, public artifact/schema compatibility, evaluator contribution format with positive/negative cases, offline tests, and a local CLI. Only then resume the broader roadmap's five-family alpha and CI phases.</p>
+<p>Defer plugin marketplaces, provider factories, distributed execution, dashboard/cloud storage, voice, mobile, and unattended repair until an actual user/workload establishes the need.</p>
+<h2 id="section-11">11. What &quot;sure enough&quot; does and does not mean</h2>
+<table>
+<thead>
+<tr>
+<th>Evidence achieved</th>
+<th>Defensible conclusion</th>
+<th>Still not established</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Checkpoint 2</td>
+<td>One supported autonomous happy path works.</td>
+<td>Useful bug discovery or general reliability.</td>
+</tr>
+<tr>
+<td>Checkpoint 4</td>
+<td>The narrow evaluation-report-repair-rerun loop works.</td>
+<td>Stable precision, savings, or portability.</td>
+</tr>
+<tr>
+<td>Checkpoints 5-6</td>
+<td>The tested checks have measured quality/economics and transfer to a second app.</td>
+<td>Arbitrary applications, arbitrary visuals, or production merge gating.</td>
+</tr>
+<tr>
+<td>Checkpoint 7</td>
+<td>A small reusable framework is a justified engineering investment.</td>
+<td>Comprehensive QA coverage or a guaranteed business.</td>
+</tr>
+</tbody>
+</table>
+<p>Thirty clean runs without a false alarm still do not prove a tiny false-positive rate. Under an independence assumption, the rough &quot;rule of three&quot; upper 95% bound after zero observed events is about <code>3 / n</code>; even 100 independent clean cases only suggests a bound around 3%. Repeated states from one app are correlated, so apparent sample size can overstate confidence.</p>
+<p>After framework extraction, blocking CI requires a separate programme: diverse application holdouts, human-reviewed labels, version-specific calibration, shadow runs, drift monitoring, and a product-owner-approved false-positive/false-negative tradeoff. Semantic checks remain advisory until they earn that role.</p>
+<h2 id="section-12">12. Budgets, boundaries, and checkpoint receipts</h2>
+<h3>Current execution boundary and proposed later limits</h3>
+<p>The implemented campaign enforces a <strong>cumulative USD 0.40 Jev cap</strong>, including the imported 43,000 spike tokens. It was raised from USD 0.10 after CP0-CP5 consumed USD 0.0597, on the owner's explicit authorisation; the ledger refuses implicit cap changes, so the raise is recorded in <a href="..../artifacts/feasibility/cap-raise-0.10-to-0.40.json">cap-raise-0.10-to-0.40.json</a> with the pre-change ledger preserved. No attempt record was edited, so earlier receipts keep their original denominators. A second provider is now enabled for CP6: the <code>gpt-5.6-luna</code> deployment already used by the CP5 baseline arm also serves the <code>TYPE_TEXT</code> helper, and is billed separately from the Jev cap. The USD 5 amounts below remain proposals for a later campaign, not current authorization.</p>
+<table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>Proposed starting bound</th>
+<th>Behavior at the bound</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CP0 API smoke</td>
+<td>At most three tiny synthetic Jev requests</td>
+<td>Stop and inspect; no automatic diagnostic loop.</td>
+</tr>
+<tr>
+<td>One browser journey</td>
+<td>60 actions, 120 total Jev HTTP attempts across actor/evaluator/retries, 90 seconds</td>
+<td>Finalize as incomplete/error as appropriate; never convert exhaustion into pass.</td>
+</tr>
+<tr>
+<td>Concurrency</td>
+<td>One owned browser journey; one model batch at a time initially</td>
+<td>No factories, fleets, or distributed queues.</td>
+</tr>
+<tr>
+<td>Jev experiment spending</td>
+<td>Proposed cumulative cap of USD 5</td>
+<td>Stop before reserving another request that would exceed the estimate. Confirm the cap before live execution.</td>
+</tr>
+<tr>
+<td>Helper, comparison, and repair inference</td>
+<td>Separate proposed combined cap of USD 5 when API costs are observable</td>
+<td>Confirm provider/access/prices before enabling. Existing coding-agent subscription usage is separately disclosed, not misreported as free.</td>
+</tr>
+<tr>
+<td>Repair loop</td>
+<td>At most two attempts per defect</td>
+<td>Keep the failed result; stop for diagnosis.</td>
+</tr>
+<tr>
+<td>Artifact scope</td>
+<td>Only this run's synthetic evidence and owned temporary profile</td>
+<td>No automatic uploads, broad directory deletion, or personal-profile capture.</td>
+</tr>
+</tbody>
+</table>
+<p>The proposed spending values are not pricing predictions. The initial investigation's USD 0.001806 estimate is already included in <code>budget.json</code>; it is not an extra allowance. Each HTTP attempt reserves 65,536 input tokens before sending and reconciles valid provider usage afterward; ambiguous billing retains the reservation. The existing ledger rejects implicit cap changes. Expanding the cap or adding another provider requires explicit authorization.</p>
+<p>Application data stays synthetic for these checkpoints. Provider keys never enter the browser, report, screenshots, prompts, journal, shell command arguments, or source control. Keep raw provider error bodies out of artifacts. Exact cost measurements must not require logging credentials.</p>
+<h3>Persistent experiment layout</h3>
+<p>Implemented artifacts are:</p>
+<pre><code class="language-text">artifacts\feasibility\
+  budget.json
+  checkpoints\cp0.json ... cp3.json
+  checkpoints\attempts\&lt;checkpoint&gt;-&lt;attempt-id&gt;.json
+  cohorts\cp2-&lt;batch-id&gt;.json
+  runs\&lt;run-id&gt;\report.json
+  runs\&lt;run-id&gt;\events.jsonl
+  runs\&lt;run-id&gt;\worker.json
+  runs\&lt;run-id&gt;\evidence\
+  screening\&lt;screening-id&gt;\report.json
+  screening\&lt;screening-id&gt;\report.html
+</code></pre>
+<p>Worker-only diagnostic runs need not contain an autonomous report. CP4 repair cases are stored under <code>repair\&lt;target&gt;-&lt;case-id&gt;</code> with <code>freeze.json</code>, <code>brief.md</code>, the <code>as-injected</code> copy, the working <code>app</code> copy, per-phase journey records, and <code>verify-&lt;attempt&gt;.json</code> carrying the unified application patch. CP5 comparison artifacts will be added when that stage runs; no empty successful receipts exist for CP5-7. Each checkpoint receipt references exact run/dataset IDs and hashes of non-secret inputs. Redact output before persistence, retain failed attempts, and distinguish historical results from current-source admission.</p>
+<p>The full serialized schemas are finalized while implementing the first real artifacts, before external consumers depend on them. Use Python dataclasses/typed dictionaries and the existing pytest setup, not a schema registry or database.</p>
+<h2 id="section-13">13. Concrete implementation order and reuse</h2>
+<h3>Runtime decision: use and extend jev-ultrafast</h3>
+<p><strong>Use a narrow source fork, not a rewrite and not a permanent black-box wrapper.</strong> <code>jev-ultrafast</code> supplies the actor and guarded browser execution; Jev supplies finite decisions; our additions supply continuous evidence, evaluator functions, independent verification, and reports. The external coding agent repairs the target application. These are distinct responsibilities.</p>
+<p>There are two deliberately different integration stages:</p>
+<ol>
+<li><strong>Completed initial investigation:</strong> imported the unchanged <code>C:\source\projects\jev-ultrafast</code> package from a separate environment. External drivers supplied diagnostic fixtures and accounting; they are not the product architecture.</li>
+<li><strong>Implemented CP0-3 candidate:</strong> <code>C:\source\projects\jev-test</code> is a source fork on branch <code>feasibility</code>, based on the pinned commit with remote <code>upstream</code>. Existing plans and <code>.env</code> were preserved, MIT attribution retained, and no commits or pushes made. The package remains <code>jev_ultrafast</code>; the runnable CLI is <code>jev-eval</code>. Formal checkpoint execution uses this fork's editable installation.</li>
+</ol>
+<p>An outer loop over <code>Agent.run()</code> cannot see every failure boundary: a browser action can execute before post-action capture raises, preventing a state from being yielded. The screenshot failures exposed precisely that distinction. Add explicit, small lifecycle recording points inside the fork rather than monkey-patching the live actor or assuming each yield equals one successful action.</p>
+<p>Do not start by implementing the entire architecture plan. Keep this first sequence narrow:</p>
+<table>
+<thead>
+<tr>
+<th>When</th>
+<th>Existing code to reuse</th>
+<th>How it participates and the smallest new work</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CP0</td>
+<td><code>jev_ultrafast\model.py:post_json</code>, <code>validate_choice</code>; pinned dependencies</td>
+<td>Use the existing <code>/v1/systemone</code> transport, safely map the key name, pin the model, and enforce a combined attempt/cost budget. No SDK rewrite.</td>
+</tr>
+<tr>
+<td>CP1</td>
+<td><code>browser.py:Browser</code>, <code>browser_operation</code>; <code>snapshot.js</code>; <code>scripts\check_guards.py</code>; <code>agent.py</code> recording boundaries</td>
+<td>In the owned fork, preserve node identity, freshness/hit tests, and single-consumption actions. Add browser/profile ownership, pre-navigation telemetry, immutable observations, separate evaluation projection, capture-failure regression, fake store, and independent verifier.</td>
+</tr>
+<tr>
+<td>CP2</td>
+<td><code>agent.py:Agent.command</code> and <code>run</code>; <code>model.py:choose</code>/<code>action_space</code>; <code>questions.py:NEXT_ACTION</code>/<code>TARGET</code></td>
+<td>This remains the actual actor: Jev chooses operation and compatible target heads, and code executes only that selected operation. Wire the instrumented runner and independent final outcome; do not replace the policy with a flight-specific script.</td>
+</tr>
+<tr>
+<td>CP3</td>
+<td><code>model.py:post_json</code> and <code>validate_choice</code>, plus the new observation hooks</td>
+<td>Add three plain QA functions/rubrics and a separate evaluation request. Navigation <code>DONE</code> does not become an evaluator verdict. Render measured facts and finite findings into evidence-backed JSON/HTML.</td>
+</tr>
+<tr>
+<td>CP4</td>
+<td>The same forked runner, evaluator, and report</td>
+<td>Hand the report to the existing coding-agent session. Repair target-app source only; freeze runner/evaluator/oracle inputs. No new agent orchestrator and no Jev-generated patches.</td>
+</tr>
+<tr>
+<td>CP5</td>
+<td>The same runner and persisted observations</td>
+<td>Replay frozen evaluation inputs; compare deterministic, Jev, and predeclared text-LLM arms. Measure actual actor/helper/evaluator calls separately. No second runtime for benchmarks.</td>
+</tr>
+<tr>
+<td>CP6</td>
+<td>Frozen forked core, including <code>model.py:field_context</code>/<code>field_text</code></td>
+<td>Bind a different app and verifier. Configure a real text helper, preserve strict JSON validation and exact-context cache rules, and prove ordinary text entry without rewriting detectors.</td>
+</tr>
+<tr>
+<td>CP7</td>
+<td>Repeated mechanisms observed in that fork across both apps</td>
+<td>Extract only demonstrated shared contracts/functions; retain domain acceptance rules outside the generic core. Framework design follows this evidence, not before CP1.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Not reused as production architecture:</strong> the inspector's singleton state, Google-specific verifier, recorder script as a library, or the action snapshot as a complete UX/accessibility tree. The upstream UI can remain a debugging aid. A Playwright transport is a contingency only if the scoped harness/isolation/event spike fails; it is not a second backend to build in parallel, and changing transport need not discard Jev's finite-choice policy.</p>
+<p>Use the existing offline tests and browser guard checks. Add a compact parametrized test module for verdict aggregation, evidence gaps, result-basis references, request budgets, and no duplicate actions. Test code paths without paid APIs; live evaluations are explicit experiments, not ordinary unit tests.</p>
+<p><strong>Planning ranges:</strong> access/instrumentation and the first autonomous journey usually consume the first 2-4 engineering days; a real report-driven repair demonstration is a reasonable first-week target; repeated quality/economic work and a second pilot may take another week or more. These are allocations to test assumptions, not delivery guarantees. Stop conditions and evidence gates override the calendar.</p>
+<h2 id="section-14">14. Sources and current limitations</h2>
+<p>The source was re-inspected and the official quickstart, API, state, models, confidence, fan-out, and model-limit documentation were read alongside the live investigation on 18 September 2026. Documentation describes supported contracts; the receipt separately records what actually ran.</p>
+<h3>What the Jev documentation means for this implementation</h3>
+<table>
+<thead>
+<tr>
+<th>Documented contract</th>
+<th>Concrete design consequence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Quickstart uses <code>POST /v1/systemone</code> with <code>state</code>, <code>model</code>, and typed <code>questions</code>; Python SDK is optional.</td>
+<td>Upstream's existing <code>httpx</code> path already implements this. Keep it; installing another SDK is not required to run or evaluate.</td>
+</tr>
+<tr>
+<td>Choice selects from supplied options; Score is a weighted rating over descriptive levels; Noul is a yes-probability.</td>
+<td>Use finite choices for actor and explicit finding categories. Use other primitives only where their meanings fit; none is free-form generation or exact numeric extraction.</td>
+</tr>
+<tr>
+<td>Questions share one state but are evaluated independently; question-map keys do not supply inference instructions.</td>
+<td>Batch compatible independent decisions. Put the actual rubric and evidence reference in instructions; combine dependencies and enforce invariants in code, not by assuming one answer can read another answer in the same call.</td>
+</tr>
+<tr>
+<td>Each request receives explicit text/JSON state; the model does not observe a browser or remember a journey on its own.</td>
+<td>Capture and supply relevant before/action/after facts. The actor's current-page projection and short history are not a complete evidence timeline.</td>
+</tr>
+<tr>
+<td>Current Jev is text-only and not trained for generation.</td>
+<td>No direct screenshot/video judgment, arbitrary field-value generation, or source-patch writing. Use DOM/telemetry projections, a separate text helper, and a coding agent for those distinct jobs.</td>
+</tr>
+<tr>
+<td>Arithmetic, dates, indirection, irrelevant context, and adversarial content are known weaknesses.</td>
+<td>Compute fares/times/dates in code, keep rubrics narrow, filter state, and test injected page instructions. Do not treat prompt wording as an execution guard.</td>
+</tr>
+<tr>
+<td>Choice/Score confidence comes from the answer distribution; Noul has no separate confidence; equivalent-looking formulations need not agree numerically.</td>
+<td>Calibrate each rubric/model/primitive on held-out cases; do not transfer thresholds blindly or call confidence 1.0 perfect defect accuracy.</td>
+</tr>
+<tr>
+<td>Models are versionable; aliases move; price is per input token and output is free.</td>
+<td>Pin the returned version for a campaign, count retries and all actor/evaluator questions, and label price-based usage estimates separately from invoices or matched-model savings.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><a href="../jev-eval/plan.html">Architecture and repository analysis</a>, including the pinned file map, source links, native telemetry semantics, and privacy constraints.</li>
+<li><a href="https://docs.typesafe.ai/introduction/quickstart">Official quickstart</a>, <a href="https://docs.typesafe.ai/api">API reference</a>, and <a href="https://docs.typesafe.ai/concepts/state">state contract</a>.</li>
+<li><a href="https://docs.typesafe.ai/patterns/fan-out">Speculative fan-out</a>: independent questions over shared state, with code selecting relevant answers.</li>
+<li><a href="evidence/upstream-smoke.json">Local investigation receipt</a>: attempts, versions, measured outcomes, costs, and remaining uncertainties.</li>
+<li><a href="https://github.com/browser-use/jev-ultrafast/tree/452c1ad2dd628008f1d5608f28158d76e49e6cc0">Pinned upstream repository</a>.</li>
+<li><a href="https://docs.typesafe.ai/models">TypeSafe models: text-only input, limits, prices, and version pinning</a>.</li>
+<li><a href="https://docs.typesafe.ai/confidence">TypeSafe confidence semantics</a> and <a href="https://docs.typesafe.ai/model-jaggedness/jev-1.13">Jev 1.13 known limitations</a>.</li>
+<li><a href="https://github.com/browser-use/jev-ultrafast/blob/452c1ad2dd628008f1d5608f28158d76e49e6cc0/jev_ultrafast/model.py#L151-L198">Upstream field-text helper</a>: separate generative-model credentials are required by the current path.</li>
+<li><a href="https://github.com/browser-use/jev-ultrafast/blob/452c1ad2dd628008f1d5608f28158d76e49e6cc0/docs/performance.md">Upstream performance report</a>: useful engineering evidence, not the proposed product's measured performance.</li>
+</ul>
+<p>Jev access, native evidence contracts, successful isolated click/select journeys, and a predeclared 3/3 clean cohort have been demonstrated on one source revision. The small frozen semantic screen is promising, not calibrated product accuracy. The intermittent Chrome stall is bounded and recorded, not eliminated, and it remains a known environment risk for longer journeys. The helper is unconfigured; protected repair, matched economic advantage, and second-app transfer remain unproved. Passing CP0-CP3 authorizes CP4 only; it is not evidence of framework readiness.</p>
+<h3>Open Questions</h3>
+<p>Defaults below do not block further planning. Resolve them before the associated paid or external-data checkpoint; never record a proposed default as user authorization.</p>
+<p><em>Read-only planning choices; send decisions in chat.</em></p>
+<p><strong>What budget should a later expanded campaign use? The current Jev-only cap is USD 0.10.</strong></p>
+<ul>
+<li>Proposed: USD 5 Jev plus USD 5 for authorized helper/comparison/repair APIs <strong>(recommended)</strong></li>
+<li>Jev-only experiments first</li>
+</ul>
+<p><strong>Which authorized generative provider should supply text entry and the comparison baseline?</strong></p>
+<p>Provide provider/model preference or a reference to local configuration, not a secret value. A Jev key alone is not assumed to cover these calls.</p>
+<p><strong>Use a synthetic subscription/signup app or an existing owned app for the second pilot?</strong></p>
+<ul>
+<li>Small independent subscription/signup app <strong>(recommended)</strong></li>
+<li>An existing owned local/staging app</li>
+</ul>
+
+</main></body></html>

@@ -1,0 +1,56 @@
+[
+  {
+    "outcome": "unknown",
+    "source": "code",
+    "reason": "Required evidence window is incomplete",
+    "evidence_id": "4c270274e6b3460e9f9497cce2e66d9a",
+    "category": "fare",
+    "advisory": true,
+    "requires_review": false
+  },
+  {
+    "outcome": "unknown",
+    "source": "code",
+    "reason": "Required evidence window is incomplete",
+    "evidence_id": "bd80eb7f983c4d579e477400acffb47e",
+    "category": "fare",
+    "advisory": true,
+    "requires_review": false
+  },
+  {
+    "outcome": "unknown",
+    "source": "code",
+    "reason": "Required evidence window is incomplete",
+    "evidence_id": "a827ea5b0f8a4b0a80ebfcf74396b93a",
+    "category": "effect",
+    "advisory": true,
+    "requires_review": false
+  },
+  {
+    "outcome": "unknown",
+    "source": "code",
+    "reason": "Required evidence window is incomplete",
+    "evidence_id": "2724b3a956434ff19eefa52fe42285b7",
+    "category": "effect",
+    "advisory": true,
+    "requires_review": false
+  },
+  {
+    "outcome": "unknown",
+    "source": "code",
+    "reason": "Required evidence window is incomplete",
+    "evidence_id": "a712f983ef5b4abeb3c27b951b8745f7",
+    "category": "loading",
+    "advisory": true,
+    "requires_review": false
+  },
+  {
+    "outcome": "unknown",
+    "source": "code",
+    "reason": "Required evidence window is incomplete",
+    "evidence_id": "34c0bd8cf9ee47539d59a6d19a0bc692",
+    "category": "loading",
+    "advisory": true,
+    "requires_review": false
+  }
+]

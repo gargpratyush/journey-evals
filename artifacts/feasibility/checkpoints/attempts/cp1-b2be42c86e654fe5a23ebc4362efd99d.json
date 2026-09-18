@@ -1,0 +1,61 @@
+{
+  "status": "GREEN",
+  "source_sha256": "4a2734a86a46dfb4b55fc5bb5504d961c3a7c099464a88dd92b67f800498c0f1",
+  "offline_tests_passed": true,
+  "workers": [
+    {
+      "status": "COMPLETED",
+      "mode": "scripted",
+      "source_sha256": "4a2734a86a46dfb4b55fc5bb5504d961c3a7c099464a88dd92b67f800498c0f1",
+      "browser_version": "Chrome/153.0.8010.52",
+      "child_credentials_absent": true,
+      "booking_evidence_complete": true,
+      "disabled_controls_observed_not_actionable": true,
+      "capture_regression_rounds": 10,
+      "transient_feedback_captured": true,
+      "navigation_gap_explicit": true,
+      "stale_navigation_rejected": true,
+      "native_guard_checks": 21,
+      "resources_closed": true,
+      "profile_removed": true,
+      "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\scripted-cc0165122aea40678a61752cca32abbf",
+      "exit_code": 0,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      }
+    },
+    {
+      "status": "COMPLETED",
+      "mode": "isolation",
+      "source_sha256": "4a2734a86a46dfb4b55fc5bb5504d961c3a7c099464a88dd92b67f800498c0f1",
+      "browser_version": "Chrome/153.0.8010.52",
+      "child_credentials_absent": true,
+      "fresh_profile_isolated": true,
+      "resources_closed": true,
+      "profile_removed": true,
+      "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\isolation-43ccf9f5a5f54505a285c20d94776708",
+      "exit_code": 0
+    },
+    {
+      "status": "CANCELLED_AS_EXPECTED",
+      "mode": "cancel",
+      "source_sha256": "4a2734a86a46dfb4b55fc5bb5504d961c3a7c099464a88dd92b67f800498c0f1",
+      "browser_version": "Chrome/153.0.8010.52",
+      "child_credentials_absent": true,
+      "resources_closed": true,
+      "profile_removed": true,
+      "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\cancel-83ef6dc2e30c4979bc99940ade7d565a",
+      "exit_code": 0
+    }
+  ],
+  "inference_attempts": 0,
+  "secret_scan": {
+    "files": 116,
+    "passed": true
+  },
+  "checkpoint": "cp1",
+  "timestamp": "2026-09-18T10:56:28.124291+00:00",
+  "attempt_id": "b2be42c86e654fe5a23ebc4362efd99d"
+}

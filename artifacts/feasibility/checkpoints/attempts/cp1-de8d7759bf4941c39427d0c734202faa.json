@@ -1,0 +1,57 @@
+{
+  "status": "AMBER",
+  "source_sha256": "017f246856136ba047992423ca1d5768a06835514d2e3338f66175adada8c81f",
+  "offline_tests_passed": true,
+  "workers": [
+    {
+      "status": "ERROR",
+      "mode": "scripted",
+      "source_sha256": "017f246856136ba047992423ca1d5768a06835514d2e3338f66175adada8c81f",
+      "browser_version": "Chrome/153.0.8010.52",
+      "child_credentials_absent": true,
+      "error": "_IPCResponseTimeout: Emulation.setDeviceMetricsOverride timed out after 5s waiting for the daemon",
+      "resources_closed": true,
+      "profile_removed": true,
+      "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\scripted-322942688e134696a7b6febcc0c29792",
+      "exit_code": 1,
+      "independent_verifier": {
+        "passed": false,
+        "failures": [
+          "Expected exactly one booking"
+        ],
+        "booking_count": 0
+      }
+    },
+    {
+      "status": "ERROR",
+      "mode": "isolation",
+      "source_sha256": "017f246856136ba047992423ca1d5768a06835514d2e3338f66175adada8c81f",
+      "browser_version": "Chrome/153.0.8010.52",
+      "child_credentials_absent": true,
+      "error": "_IPCResponseTimeout: Emulation.setDeviceMetricsOverride timed out after 5s waiting for the daemon",
+      "resources_closed": true,
+      "profile_removed": true,
+      "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\isolation-7fd4e585eb5a4da9b6c563ace3d32cdc",
+      "exit_code": 1
+    },
+    {
+      "status": "CANCELLED_AS_EXPECTED",
+      "mode": "cancel",
+      "source_sha256": "017f246856136ba047992423ca1d5768a06835514d2e3338f66175adada8c81f",
+      "browser_version": "Chrome/153.0.8010.52",
+      "child_credentials_absent": true,
+      "resources_closed": true,
+      "profile_removed": true,
+      "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\cancel-632b831e5d404e35a0e50c3be8baca72",
+      "exit_code": 0
+    }
+  ],
+  "inference_attempts": 0,
+  "secret_scan": {
+    "files": 16,
+    "passed": true
+  },
+  "checkpoint": "cp1",
+  "timestamp": "2026-09-18T10:51:00.554673+00:00",
+  "attempt_id": "de8d7759bf4941c39427d0c734202faa"
+}

@@ -1,0 +1,344 @@
+[
+  {
+    "outcome": "clean",
+    "source": "jev",
+    "answer": {
+      "type": "choice",
+      "choice": "clean",
+      "confidence": 0.99,
+      "probabilities": {
+        "defect": 0.01,
+        "unknown": 0.0,
+        "clean": 0.99
+      }
+    },
+    "model": "jev-1.13.0",
+    "evidence_id": "560d26404e5f409abd1c5dc2d5fa88a0",
+    "category": "fare",
+    "advisory": true,
+    "requires_review": false
+  },
+  {
+    "outcome": "clean",
+    "source": "jev",
+    "answer": {
+      "type": "choice",
+      "choice": "clean",
+      "confidence": 0.97,
+      "probabilities": {
+        "defect": 0.02,
+        "unknown": 0.0,
+        "clean": 0.98
+      }
+    },
+    "model": "jev-1.13.0",
+    "evidence_id": "f1d116029d9349d3976193002fcfb57c",
+    "category": "fare",
+    "advisory": true,
+    "requires_review": false
+  },
+  {
+    "outcome": "defect",
+    "source": "jev",
+    "answer": {
+      "type": "choice",
+      "choice": "defect",
+      "confidence": 0.98,
+      "probabilities": {
+        "defect": 0.99,
+        "unknown": 0.0,
+        "clean": 0.01
+      }
+    },
+    "model": "jev-1.13.0",
+    "evidence_id": "f6f80bd68b724ef4bc24fcc6c5573df1",
+    "category": "fare",
+    "advisory": true,
+    "requires_review": true
+  },
+  {
+    "outcome": "clean",
+    "source": "jev",
+    "answer": {
+      "type": "choice",
+      "choice": "clean",
+      "confidence": 0.99,
+      "probabilities": {
+        "defect": 0.0,
+        "unknown": 0.0,
+        "clean": 1.0
+      }
+    },
+    "model": "jev-1.13.0",
+    "evidence_id": "5cb2abba84ac4e07a1b49bb7e2fae773",
+    "category": "fare",
+    "advisory": true,
+    "requires_review": false
+  },
+  {
+    "outcome": "defect",
+    "source": "jev",
+    "answer": {
+      "type": "choice",
+      "choice": "defect",
+      "confidence": 0.98,
+      "probabilities": {
+        "defect": 0.99,
+        "unknown": 0.0,
+        "clean": 0.01
+      }
+    },
+    "model": "jev-1.13.0",
+    "evidence_id": "aebc7e8c98024ad88db38a3359cc2031",
+    "category": "fare",
+    "advisory": true,
+    "requires_review": true
+  },
+  {
+    "outcome": "defect",
+    "source": "jev",
+    "answer": {
+      "type": "choice",
+      "choice": "defect",
+      "confidence": 0.99,
+      "probabilities": {
+        "unknown": 0.0,
+        "defect": 1.0,
+        "clean": 0.0
+      }
+    },
+    "model": "jev-1.13.0",
+    "evidence_id": "3f170bdb1ecd43648a56eebeeec71c54",
+    "category": "fare",
+    "advisory": true,
+    "requires_review": true
+  },
+  {
+    "outcome": "defect",
+    "source": "jev",
+    "answer": {
+      "type": "choice",
+      "choice": "defect",
+      "confidence": 0.99,
+      "probabilities": {
+        "clean": 0.0,
+        "unknown": 0.0,
+        "defect": 1.0
+      }
+    },
+    "model": "jev-1.13.0",
+    "evidence_id": "4784c6f6a1b7435b88ac76b6ca3bcfc6",
+    "category": "effect",
+    "advisory": true,
+    "requires_review": true
+  },
+  {
+    "outcome": "clean",
+    "source": "jev",
+    "answer": {
+      "type": "choice",
+      "choice": "clean",
+      "confidence": 0.97,
+      "probabilities": {
+        "clean": 0.97,
+        "unknown": 0.02,
+        "defect": 0.01
+      }
+    },
+    "model": "jev-1.13.0",
+    "evidence_id": "cdaad7ae533d4b63be9e0a3616032ef5",
+    "category": "effect",
+    "advisory": true,
+    "requires_review": false
+  },
+  {
+    "outcome": "defect",
+    "source": "jev",
+    "answer": {
+      "type": "choice",
+      "choice": "defect",
+      "confidence": 1.0,
+      "probabilities": {
+        "clean": 0.0,
+        "unknown": 0.0,
+        "defect": 1.0
+      }
+    },
+    "model": "jev-1.13.0",
+    "evidence_id": "52615d967f8646f8bd50424ecffc1aa8",
+    "category": "effect",
+    "advisory": true,
+    "requires_review": true
+  },
+  {
+    "outcome": "clean",
+    "source": "jev",
+    "answer": {
+      "type": "choice",
+      "choice": "clean",
+      "confidence": 0.94,
+      "probabilities": {
+        "clean": 0.96,
+        "unknown": 0.03,
+        "defect": 0.01
+      }
+    },
+    "model": "jev-1.13.0",
+    "evidence_id": "cab5e483951647d0b35c0389d9f703e1",
+    "category": "effect",
+    "advisory": true,
+    "requires_review": false
+  },
+  {
+    "outcome": "clean",
+    "source": "jev",
+    "answer": {
+      "type": "choice",
+      "choice": "clean",
+      "confidence": 0.96,
+      "probabilities": {
+        "clean": 0.97,
+        "unknown": 0.02,
+        "defect": 0.01
+      }
+    },
+    "model": "jev-1.13.0",
+    "evidence_id": "665ebf2605fa4529b99a72721751dee3",
+    "category": "effect",
+    "advisory": true,
+    "requires_review": false
+  },
+  {
+    "outcome": "defect",
+    "source": "jev",
+    "answer": {
+      "type": "choice",
+      "choice": "defect",
+      "confidence": 0.99,
+      "probabilities": {
+        "clean": 0.0,
+        "unknown": 0.0,
+        "defect": 1.0
+      }
+    },
+    "model": "jev-1.13.0",
+    "evidence_id": "ab766cf9385b485a91a37aad8d342554",
+    "category": "effect",
+    "advisory": true,
+    "requires_review": true
+  },
+  {
+    "outcome": "clean",
+    "source": "jev",
+    "answer": {
+      "type": "choice",
+      "choice": "clean",
+      "confidence": 0.67,
+      "probabilities": {
+        "clean": 0.78,
+        "defect": 0.18,
+        "unknown": 0.04
+      }
+    },
+    "model": "jev-1.13.0",
+    "evidence_id": "f18c3331ac1a4579bb430c349c4ce891",
+    "category": "loading",
+    "advisory": true,
+    "requires_review": false
+  },
+  {
+    "outcome": "defect",
+    "source": "jev",
+    "answer": {
+      "type": "choice",
+      "choice": "defect",
+      "confidence": 0.98,
+      "probabilities": {
+        "clean": 0.01,
+        "defect": 0.99,
+        "unknown": 0.0
+      }
+    },
+    "model": "jev-1.13.0",
+    "evidence_id": "8a34fd971a334f1cb7b5239cd12c600c",
+    "category": "loading",
+    "advisory": true,
+    "requires_review": true
+  },
+  {
+    "outcome": "defect",
+    "source": "jev",
+    "answer": {
+      "type": "choice",
+      "choice": "defect",
+      "confidence": 0.99,
+      "probabilities": {
+        "clean": 0.0,
+        "defect": 1.0,
+        "unknown": 0.0
+      }
+    },
+    "model": "jev-1.13.0",
+    "evidence_id": "e5f3e5f4e5a24ca0a1dde60fd7e7ab97",
+    "category": "loading",
+    "advisory": true,
+    "requires_review": true
+  },
+  {
+    "outcome": "clean",
+    "source": "jev",
+    "answer": {
+      "type": "choice",
+      "choice": "clean",
+      "confidence": 0.83,
+      "probabilities": {
+        "clean": 0.88,
+        "defect": 0.1,
+        "unknown": 0.02
+      }
+    },
+    "model": "jev-1.13.0",
+    "evidence_id": "d95b7bbef3864584a92ab2a2a919c7b5",
+    "category": "loading",
+    "advisory": true,
+    "requires_review": false
+  },
+  {
+    "outcome": "clean",
+    "source": "jev",
+    "answer": {
+      "type": "choice",
+      "choice": "clean",
+      "confidence": 0.98,
+      "probabilities": {
+        "clean": 0.99,
+        "defect": 0.01,
+        "unknown": 0.0
+      }
+    },
+    "model": "jev-1.13.0",
+    "evidence_id": "5a0c7eef35194bf186c7b53fc1ec1350",
+    "category": "loading",
+    "advisory": true,
+    "requires_review": false
+  },
+  {
+    "outcome": "defect",
+    "source": "jev",
+    "answer": {
+      "type": "choice",
+      "choice": "defect",
+      "confidence": 0.98,
+      "probabilities": {
+        "clean": 0.01,
+        "defect": 0.99,
+        "unknown": 0.0
+      }
+    },
+    "model": "jev-1.13.0",
+    "evidence_id": "ffcc9ca98c8e40f9959e8561fd2a7da1",
+    "category": "loading",
+    "advisory": true,
+    "requires_review": true
+  }
+]

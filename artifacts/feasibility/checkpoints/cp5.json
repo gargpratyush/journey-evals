@@ -1,0 +1,96 @@
+{
+  "checkpoint": "cp5",
+  "status": "AMBER",
+  "schema_version": 1,
+  "timestamp": "2026-09-18T16:26:22.931544+00:00",
+  "attempt_id": "ee556b553442489a8de1516a9295caf6",
+  "source_sha256": "7c74bb07fea91f5d047b3385b4b39d5c58cd4078d0bf869a6d8c2951abbec5d6",
+  "summary": "Jev resolved every check it was asked to resolve, in the held-out corpus and live in the browser. CP5 is AMBER for two independent reasons that are not quality failures: the measured cost advantage is 7.27x against a 10x investment gate, and the browser actor abandons a journey when a single step takes longer than about 1.2 seconds.",
+  "arms": {
+    "A_holdout_quality": {
+      "status": "GREEN",
+      "artifact": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\reliability\\0913d8c6e7314a9fb8d39e1f7c1dac78\\quality.json",
+      "cases": null,
+      "result": "Jev 90/90 and the baseline 90/90; deterministic code alone resolved 10/90.",
+      "caveat": "Both model arms saturated at 100 percent, so this corpus cannot discriminate between them on quality. It bounds quality from below, it does not rank.",
+      "independent_runs": 2
+    },
+    "B_live_repeatability": {
+      "status": "AMBER",
+      "artifact": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\live\\summary\\live.json",
+      "planned": 60,
+      "gates": {
+        "clean_journeys_complete": true,
+        "detection_per_check": {
+          "fare": true,
+          "effect": true,
+          "loading": true
+        },
+        "spurious_total": true,
+        "spurious_per_group": {
+          "fare": true,
+          "effect": true,
+          "loading": true
+        },
+        "definitive_controls_per_check": {
+          "fare": true,
+          "effect": true,
+          "loading": true
+        },
+        "no_false_pass": false,
+        "latency_budget": true
+      },
+      "check_verdict_accuracy": "59/59 usable journeys classified correctly",
+      "spurious_findings": 0,
+      "execution_failures": 1,
+      "execution_failure_cause": "ValueError: Invalid TypeSafe response; no action executed.",
+      "failed_gate": "no_false_pass",
+      "false_pass_count": 7
+    },
+    "C_economics": {
+      "status": "AMBER",
+      "artifact": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\reliability\\0913d8c6e7314a9fb8d39e1f7c1dac78\\economics-priced.json",
+      "usd_ratio_baseline_over_jev": 7.27,
+      "latency_ratio_baseline_over_jev": 14.0,
+      "token_ratio_baseline_over_jev": 0.79,
+      "ten_x_gate": false,
+      "both_arms_meet_quality_floor": true
+    },
+    "D_instrumentation_overhead": {
+      "status": "GREEN",
+      "artifact": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\overhead\\cfe8332ada2d42ada4dd8650d74d6608\\overhead.json",
+      "pairs_planned": 10,
+      "pairs_usable": 9,
+      "median_slowdown_pct": 20.09,
+      "median_step_delta_ms": 4.79,
+      "within_tolerance": true,
+      "tolerance": "investigate above 10% median slowdown or 20 ms per scripted step, whichever is larger",
+      "unusable_pair_cause": "one Chrome first-frame stall, retained as a runner failure"
+    }
+  },
+  "false_pass_analysis": {
+    "finding": "All 7 false-pass cases are loading/clean controls. The loading check correctly returned clean, but the browser actor never completed a booking, so the journey would have been reported as passing while the user goal was never reached.",
+    "root_cause": "The actor abandons the journey when a single step takes longer than about 1.2 seconds, even when the page shows visible progress feedback.",
+    "evidence": {
+      "slow_controls_over_1000ms": 7,
+      "slow_controls_that_booked": 0,
+      "fast_controls_under_1000ms": 3,
+      "fast_controls_that_booked": 3
+    },
+    "attribution": "This is a limitation of the browser actor, not of Jev and not of the evaluators. Jev classified all 59 usable journeys correctly, including these 7.",
+    "consequence": "A journey-completion gate must be reported separately from a check verdict. A green check does not by itself mean the journey succeeded.",
+    "not_retried": "These runs were retained as measured. The delay range was not lowered to make the gate pass."
+  },
+  "budget": {
+    "attempts": 862,
+    "accounted_input_tokens_including_history": 1422283,
+    "spent_usd": 0.059736,
+    "cap_usd": "0.10",
+    "headroom_usd": 0.040264
+  },
+  "decision_required": "CP5 does not clear the investment gate on its own. The demonstrated advantage on this workload is latency (14x), not cost (7.27x) and not quality (tied at ceiling). Proceeding to CP6 and CP7 requires an explicit decision to either restate the value proposition around latency and journey throughput, or to pivot.",
+  "blocked": {
+    "cp6": "Requires TEXT_MODEL_API_KEY and a second synthetic application.",
+    "cp7": "Depends on CP5 and CP6."
+  }
+}

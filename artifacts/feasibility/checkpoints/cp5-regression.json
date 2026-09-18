@@ -1,0 +1,697 @@
+{
+  "checkpoint": "cp5-regression",
+  "status": "AMBER",
+  "purpose": "Non-regression evidence for a deliberate core change to the actor policy, and the direct test of whether that change removes the CP5-B false-pass finding.",
+  "core_change": {
+    "files": [
+      "jev_ultrafast/questions.py",
+      "jev_ultrafast/agent.py"
+    ],
+    "what": "NEXT_ACTION previously asserted that recent WAIT actions are not evidence of loading, with no rule licensing continued waiting. The actor therefore abandoned journeys while a submitted operation was still running and its in-progress text was on screen. The policy now licenses waiting while an operation is visibly running, and the bound on that loop moved from prompt wording into code as MAX_UNCHANGED_WAITS.",
+    "why": "CP5-B reported 7 of 60 journeys passing while the browser actor had silently abandoned them. All 7 had visible in-progress text, so this was an actor defect, not a fixture artifact and not a Jev misclassification."
+  },
+  "truncation": {
+    "planned": 60,
+    "ran": 40,
+    "reason": "Stopped early at the owner's explicit instruction to save wall-clock time.",
+    "sampling": "plan_journeys shuffles the 60 cases once before execution, so the executed prefix is a random subsample of the matrix, not a chosen subset. It is still a subsample: every rate below is over the executed denominator, never over 60."
+  },
+  "counts": {
+    "ran": 40,
+    "faults": 19,
+    "controls": 21,
+    "detected": 19,
+    "spurious": 1,
+    "execution_failures": 0,
+    "journeys_completed": 40,
+    "browser_stalls_retried": 15
+  },
+  "by_group": {
+    "fare/fault": {
+      "ran": 8,
+      "defect": 8,
+      "clean": 0,
+      "unknown": 0,
+      "journeys_completed": 8
+    },
+    "fare/clean": {
+      "ran": 7,
+      "defect": 0,
+      "clean": 7,
+      "unknown": 0,
+      "journeys_completed": 7
+    },
+    "effect/fault": {
+      "ran": 4,
+      "defect": 4,
+      "clean": 0,
+      "unknown": 0,
+      "journeys_completed": 4
+    },
+    "effect/clean": {
+      "ran": 7,
+      "defect": 0,
+      "clean": 7,
+      "unknown": 0,
+      "journeys_completed": 7
+    },
+    "loading/fault": {
+      "ran": 7,
+      "defect": 7,
+      "clean": 0,
+      "unknown": 0,
+      "journeys_completed": 7
+    },
+    "loading/clean": {
+      "ran": 7,
+      "defect": 1,
+      "clean": 6,
+      "unknown": 0,
+      "journeys_completed": 7
+    }
+  },
+  "false_pass_ids": [],
+  "gates": {
+    "no_false_pass": true,
+    "no_spurious_findings": false,
+    "detection_retained": true,
+    "slow_clean_journeys_now_complete": true,
+    "no_execution_failures": true
+  },
+  "slow_loading_controls": {
+    "definition": "loading-check controls whose measured server response was at least 1000 ms",
+    "before_fix": {
+      "ran": 7,
+      "journeys_completed": 0
+    },
+    "after_fix": {
+      "ran": 5,
+      "journeys_completed": 5
+    }
+  },
+  "baseline_receipt": "artifacts\\feasibility\\live\\summary\\live-cp5b-before-actor-fix.json",
+  "positions_executed": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39
+  ],
+  "retained_comparison": [
+    {
+      "position": 0,
+      "check": "fare",
+      "group": "clean",
+      "search_ms": 63.356,
+      "before": {
+        "booked": 1,
+        "verdict": "clean"
+      },
+      "after": {
+        "booked": 1,
+        "verdict": "clean"
+      }
+    },
+    {
+      "position": 1,
+      "check": "effect",
+      "group": "fault",
+      "search_ms": 245.215,
+      "before": {
+        "booked": 1,
+        "verdict": "defect"
+      },
+      "after": {
+        "booked": 1,
+        "verdict": "defect"
+      }
+    },
+    {
+      "position": 2,
+      "check": "effect",
+      "group": "clean",
+      "search_ms": 224.187,
+      "before": {
+        "booked": 1,
+        "verdict": "clean"
+      },
+      "after": {
+        "booked": 1,
+        "verdict": "clean"
+      }
+    },
+    {
+      "position": 3,
+      "check": "loading",
+      "group": "fault",
+      "search_ms": 1315.175,
+      "before": {
+        "booked": 0,
+        "verdict": "defect"
+      },
+      "after": {
+        "booked": 1,
+        "verdict": "defect"
+      }
+    },
+    {
+      "position": 4,
+      "check": "effect",
+      "group": "clean",
+      "search_ms": 105.231,
+      "before": {
+        "booked": 1,
+        "verdict": "clean"
+      },
+      "after": {
+        "booked": 1,
+        "verdict": "clean"
+      }
+    },
+    {
+      "position": 5,
+      "check": "effect",
+      "group": "clean",
+      "search_ms": 399.301,
+      "before": {
+        "booked": 1,
+        "verdict": "clean"
+      },
+      "after": {
+        "booked": 1,
+        "verdict": "clean"
+      }
+    },
+    {
+      "position": 6,
+      "check": "fare",
+      "group": "clean",
+      "search_ms": 354.089,
+      "before": {
+        "booked": 1,
+        "verdict": "clean"
+      },
+      "after": {
+        "booked": 1,
+        "verdict": "clean"
+      }
+    },
+    {
+      "position": 7,
+      "check": "effect",
+      "group": "clean",
+      "search_ms": 399.342,
+      "before": {
+        "booked": 1,
+        "verdict": "clean"
+      },
+      "after": {
+        "booked": 1,
+        "verdict": "clean"
+      }
+    },
+    {
+      "position": 8,
+      "check": "loading",
+      "group": "fault",
+      "search_ms": 1317.15,
+      "before": {
+        "booked": 0,
+        "verdict": "defect"
+      },
+      "after": {
+        "booked": 1,
+        "verdict": "defect"
+      }
+    },
+    {
+      "position": 9,
+      "check": "loading",
+      "group": "clean",
+      "search_ms": 1662.341,
+      "before": {
+        "booked": 0,
+        "verdict": "clean"
+      },
+      "after": {
+        "booked": 1,
+        "verdict": "clean"
+      }
+    },
+    {
+      "position": 10,
+      "check": "fare",
+      "group": "fault",
+      "search_ms": 106.548,
+      "before": {
+        "booked": 1,
+        "verdict": "defect"
+      },
+      "after": {
+        "booked": 1,
+        "verdict": "defect"
+      }
+    },
+    {
+      "position": 11,
+      "check": "effect",
+      "group": "clean",
+      "search_ms": 168.169,
+      "before": {
+        "booked": 1,
+        "verdict": "clean"
+      },
+      "after": {
+        "booked": 1,
+        "verdict": "clean"
+      }
+    },
+    {
+      "position": 12,
+      "check": "loading",
+      "group": "fault",
+      "search_ms": 1222.361,
+      "before": {
+        "booked": 1,
+        "verdict": "defect"
+      },
+      "after": {
+        "booked": 1,
+        "verdict": "defect"
+      }
+    },
+    {
+      "position": 13,
+      "check": "loading",
+      "group": "fault",
+      "search_ms": 1259.443,
+      "before": {
+        "booked": 0,
+        "verdict": "defect"
+      },
+      "after": {
+        "booked": 1,
+        "verdict": "defect"
+      }
+    },
+    {
+      "position": 14,
+      "check": "loading",
+      "group": "fault",
+      "search_ms": 1216.34,
+      "before": {
+        "booked": 0,
+        "verdict": "defect"
+      },
+      "after": {
+        "booked": 1,
+        "verdict": "defect"
+      }
+    },
+    {
+      "position": 15,
+      "check": "loading",
+      "group": "clean",
+      "search_ms": 1361.102,
+      "before": {
+        "booked": 0,
+        "verdict": "clean"
+      },
+      "after": {
+        "booked": 1,
+        "verdict": "clean"
+      }
+    },
+    {
+      "position": 16,
+      "check": "loading",
+      "group": "clean",
+      "search_ms": 1504.176,
+      "before": {
+        "booked": 0,
+        "verdict": "clean"
+      },
+      "after": {
+        "booked": 1,
+        "verdict": "clean"
+      }
+    },
+    {
+      "position": 17,
+      "check": "effect",
+      "group": "fault",
+      "search_ms": 351.278,
+      "before": {
+        "booked": 1,
+        "verdict": "defect"
+      },
+      "after": {
+        "booked": 1,
+        "verdict": "defect"
+      }
+    },
+    {
+      "position": 18,
+      "check": "fare",
+      "group": "fault",
+      "search_ms": 60.117,
+      "before": {
+        "booked": 1,
+        "verdict": "defect"
+      },
+      "after": {
+        "booked": 1,
+        "verdict": "defect"
+      }
+    },
+    {
+      "position": 19,
+      "check": "fare",
+      "group": "clean",
+      "search_ms": 108.422,
+      "before": {
+        "booked": 1,
+        "verdict": "clean"
+      },
+      "after": {
+        "booked": 1,
+        "verdict": "clean"
+      }
+    },
+    {
+      "position": 20,
+      "check": "effect",
+      "group": "fault",
+      "search_ms": 105.128,
+      "before": {
+        "booked": 1,
+        "verdict": "defect"
+      },
+      "after": {
+        "booked": 1,
+        "verdict": "defect"
+      }
+    },
+    {
+      "position": 21,
+      "check": "fare",
+      "group": "clean",
+      "search_ms": 397.433,
+      "before": {
+        "booked": 1,
+        "verdict": "clean"
+      },
+      "after": {
+        "booked": 1,
+        "verdict": "clean"
+      }
+    },
+    {
+      "position": 22,
+      "check": "effect",
+      "group": "clean",
+      "search_ms": 340.092,
+      "before": {
+        "booked": 1,
+        "verdict": "clean"
+      },
+      "after": {
+        "booked": 1,
+        "verdict": "clean"
+      }
+    },
+    {
+      "position": 23,
+      "check": "fare",
+      "group": "clean",
+      "search_ms": 132.558,
+      "before": {
+        "booked": 1,
+        "verdict": "clean"
+      },
+      "after": {
+        "booked": 1,
+        "verdict": "clean"
+      }
+    },
+    {
+      "position": 24,
+      "check": "fare",
+      "group": "clean",
+      "search_ms": 164.079,
+      "before": {
+        "booked": 1,
+        "verdict": "clean"
+      },
+      "after": {
+        "booked": 1,
+        "verdict": "clean"
+      }
+    },
+    {
+      "position": 25,
+      "check": "fare",
+      "group": "fault",
+      "search_ms": 151.153,
+      "before": {
+        "booked": 1,
+        "verdict": "defect"
+      },
+      "after": {
+        "booked": 1,
+        "verdict": "defect"
+      }
+    },
+    {
+      "position": 26,
+      "check": "fare",
+      "group": "fault",
+      "search_ms": 331.4,
+      "before": {
+        "booked": 1,
+        "verdict": "defect"
+      },
+      "after": {
+        "booked": 1,
+        "verdict": "defect"
+      }
+    },
+    {
+      "position": 27,
+      "check": "fare",
+      "group": "fault",
+      "search_ms": 241.614,
+      "before": {
+        "booked": 1,
+        "verdict": "defect"
+      },
+      "after": {
+        "booked": 1,
+        "verdict": "defect"
+      }
+    },
+    {
+      "position": 28,
+      "check": "loading",
+      "group": "clean",
+      "search_ms": 1478.3,
+      "before": {
+        "booked": 0,
+        "verdict": "clean"
+      },
+      "after": {
+        "booked": 1,
+        "verdict": "clean"
+      }
+    },
+    {
+      "position": 29,
+      "check": "fare",
+      "group": "clean",
+      "search_ms": 162.182,
+      "before": {
+        "booked": 1,
+        "verdict": "clean"
+      },
+      "after": {
+        "booked": 1,
+        "verdict": "clean"
+      }
+    },
+    {
+      "position": 30,
+      "check": "fare",
+      "group": "fault",
+      "search_ms": 160.41,
+      "before": {
+        "booked": 1,
+        "verdict": "defect"
+      },
+      "after": {
+        "booked": 1,
+        "verdict": "defect"
+      }
+    },
+    {
+      "position": 31,
+      "check": "fare",
+      "group": "fault",
+      "search_ms": 108.439,
+      "before": {
+        "booked": 1,
+        "verdict": "defect"
+      },
+      "after": {
+        "booked": 1,
+        "verdict": "defect"
+      }
+    },
+    {
+      "position": 32,
+      "check": "fare",
+      "group": "fault",
+      "search_ms": 94.394,
+      "before": {
+        "booked": 1,
+        "verdict": "defect"
+      },
+      "after": {
+        "booked": 1,
+        "verdict": "defect"
+      }
+    },
+    {
+      "position": 33,
+      "check": "effect",
+      "group": "fault",
+      "search_ms": 270.387,
+      "before": {
+        "booked": 1,
+        "verdict": "defect"
+      },
+      "after": {
+        "booked": 1,
+        "verdict": "defect"
+      }
+    },
+    {
+      "position": 34,
+      "check": "effect",
+      "group": "clean",
+      "search_ms": 70.106,
+      "before": {
+        "booked": 1,
+        "verdict": "clean"
+      },
+      "after": {
+        "booked": 1,
+        "verdict": "clean"
+      }
+    },
+    {
+      "position": 35,
+      "check": "loading",
+      "group": "fault",
+      "search_ms": 1227.522,
+      "before": {
+        "booked": 0,
+        "verdict": "defect"
+      },
+      "after": {
+        "booked": 1,
+        "verdict": "defect"
+      }
+    },
+    {
+      "position": 36,
+      "check": "loading",
+      "group": "clean",
+      "search_ms": 1538.573,
+      "before": {
+        "booked": 0,
+        "verdict": "clean"
+      },
+      "after": {
+        "booked": 1,
+        "verdict": "defect"
+      }
+    },
+    {
+      "position": 37,
+      "check": "loading",
+      "group": "clean",
+      "search_ms": 239.123,
+      "before": {
+        "booked": 1,
+        "verdict": "clean"
+      },
+      "after": {
+        "booked": 1,
+        "verdict": "clean"
+      }
+    },
+    {
+      "position": 38,
+      "check": "loading",
+      "group": "clean",
+      "search_ms": 159.314,
+      "before": {
+        "booked": 1,
+        "verdict": "clean"
+      },
+      "after": {
+        "booked": 1,
+        "verdict": "clean"
+      }
+    },
+    {
+      "position": 39,
+      "check": "loading",
+      "group": "fault",
+      "search_ms": 1699.301,
+      "before": {
+        "booked": 0,
+        "verdict": "defect"
+      },
+      "after": {
+        "booked": 1,
+        "verdict": "defect"
+      }
+    }
+  ]
+}

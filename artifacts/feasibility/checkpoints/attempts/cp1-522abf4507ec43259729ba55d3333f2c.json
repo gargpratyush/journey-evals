@@ -1,0 +1,99 @@
+{
+  "status": "GREEN",
+  "source_sha256": "1833d9bdd281e84ac270f52fe3124a033d159a8c75b12a515c52a3b95d01eb19",
+  "offline_tests_passed": true,
+  "workers": [
+    {
+      "schema_version": 1,
+      "status": "COMPLETED",
+      "mode": "scripted",
+      "source_sha256": "1833d9bdd281e84ac270f52fe3124a033d159a8c75b12a515c52a3b95d01eb19",
+      "browser_version": "Chrome/153.0.8010.52",
+      "child_credentials_absent": true,
+      "booking_evidence_complete": true,
+      "disabled_controls_observed_not_actionable": true,
+      "capture_regression_rounds": 10,
+      "transient_feedback_captured": true,
+      "navigation_gap_explicit": true,
+      "stale_navigation_rejected": true,
+      "console_and_network_errors_captured": true,
+      "native_guard_checks": 21,
+      "resources_closed": true,
+      "profile_removed": true,
+      "cleanup_retries": 0,
+      "cleanup_events": [],
+      "cleanup_errors": [],
+      "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\scripted-475fa73e65aa4df192318b67cc76eb61",
+      "exit_code": 0,
+      "worker_wall_ms": 15822,
+      "inference_started": false,
+      "abandoned_browser_stalls": [
+        {
+          "attempt": 0,
+          "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\scripted-524b1f555c734f8984c97894663a7ff7",
+          "error": "_IPCResponseTimeout: Emulation.setDeviceMetricsOverride timed out after 60s waiting for the daemon",
+          "inference_started": false
+        }
+      ],
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      }
+    },
+    {
+      "schema_version": 1,
+      "status": "COMPLETED",
+      "mode": "isolation",
+      "source_sha256": "1833d9bdd281e84ac270f52fe3124a033d159a8c75b12a515c52a3b95d01eb19",
+      "browser_version": "Chrome/153.0.8010.52",
+      "child_credentials_absent": true,
+      "fresh_profile_isolated": true,
+      "resources_closed": true,
+      "profile_removed": true,
+      "cleanup_retries": 0,
+      "cleanup_events": [],
+      "cleanup_errors": [],
+      "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\isolation-6d2ff987281c4c618fabff3eb3e81556",
+      "exit_code": 0,
+      "worker_wall_ms": 3340,
+      "inference_started": false,
+      "abandoned_browser_stalls": []
+    },
+    {
+      "schema_version": 1,
+      "status": "CANCELLED_AS_EXPECTED",
+      "mode": "cancel",
+      "source_sha256": "1833d9bdd281e84ac270f52fe3124a033d159a8c75b12a515c52a3b95d01eb19",
+      "browser_version": "Chrome/153.0.8010.52",
+      "child_credentials_absent": true,
+      "resources_closed": true,
+      "profile_removed": true,
+      "cleanup_retries": 0,
+      "cleanup_events": [],
+      "cleanup_errors": [],
+      "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\cancel-0d366138a48243edaf900fc9f992ea07",
+      "exit_code": 0,
+      "worker_wall_ms": 3353,
+      "inference_started": false,
+      "abandoned_browser_stalls": [
+        {
+          "attempt": 0,
+          "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\cancel-b88006a54bdf40cb96653eb6a04c0e0a",
+          "error": "_IPCResponseTimeout: Emulation.setDeviceMetricsOverride timed out after 60s waiting for the daemon",
+          "inference_started": false
+        }
+      ]
+    }
+  ],
+  "inference_attempts": 0,
+  "secret_scan": {
+    "files": 1058,
+    "passed": true,
+    "scope": "Published artifacts only; private browser work profiles excluded"
+  },
+  "schema_version": 1,
+  "checkpoint": "cp1",
+  "timestamp": "2026-09-18T13:16:49.047786+00:00",
+  "attempt_id": "522abf4507ec43259729ba55d3333f2c"
+}

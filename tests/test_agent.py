@@ -218,6 +218,43 @@ def test_loading_waits_do_not_trigger_no_progress_stop(runner):
     assert len(runner.state["history"]) == 5 and runner.state["status"] == "ready"
 
 
+def test_unchanged_waits_stop_at_the_code_owned_bound(runner):
+    from jev_ultrafast.questions import MAX_UNCHANGED_WAITS
+
+    for _ in range(MAX_UNCHANGED_WAITS):
+        assert runner.state["status"] != "blocked"
+        runner.state["decision"] = decision("wait")
+        runner.command("act", {"fingerprint": runner.state["page"]["fingerprint"]})
+    assert runner.state["status"] == "blocked"
+    assert len(runner.state["history"]) == MAX_UNCHANGED_WAITS
+
+
+def test_a_wait_that_changes_the_page_restarts_the_wait_bound(runner):
+    from jev_ultrafast.questions import MAX_UNCHANGED_WAITS
+
+    for _ in range(MAX_UNCHANGED_WAITS - 1):
+        runner.state["decision"] = decision("wait")
+        runner.command("act", {"fingerprint": runner.state["page"]["fingerprint"]})
+    changed = deepcopy(runner.state["page"])
+    changed["text"] = "Results ready"
+    changed["fingerprint"] = fingerprint(changed)
+    runner.state["browser"].observe.return_value = changed
+    runner.state["decision"] = decision("wait")
+    runner.command("act", {"fingerprint": runner.state["page"]["fingerprint"]})
+    assert runner.state["status"] == "ready"
+    for _ in range(MAX_UNCHANGED_WAITS - 1):
+        runner.state["decision"] = decision("wait")
+        runner.command("act", {"fingerprint": runner.state["page"]["fingerprint"]})
+    assert runner.state["status"] == "ready"
+
+
+def test_the_policy_licenses_waiting_while_an_operation_is_running():
+    from jev_ultrafast.questions import NEXT_ACTION
+
+    assert "Recent WAIT actions are not evidence of loading" not in NEXT_ACTION
+    assert "still running" in NEXT_ACTION and "is not a reason to" in NEXT_ACTION
+
+
 def test_stale_observation_preserves_executed_action(runner):
     runner.state["decision"] = decision("e3")
     runner.state["browser"].observe.side_effect = StalePage("changed")
@@ -318,3 +355,75 @@ def test_navigation_during_prediction_reobserves_without_action(runner):
     assert runner.state["status"] == "ready"
     assert runner.state["decision"] is None
     runner.state["browser"].act.assert_not_called()
+
+
+def test_snapshot_does_not_alias_mutable_agent_state(runner):
+    saved = runner.snapshot()
+    runner.state["page"]["text"] = "Changed after the observation"
+    runner.state["history"].append({"action": "Later"})
+    assert saved["page"]["text"] == "Search"
+    assert saved["history"] == []
+
+
+def test_executed_event_is_durable_before_capture_failure(runner):
+    events = []
+    runner.event_sink = lambda kind, data: events.append((kind, data))
+    runner.state["decision"] = decision("e3")
+    runner.state["browser"].observe.side_effect = TimeoutError("capture failed")
+    with pytest.raises(TimeoutError):
+        runner.command("act", {"fingerprint": runner.state["page"]["fingerprint"]})
+    assert [kind for kind, _ in events] == [
+        "decision_consumed", "action_attempt", "action_executed", "observation_failed",
+    ]
+    assert len(runner.state["history"]) == 1
+    assert runner.state["decision"] is None
+
+
+def test_uncertain_mutation_stops_without_reexecution(runner):
+    events = []
+    runner.event_sink = lambda kind, data: events.append(kind)
+    runner.state["decision"] = decision("e3")
+    runner.state["browser"].act.side_effect = RuntimeError("uncertain mutation")
+    with pytest.raises(RuntimeError):
+        runner.command("act", {"fingerprint": runner.state["page"]["fingerprint"]})
+    assert runner.state["status"] == "blocked" and runner.state["decision"] is None
+    with pytest.raises(ValueError, match="Observe and choose"):
+        runner.command("act", {"fingerprint": runner.state["page"]["fingerprint"]})
+    assert runner.state["browser"].act.call_count == 1
+    assert "action_uncertain" in events and "action_executed" not in events
+
+
+@pytest.mark.parametrize(("base", "expected"), [
+    ("https://api.deepseek.com/v1", "deepseek"),
+    ("https://openrouter.ai/api/v1", "openrouter"),
+    ("https://example-resource.services.ai.azure.com/openai/v1", "azure"),
+    ("https://example.openai.azure.com/openai/v1", "azure"),
+])
+def test_text_dialect_is_detected_from_the_endpoint(monkeypatch, base, expected):
+    monkeypatch.delenv("TEXT_MODEL_DIALECT", raising=False)
+    assert model.text_dialect(base) == expected
+
+
+def test_declared_text_dialect_overrides_detection(monkeypatch):
+    monkeypatch.setenv("TEXT_MODEL_DIALECT", "azure")
+    assert model.text_dialect("https://api.deepseek.com/v1") == "azure"
+    monkeypatch.setenv("TEXT_MODEL_DIALECT", "nonsense")
+    with pytest.raises(ValueError, match="TEXT_MODEL_DIALECT"):
+        model.text_dialect("https://api.deepseek.com/v1")
+
+
+def test_azure_tuning_uses_the_parameters_azure_accepts(monkeypatch):
+    """Azure Foundry rejects max_tokens and the reasoning object outright."""
+    monkeypatch.delenv("TEXT_MODEL_REASONING", raising=False)
+    tuning = model.text_tuning("azure")
+    assert tuning == {"max_completion_tokens": 1024, "reasoning_effort": "low"}
+    monkeypatch.setenv("TEXT_MODEL_REASONING", "none")
+    assert model.text_tuning("azure") == {"max_completion_tokens": 1024}
+
+
+def test_existing_vendor_tuning_is_unchanged(monkeypatch):
+    monkeypatch.delenv("TEXT_MODEL_REASONING", raising=False)
+    assert model.text_tuning("deepseek") == {"max_tokens": 1024, "thinking": {"type": "disabled"}}
+    assert model.text_tuning("openrouter") == {"max_tokens": 1024, "reasoning": {"effort": "low"}}
+    monkeypatch.setenv("TEXT_MODEL_REASONING", "none")
+    assert model.text_tuning("openrouter") == {"max_tokens": 1024, "reasoning": {"enabled": False}}

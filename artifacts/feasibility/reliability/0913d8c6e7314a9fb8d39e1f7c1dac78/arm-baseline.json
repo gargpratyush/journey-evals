@@ -1,0 +1,1327 @@
+{
+  "arm": "baseline",
+  "metrics": {
+    "per_check": {
+      "fare": {
+        "positives": 15,
+        "negatives": 15,
+        "detected": 15,
+        "missed": 0,
+        "false_positive": 0,
+        "definitive_controls": 15,
+        "abstained_controls": 0,
+        "resolved": 30,
+        "correct": 30
+      },
+      "effect": {
+        "positives": 15,
+        "negatives": 15,
+        "detected": 15,
+        "missed": 0,
+        "false_positive": 0,
+        "definitive_controls": 15,
+        "abstained_controls": 0,
+        "resolved": 30,
+        "correct": 30
+      },
+      "loading": {
+        "positives": 15,
+        "negatives": 15,
+        "detected": 15,
+        "missed": 0,
+        "false_positive": 0,
+        "definitive_controls": 15,
+        "abstained_controls": 0,
+        "resolved": 30,
+        "correct": 30
+      }
+    },
+    "totals": {
+      "positives": 45,
+      "negatives": 45,
+      "detected": 45,
+      "missed": 0,
+      "false_positive": 0,
+      "definitive_controls": 45,
+      "abstained_controls": 0,
+      "resolved": 90,
+      "correct": 90,
+      "precision": 1.0,
+      "recall": 1.0,
+      "decision_coverage": 1.0
+    }
+  },
+  "missing_evidence": {
+    "cases": 12,
+    "abstained": 12,
+    "all_abstained": true,
+    "outcomes": {
+      "missing-fare-0": "unknown",
+      "missing-effect-0": "unknown",
+      "missing-basis-0": "unknown",
+      "missing-fare-1": "unknown",
+      "missing-effect-1": "unknown",
+      "missing-basis-1": "unknown",
+      "missing-fare-2": "unknown",
+      "missing-effect-2": "unknown",
+      "missing-basis-2": "unknown",
+      "missing-fare-3": "unknown",
+      "missing-effect-3": "unknown",
+      "missing-basis-3": "unknown"
+    }
+  },
+  "receipt": {
+    "model": "gpt-5.6-luna",
+    "requests": 3,
+    "successful_requests": 3,
+    "retries": 0,
+    "input_tokens": 10445,
+    "output_tokens": 2380,
+    "reasoning_tokens": 382,
+    "latency_ms": 26912,
+    "pricing": "rate not configured; token counts are the measured quantity",
+    "run_id": "9a8cc6e0ccfa4edba664c6acb81eb1e7"
+  },
+  "wall_ms": 26924,
+  "tokens": 12825,
+  "results": [
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "The text does not explain any price increase or request acknowledgement."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "d8237d83da5c48308c62d3c27d75eb35",
+      "category": "fare",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "The text contains no explanation of an increase or acknowledgement request."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "eb11ae91409f4116ad4da865182015fc",
+      "category": "fare",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "clean",
+      "source": "baseline",
+      "answer": {
+        "choice": "clean",
+        "reason": "It explicitly states the old and new USD amounts, the USD 18 increase, and requires acceptance before booking."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "56b4ccc8ea864cff9e69e3bd281f1e17",
+      "category": "fare",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "The updated summary does not explain an increase or request acknowledgement."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "02d2f36c9dac40c494c0482cad210142",
+      "category": "fare",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "A new total and a Book prompt alone do not explain the increase or request acknowledgement."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "09d5e65461a747cf9e6cdb7e2148f441",
+      "category": "fare",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "clean",
+      "source": "baseline",
+      "answer": {
+        "choice": "clean",
+        "reason": "It explains the USD 18 increase and requires accepting the new amount to proceed."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "31aa808471d0423ca353b21d4a4d9ec0",
+      "category": "fare",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "This is a generic fare-update statement and does not explain the specific increase or request acknowledgement."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "a3ead8e3332d4529be1d25041da561e2",
+      "category": "fare",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "clean",
+      "source": "baseline",
+      "answer": {
+        "choice": "clean",
+        "reason": "It explains the increase from USD 100 to USD 118 and requires accepting the new amount."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "aea8076d0da143fdba3f11d9b7cf0133",
+      "category": "fare",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "clean",
+      "source": "code",
+      "reason": "No measured price increase",
+      "evidence_id": "0331f88d399541d49132e95a8cb822ee",
+      "category": "fare",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "It gives only a generic explanation that some journeys cost more and does not request acknowledgement of a specific increase."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "ede7862eee724e4a8673b810b141d9de",
+      "category": "fare",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "clean",
+      "source": "baseline",
+      "answer": {
+        "choice": "clean",
+        "reason": "It explains the USD 18 partner fee increase and requests confirmation of the new total."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "0ca9540cabc542e19f01ddffff5d0df4",
+      "category": "fare",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "clean",
+      "source": "code",
+      "reason": "No measured price increase",
+      "evidence_id": "16ef862a6911494ba6773962fa51d5c4",
+      "category": "fare",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "clean",
+      "source": "code",
+      "reason": "No measured price increase",
+      "evidence_id": "e39e362d5a6844c992c6b3322cd37c66",
+      "category": "fare",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "The availability statement does not explain a specific price increase or request acknowledgement."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "2d4ade1e93dc4b168a43de4fe42b2fa0",
+      "category": "fare",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "clean",
+      "source": "baseline",
+      "answer": {
+        "choice": "clean",
+        "reason": "It identifies the unavailable old price, states the new USD 118 price and USD 18 increase, and requests acknowledgement."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "d829a202c8e5401d868d6a96b195f09f",
+      "category": "fare",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "clean",
+      "source": "baseline",
+      "answer": {
+        "choice": "clean",
+        "reason": "It explains the increase from USD 100 to USD 118 and requires acceptance before booking."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "1aefa1dd8737420283dc4b19d82716e1",
+      "category": "fare",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "clean",
+      "source": "code",
+      "reason": "No measured price increase",
+      "evidence_id": "34596c5cc84645cd9d625a0a18791afb",
+      "category": "fare",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "clean",
+      "source": "baseline",
+      "answer": {
+        "choice": "clean",
+        "reason": "It explicitly identifies the old and higher USD amounts, explains the currency revision, and requests approval."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "d853e0c6e2fd4b3d96d8e9c90144a3c4",
+      "category": "fare",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "The generic fee statement does not explain a specific increase or request acknowledgement."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "9fe516ff341943f5b9cf95fc918d49be",
+      "category": "fare",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "This is a generic pricing disclaimer and does not explain the increase or request acknowledgement."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "349d0bf4484d4a96afe55af337b9e4f1",
+      "category": "fare",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "The booking prompt contains no explanation of a price increase or acknowledgement request."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "0ed8668f15cd4657bced06487d3e752c",
+      "category": "fare",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "The generic completion message does not address the price increase or acknowledgement."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "e1fe19426c7a44bbacf5a4b4e5f24800",
+      "category": "fare",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "The text is an unrelated instruction to the reviewer and provides no qualifying price explanation or acknowledgement request."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "3ce2859b7e094d84857b1f2cfe3f8e64",
+      "category": "fare",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "clean",
+      "source": "code",
+      "reason": "No measured price increase",
+      "evidence_id": "a56c1234ef744b3b9f341b14f9d34cb2",
+      "category": "fare",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "clean",
+      "source": "baseline",
+      "answer": {
+        "choice": "clean",
+        "reason": "It explains why USD 118 applies instead of USD 100 and asks the user to accept it before booking."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "55416bead1ba462f8bb9ce4b2aeb1a6b",
+      "category": "fare",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "clean",
+      "source": "baseline",
+      "answer": {
+        "choice": "clean",
+        "reason": "It explains the change from USD 100 to USD 118 and requests confirmation before booking."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "82e8db7ad1d944e3bc4014386094f5dd",
+      "category": "fare",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "It vaguely references the old amount but neither explains the specific increase nor requests acknowledgement."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "5691e23753f6415682c9c8329093f05c",
+      "category": "fare",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "clean",
+      "source": "baseline",
+      "answer": {
+        "choice": "clean",
+        "reason": "It explains why USD 100 became USD 118 and requests acceptance to continue."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "0f02dd4fd54940f69799e7826ffce095",
+      "category": "fare",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "The text only says the itinerary is ready and does not explain an increase or request acknowledgement."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "a2ce0dba3a7a46628adb98603306bba2",
+      "category": "fare",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "The booking prompt does not explain a price increase or request acknowledgement."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "6f3e9f02807d4379bc2e91347433d3a9",
+      "category": "fare",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "unknown",
+      "source": "code",
+      "reason": "Required evidence window is incomplete",
+      "evidence_id": "9d2eb8dfe3274de98708fae7146595ed",
+      "category": "fare",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "unknown",
+      "source": "code",
+      "reason": "Price association/currency/fare basis is not established",
+      "evidence_id": "7ce334c5395f4d8caa6f3c17d2aaaf91",
+      "category": "fare",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "unknown",
+      "source": "code",
+      "reason": "Required evidence window is incomplete",
+      "evidence_id": "dfd17adcf4634feb87721cd03841ce3e",
+      "category": "fare",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "unknown",
+      "source": "code",
+      "reason": "Price association/currency/fare basis is not established",
+      "evidence_id": "71135676309d4a9e9bd23754c90c2272",
+      "category": "fare",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "unknown",
+      "source": "code",
+      "reason": "Required evidence window is incomplete",
+      "evidence_id": "b5a3da33486b44cc9351bfc1b111f5ca",
+      "category": "fare",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "unknown",
+      "source": "code",
+      "reason": "Price association/currency/fare basis is not established",
+      "evidence_id": "75cc0c04aef04097a7cc7e08442141f4",
+      "category": "fare",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "unknown",
+      "source": "code",
+      "reason": "Required evidence window is incomplete",
+      "evidence_id": "68ad1a1a88b74f1683bc9511f27b7c9d",
+      "category": "fare",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "unknown",
+      "source": "code",
+      "reason": "Price association/currency/fare basis is not established",
+      "evidence_id": "c3a013261ac54b5b9a3864f7690ac280",
+      "category": "fare",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "clean",
+      "source": "baseline",
+      "answer": {
+        "choice": "clean",
+        "reason": "After evidence shows only window seats remain; aisle rows were removed."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "ef6d74648cef456a994788b4aa5b7b8b",
+      "category": "effect",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "The promotion does not appear in the price breakdown; only a success message is shown."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "0713cd251384499cac970c998b00057d",
+      "category": "effect",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "clean",
+      "source": "baseline",
+      "answer": {
+        "choice": "clean",
+        "reason": "After evidence shows results ordered by duration, shortest first."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "ab841e01333c49dcb7aa7db4d885b37c",
+      "category": "effect",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "The summary still says flight only, so insurance is not visibly included."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "aa09f2d7bdd04f69a4a8ad5afd7e397c",
+      "category": "effect",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "clean",
+      "source": "baseline",
+      "answer": {
+        "choice": "clean",
+        "reason": "After evidence shows the fare rules panel is hidden."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "82c5eb0370b54b3aaadc7a24a5c082f9",
+      "category": "effect",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "The trip name remains Untitled trip despite the save message."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "a3bf0db11be644e69c92bbd08fe8576d",
+      "category": "effect",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "Results remain ordered by price rather than duration."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "b06bf2fbb84f47ca842bca02d0146b42",
+      "category": "effect",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "clean",
+      "source": "baseline",
+      "answer": {
+        "choice": "clean",
+        "reason": "After evidence shows prices in EUR."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "b80c750c498a4715925b746d61b429dc",
+      "category": "effect",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "The return time remains 09:00 rather than showing the later option."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "6eed00d690894b27817a0836da35c959",
+      "category": "effect",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "No download offer is shown; the itinerary remains on screen."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "147cc91732504a5d984107cda49f8139",
+      "category": "effect",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "Sold-out flights remain included in the listing."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "697e72388b20426baf7a5d1956882a70",
+      "category": "effect",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "The trip type remains personal despite the label message."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "7b2f2eecdb0046599153715658a352aa",
+      "category": "effect",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "clean",
+      "source": "baseline",
+      "answer": {
+        "choice": "clean",
+        "reason": "After evidence shows the trip type as business travel."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "f8512a7f1e9c46c7918750d237e8b966",
+      "category": "effect",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "The saved traveller list is unchanged despite the deletion message."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "7fa29a412f9649058f373ae9b5601302",
+      "category": "effect",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "clean",
+      "source": "baseline",
+      "answer": {
+        "choice": "clean",
+        "reason": "After evidence says the listing shows available flights only."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "018f3288f4664f3480ebe26774464cb0",
+      "category": "effect",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "clean",
+      "source": "baseline",
+      "answer": {
+        "choice": "clean",
+        "reason": "After evidence shows no seat is selected."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "67329840cf2f465abaff0188c6a341ed",
+      "category": "effect",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "clean",
+      "source": "baseline",
+      "answer": {
+        "choice": "clean",
+        "reason": "After evidence shows the return time changed to 17:40."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "191be2a99a2f4aa1b8f5aa28e9afc33b",
+      "category": "effect",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "The passenger count remains 1 rather than increasing to two."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "82306846ed0f454aa2d475bcd37a52ba",
+      "category": "effect",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "clean",
+      "source": "baseline",
+      "answer": {
+        "choice": "clean",
+        "reason": "After evidence shows two passengers."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "1f786f672c8d4185a11ed98abfe5059a",
+      "category": "effect",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "Aisle and window seats are still listed, so the filter effect is not visible."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "e1e7ef6ad52f4ed5971ea2815555a833",
+      "category": "effect",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "clean",
+      "source": "baseline",
+      "answer": {
+        "choice": "clean",
+        "reason": "After evidence shows the trip name as Client visit."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "ba5c2878a1d846f78ea5977b97e35b83",
+      "category": "effect",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "clean",
+      "source": "baseline",
+      "answer": {
+        "choice": "clean",
+        "reason": "After evidence shows no filters applied, indicating the destination filter was removed."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "b084fd7f00ec4079870c7d18b61ecf15",
+      "category": "effect",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "Seat 12A remains selected despite the update message."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "d5e8aed14f324b0d86969b37ae61cd2c",
+      "category": "effect",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "clean",
+      "source": "baseline",
+      "answer": {
+        "choice": "clean",
+        "reason": "The promotion appears in the price breakdown with a USD 10 deduction."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "a8aba49d998a49009eb9731827b04509",
+      "category": "effect",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "clean",
+      "source": "baseline",
+      "answer": {
+        "choice": "clean",
+        "reason": "After evidence offers itinerary.pdf for download."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "3510752ae10849d096726c6b2e5e7651",
+      "category": "effect",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "The fare rules panel remains expanded."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "07809b7e74b34670b12511147f09f56c",
+      "category": "effect",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "The destination filter remains present despite the cleared message."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "8944dccd12b5419c84ff832eb8d91c09",
+      "category": "effect",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "Prices remain in USD rather than EUR."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "4bd21d6a8ba8455a8c8c5389ff6c297a",
+      "category": "effect",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "clean",
+      "source": "baseline",
+      "answer": {
+        "choice": "clean",
+        "reason": "After evidence shows the summary includes travel insurance."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "7f4b1f77fb974b1d897f50ccee6d49bd",
+      "category": "effect",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "clean",
+      "source": "baseline",
+      "answer": {
+        "choice": "clean",
+        "reason": "After evidence shows only B. Cole remains, so A. Ray was removed."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "649856b386e34579a6e618701450eae1",
+      "category": "effect",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "unknown",
+      "source": "code",
+      "reason": "Action execution or observation deadline is not established",
+      "evidence_id": "c29e0b3c9fe24677979543574a430a9d",
+      "category": "effect",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "unknown",
+      "source": "code",
+      "reason": "Action execution or observation deadline is not established",
+      "evidence_id": "e32cbad0f2834fb0a6ddac91b893068e",
+      "category": "effect",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "unknown",
+      "source": "code",
+      "reason": "Action execution or observation deadline is not established",
+      "evidence_id": "1ddb8f5093614859a54784d1bbf0337d",
+      "category": "effect",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "unknown",
+      "source": "code",
+      "reason": "Action execution or observation deadline is not established",
+      "evidence_id": "6c49daec94744ee79c356ab3c3bd3530",
+      "category": "effect",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "clean",
+      "source": "baseline",
+      "answer": {
+        "choice": "clean",
+        "reason": "Visible feedback says \u201cRefund in progress,\u201d directly indicating the named operation is underway."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "5e5212879fec49448c5bc9d3183d55fe",
+      "category": "loading",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "The feedback states that one cabin bag is included, not that baggage allowance checking is in progress."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "b158bc0ab32c427c914f097298a19fa6",
+      "category": "loading",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "The feedback about accepted cards is unrelated to splitting the payment."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "7dc1af32e8a24e418d01be11d0d05a9c",
+      "category": "loading",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "The sandbox thank-you message does not indicate that ticket issuance is in progress."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "00739cf3afe74fee854c791cf5fdc002",
+      "category": "loading",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "The terms-and-conditions message does not indicate that the hold is being cancelled."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "fafa5f0937bd47c0b816a0f1043711b5",
+      "category": "loading",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "clean",
+      "source": "baseline",
+      "answer": {
+        "choice": "clean",
+        "reason": "The feedback explicitly says the airline is being contacted and that it may take a moment."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "6444d5d6b3bc49f49dcf788966103ae6",
+      "category": "loading",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "clean",
+      "source": "baseline",
+      "answer": {
+        "choice": "clean",
+        "reason": "\u201cChecking baggage allowance\u201d directly indicates the named operation is in progress."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "7894465cef544992a5a0ba4edd65c035",
+      "category": "loading",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "clean",
+      "source": "baseline",
+      "answer": {
+        "choice": "clean",
+        "reason": "\u201cCancelling your held booking\u201d indicates that cancellation is underway."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "d6db7121514f4703a8eb6f77f7b799eb",
+      "category": "loading",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "clean",
+      "source": "code",
+      "reason": "Response is below this fixture's declared loading-feedback threshold",
+      "evidence_id": "4bbeead9ec6f450bbe2541a69e028546",
+      "category": "loading",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "clean",
+      "source": "baseline",
+      "answer": {
+        "choice": "clean",
+        "reason": "\u201cIssuing your ticket now\u201d directly communicates that ticket issuance is in progress."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "1605664365604237b1c4da65918491ba",
+      "category": "loading",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "clean",
+      "source": "code",
+      "reason": "Response is below this fixture's declared loading-feedback threshold",
+      "evidence_id": "2ac530f2874040f8ba2a54cd21839ea4",
+      "category": "loading",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "clean",
+      "source": "code",
+      "reason": "Response is below this fixture's declared loading-feedback threshold",
+      "evidence_id": "e0399e21efdb4f7b91f3dc9ca0acd9d0",
+      "category": "loading",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "The invitation to choose a seat does not indicate that the seat map is being confirmed."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "fd17679a21cf4f5d9bc4735bdf9bbde6",
+      "category": "loading",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "The passport validity requirement is static guidance, not progress feedback for verification."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "627cb7444cb3436ba8b26b566d9e3823",
+      "category": "loading",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "The app-download promotion is unrelated to updating the itinerary."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "d28185d6d79d433da9658b23ac2e92b9",
+      "category": "loading",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "clean",
+      "source": "baseline",
+      "answer": {
+        "choice": "clean",
+        "reason": "\u201cVerifying passport details\u201d directly indicates that passport verification is underway."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "7de11438cda842caa3aed0d4ff0780db",
+      "category": "loading",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "The statement about refund delivery timing does not communicate that the refund operation is currently in progress."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "db9fb5ea1b8140bb9a100b30a51f8d4e",
+      "category": "loading",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "The weekday-fares statement is unrelated to recalculating the total."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "6da6098687dd4136af4ad691fbf2fd2e",
+      "category": "loading",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "clean",
+      "source": "code",
+      "reason": "Response is below this fixture's declared loading-feedback threshold",
+      "evidence_id": "a002ca1c5cb84093abf232e8c1b7db9f",
+      "category": "loading",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "The spam-folder advice does not indicate that the receipt is being sent."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "5a5e4d22f63f44a19ec147f93ae74ba2",
+      "category": "loading",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "clean",
+      "source": "baseline",
+      "answer": {
+        "choice": "clean",
+        "reason": "\u201cRecalculating your total\u201d directly communicates that recalculation is in progress."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "0c8a89d417074f4ca2ccc2236ea2a400",
+      "category": "loading",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "The points promotion is unrelated to reserving the fare."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "9f675dd20ba74ca4bbea497818094205",
+      "category": "loading",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "clean",
+      "source": "code",
+      "reason": "Response is below this fixture's declared loading-feedback threshold",
+      "evidence_id": "9cdc590298d940d69b821180f3603eaa",
+      "category": "loading",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "The availability disclaimer does not indicate that the upgrade is being confirmed."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "4c48a97541e34f6f9502dc8cf2354a15",
+      "category": "loading",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "clean",
+      "source": "baseline",
+      "answer": {
+        "choice": "clean",
+        "reason": "\u201cUpdating your itinerary\u201d directly indicates that the named operation is underway."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "ee1aa567a6244671b9f44c637b9e4fac",
+      "category": "loading",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "The expiration notice is unrelated to restoring the saved search."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "668d21ebe71140538cec99d9694afcb9",
+      "category": "loading",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "The popular-routes message does not indicate that the airline is being contacted."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "e74b6c01e25c444c9b0f1235b72ff106",
+      "category": "loading",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "defect",
+      "source": "baseline",
+      "answer": {
+        "choice": "defect",
+        "reason": "The travel slogan is unrelated to merging the itineraries."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "eb811f02b654414dabdefd38bd812d97",
+      "category": "loading",
+      "advisory": true,
+      "requires_review": true
+    },
+    {
+      "outcome": "clean",
+      "source": "baseline",
+      "answer": {
+        "choice": "clean",
+        "reason": "The feedback says the fare is being held while it is reserved, clearly indicating progress."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "b6670a33e6c2494ca082e6d4a4f6a4d0",
+      "category": "loading",
+      "advisory": true,
+      "requires_review": false
+    },
+    {
+      "outcome": "clean",
+      "source": "baseline",
+      "answer": {
+        "choice": "clean",
+        "reason": "\u201cConfirming your seat map\u201d directly communicates that confirmation is in progress."
+      },
+      "model": "gpt-5.6-luna",
+      "evidence_id": "3f0c76114778402ab6acc0c26658af52",
+      "category": "loading",
+      "advisory": true,
+      "requires_review": false
+    }
+  ]
+}

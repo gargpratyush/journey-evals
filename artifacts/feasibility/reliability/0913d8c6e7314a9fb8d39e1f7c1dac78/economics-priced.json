@@ -1,0 +1,35 @@
+{
+  "note": "Run #2 measured usage repriced at the owner-supplied baseline rate. No model was re-invoked.",
+  "economics": {
+    "jev": {
+      "tokens": 16198,
+      "correct_resolved": 90,
+      "usd": "0.000680316",
+      "usd_per_correct": "0.000007559066666666666666666666667",
+      "wall_ms": 1923,
+      "requests": 3,
+      "rate": "USD 0.042000000/M input tokens, output not billed (published Jev rate)"
+    },
+    "baseline": {
+      "tokens": 12825,
+      "correct_resolved": 90,
+      "usd": "0.004945",
+      "usd_per_correct": "0.00005494444444444444444444444444",
+      "wall_ms": 26924,
+      "requests": 3,
+      "reasoning_tokens": 382,
+      "rate": "USD 0.20/M input and 1.20/M output, supplied by the Azure subscription owner for this deployment. Estimate from reported usage, not an invoice."
+    },
+    "token_ratio_baseline_over_jev": 0.79,
+    "usd_ratio_baseline_over_jev": 7.27,
+    "latency_ratio_baseline_over_jev": 14.0,
+    "quality_delta": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "decision_coverage": 0.0
+    },
+    "both_arms_meet_quality_floor": true,
+    "ten_x_gate": false,
+    "interpretation": "Estimates from reported usage at the two published/authorized rates, not invoices. Attributable to this comparator, version and workload only."
+  }
+}

@@ -1,0 +1,209 @@
+<!doctype html><meta charset=utf-8><title>CP3 detection screening</title><style>body{font:16px system-ui;max-width:1100px;margin:32px auto}pre{white-space:pre-wrap}</style><h1>CP3: detection screening</h1><p>Semantic findings are advisory and require review. These small samples do not establish production accuracy.</p><pre>{
+  &quot;status&quot;: &quot;GREEN&quot;,
+  &quot;directory&quot;: &quot;C:\\source\\projects\\jev-test\\artifacts\\feasibility\\screening\\20eaa87ec94c4043a6fb5ef2c82614c0&quot;,
+  &quot;freeze&quot;: {
+    &quot;source_sha256&quot;: &quot;6ff69d55d004405421cb93b45319167d0fb80258331377ad9c0b4096f79eff9b&quot;,
+    &quot;evaluator_sha256&quot;: &quot;357b98c13eff89e43d63626d06c4a9af5a8b621cdbe786fd94b2ddabe3f25116&quot;,
+    &quot;dataset_sha256&quot;: &quot;3fefb4ef9cf219d3a5ec77e9746eb8f766ebb7f1d0267b41fa282889c4d94d2d&quot;,
+    &quot;dataset_content_sha256&quot;: &quot;4eda4fbd596fd9ff96d6626c497a8d6d4f20bc1e898ae28c9a7afddda1cb1bce&quot;,
+    &quot;thresholds&quot;: {
+      &quot;minimum_true_positive&quot;: 8,
+      &quot;maximum_false_positive&quot;: 1,
+      &quot;minimum_definitive_controls&quot;: 8
+    },
+    &quot;labels&quot;: &quot;Constructed and independently labeled in code; not model-generated ground truth.&quot;,
+    &quot;holdout_rule&quot;: &quot;Families remain in one split; scored cases retire if used to change the candidate.&quot;
+  },
+  &quot;development&quot;: {
+    &quot;positives&quot;: 9,
+    &quot;negatives&quot;: 9,
+    &quot;true_positive&quot;: 9,
+    &quot;false_positive&quot;: 0,
+    &quot;definitive_controls&quot;: 9,
+    &quot;unknown&quot;: 0
+  },
+  &quot;holdout&quot;: {
+    &quot;positives&quot;: 9,
+    &quot;negatives&quot;: 9,
+    &quot;true_positive&quot;: 9,
+    &quot;false_positive&quot;: 0,
+    &quot;definitive_controls&quot;: 9,
+    &quot;unknown&quot;: 0
+  },
+  &quot;missing_evidence_all_unknown&quot;: true,
+  &quot;screening_budget&quot;: {
+    &quot;limit_usd&quot;: &quot;0.10&quot;,
+    &quot;attempts_this_checkpoint&quot;: 6,
+    &quot;accounted_input_tokens_including_history&quot;: 169010,
+    &quot;accounted_usd&quot;: &quot;0.007098420&quot;,
+    &quot;billing&quot;: &quot;Published-rate estimate; non-success/unknown requests retain maximum reservation.&quot;
+  },
+  &quot;screening_gate_passed&quot;: true,
+  &quot;live_trio&quot;: [
+    {
+      &quot;run&quot;: {
+        &quot;schema_version&quot;: 1,
+        &quot;status&quot;: &quot;COMPLETED&quot;,
+        &quot;mode&quot;: &quot;autonomous&quot;,
+        &quot;source_sha256&quot;: &quot;6ff69d55d004405421cb93b45319167d0fb80258331377ad9c0b4096f79eff9b&quot;,
+        &quot;browser_version&quot;: &quot;Chrome/153.0.8010.52&quot;,
+        &quot;child_credentials_absent&quot;: true,
+        &quot;agent_status&quot;: &quot;done&quot;,
+        &quot;actions&quot;: 7,
+        &quot;decisions&quot;: 8,
+        &quot;actor_elapsed_ms&quot;: 5684,
+        &quot;text_entry&quot;: &quot;NOT_TESTED&quot;,
+        &quot;evidence_complete&quot;: true,
+        &quot;budget&quot;: {
+          &quot;limit_usd&quot;: &quot;0.10&quot;,
+          &quot;attempts_this_checkpoint&quot;: 8,
+          &quot;accounted_input_tokens_including_history&quot;: 182036,
+          &quot;accounted_usd&quot;: &quot;0.007645512&quot;,
+          &quot;billing&quot;: &quot;Published-rate estimate; non-success/unknown requests retain maximum reservation.&quot;
+        },
+        &quot;resources_closed&quot;: true,
+        &quot;profile_removed&quot;: true,
+        &quot;cleanup_retries&quot;: 0,
+        &quot;directory&quot;: &quot;C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-914ff1e4cdcb4d9f82e0d7e5947def8c&quot;,
+        &quot;exit_code&quot;: 0,
+        &quot;worker_wall_ms&quot;: 21276
+      },
+      &quot;independent_verifier&quot;: {
+        &quot;passed&quot;: true,
+        &quot;failures&quot;: [],
+        &quot;booking_count&quot;: 1
+      },
+      &quot;expected&quot;: &quot;clean&quot;,
+      &quot;finding&quot;: {
+        &quot;outcome&quot;: &quot;clean&quot;,
+        &quot;source&quot;: &quot;code&quot;,
+        &quot;reason&quot;: &quot;No measured price increase&quot;,
+        &quot;evidence_id&quot;: &quot;70d7e1f184bc40d4af59faca95b6b6fd&quot;,
+        &quot;category&quot;: &quot;fare&quot;,
+        &quot;advisory&quot;: true,
+        &quot;requires_review&quot;: false
+      },
+      &quot;acknowledgement_observed&quot;: false,
+      &quot;passed&quot;: true,
+      &quot;elapsed_ms&quot;: 21434
+    },
+    {
+      &quot;run&quot;: {
+        &quot;schema_version&quot;: 1,
+        &quot;status&quot;: &quot;COMPLETED&quot;,
+        &quot;mode&quot;: &quot;autonomous&quot;,
+        &quot;source_sha256&quot;: &quot;6ff69d55d004405421cb93b45319167d0fb80258331377ad9c0b4096f79eff9b&quot;,
+        &quot;browser_version&quot;: &quot;Chrome/153.0.8010.52&quot;,
+        &quot;child_credentials_absent&quot;: true,
+        &quot;agent_status&quot;: &quot;done&quot;,
+        &quot;actions&quot;: 7,
+        &quot;decisions&quot;: 8,
+        &quot;actor_elapsed_ms&quot;: 6061,
+        &quot;text_entry&quot;: &quot;NOT_TESTED&quot;,
+        &quot;evidence_complete&quot;: true,
+        &quot;budget&quot;: {
+          &quot;limit_usd&quot;: &quot;0.10&quot;,
+          &quot;attempts_this_checkpoint&quot;: 8,
+          &quot;accounted_input_tokens_including_history&quot;: 195062,
+          &quot;accounted_usd&quot;: &quot;0.008192604&quot;,
+          &quot;billing&quot;: &quot;Published-rate estimate; non-success/unknown requests retain maximum reservation.&quot;
+        },
+        &quot;resources_closed&quot;: true,
+        &quot;profile_removed&quot;: true,
+        &quot;cleanup_retries&quot;: 0,
+        &quot;directory&quot;: &quot;C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-3a83fee624e3428ab5d8b76767e4a4fe&quot;,
+        &quot;exit_code&quot;: 0,
+        &quot;worker_wall_ms&quot;: 22079
+      },
+      &quot;independent_verifier&quot;: {
+        &quot;passed&quot;: true,
+        &quot;failures&quot;: [],
+        &quot;booking_count&quot;: 1
+      },
+      &quot;expected&quot;: &quot;defect&quot;,
+      &quot;finding&quot;: {
+        &quot;outcome&quot;: &quot;defect&quot;,
+        &quot;source&quot;: &quot;jev&quot;,
+        &quot;answer&quot;: {
+          &quot;type&quot;: &quot;choice&quot;,
+          &quot;choice&quot;: &quot;defect&quot;,
+          &quot;confidence&quot;: 0.97,
+          &quot;probabilities&quot;: {
+            &quot;unknown&quot;: 0.0,
+            &quot;clean&quot;: 0.01,
+            &quot;defect&quot;: 0.99
+          }
+        },
+        &quot;model&quot;: &quot;jev-1.13.0&quot;,
+        &quot;evidence_id&quot;: &quot;4b5c07fe3030458a9b6f1e5b5e1f4571&quot;,
+        &quot;category&quot;: &quot;fare&quot;,
+        &quot;advisory&quot;: true,
+        &quot;requires_review&quot;: true
+      },
+      &quot;acknowledgement_observed&quot;: false,
+      &quot;passed&quot;: true,
+      &quot;elapsed_ms&quot;: 23111
+    },
+    {
+      &quot;run&quot;: {
+        &quot;schema_version&quot;: 1,
+        &quot;status&quot;: &quot;COMPLETED&quot;,
+        &quot;mode&quot;: &quot;autonomous&quot;,
+        &quot;source_sha256&quot;: &quot;6ff69d55d004405421cb93b45319167d0fb80258331377ad9c0b4096f79eff9b&quot;,
+        &quot;browser_version&quot;: &quot;Chrome/153.0.8010.52&quot;,
+        &quot;child_credentials_absent&quot;: true,
+        &quot;agent_status&quot;: &quot;done&quot;,
+        &quot;actions&quot;: 7,
+        &quot;decisions&quot;: 8,
+        &quot;actor_elapsed_ms&quot;: 6019,
+        &quot;text_entry&quot;: &quot;NOT_TESTED&quot;,
+        &quot;evidence_complete&quot;: true,
+        &quot;budget&quot;: {
+          &quot;limit_usd&quot;: &quot;0.10&quot;,
+          &quot;attempts_this_checkpoint&quot;: 8,
+          &quot;accounted_input_tokens_including_history&quot;: 208635,
+          &quot;accounted_usd&quot;: &quot;0.008762670&quot;,
+          &quot;billing&quot;: &quot;Published-rate estimate; non-success/unknown requests retain maximum reservation.&quot;
+        },
+        &quot;resources_closed&quot;: true,
+        &quot;profile_removed&quot;: true,
+        &quot;cleanup_retries&quot;: 0,
+        &quot;directory&quot;: &quot;C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-2e46c39b0d8843d08e5fa99319b885c3&quot;,
+        &quot;exit_code&quot;: 0,
+        &quot;worker_wall_ms&quot;: 21612
+      },
+      &quot;independent_verifier&quot;: {
+        &quot;passed&quot;: true,
+        &quot;failures&quot;: [],
+        &quot;booking_count&quot;: 1
+      },
+      &quot;expected&quot;: &quot;clean&quot;,
+      &quot;finding&quot;: {
+        &quot;outcome&quot;: &quot;clean&quot;,
+        &quot;source&quot;: &quot;jev&quot;,
+        &quot;answer&quot;: {
+          &quot;type&quot;: &quot;choice&quot;,
+          &quot;choice&quot;: &quot;clean&quot;,
+          &quot;confidence&quot;: 1.0,
+          &quot;probabilities&quot;: {
+            &quot;defect&quot;: 0.0,
+            &quot;clean&quot;: 1.0,
+            &quot;unknown&quot;: 0.0
+          }
+        },
+        &quot;model&quot;: &quot;jev-1.13.0&quot;,
+        &quot;evidence_id&quot;: &quot;6d90024715214314b5742dec2b572ea6&quot;,
+        &quot;category&quot;: &quot;fare&quot;,
+        &quot;advisory&quot;: true,
+        &quot;requires_review&quot;: false
+      },
+      &quot;acknowledgement_observed&quot;: true,
+      &quot;passed&quot;: true,
+      &quot;elapsed_ms&quot;: 22709
+    }
+  ],
+  &quot;schema_version&quot;: 1,
+  &quot;checkpoint&quot;: &quot;cp3&quot;,
+  &quot;timestamp&quot;: &quot;2026-09-18T11:19:52.295751+00:00&quot;,
+  &quot;attempt_id&quot;: &quot;d8643e9cea7a48fb99de0fddb6d95dca&quot;
+}</pre>

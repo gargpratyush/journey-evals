@@ -1,0 +1,123 @@
+{
+  "status": "AMBER",
+  "batch_id": "acf1c19f8cec4688b9c85c6f4b1a76b1",
+  "planned": 3,
+  "completed_and_verified": 2,
+  "runs": [
+    {
+      "schema_version": 1,
+      "status": "COMPLETED",
+      "mode": "autonomous",
+      "source_sha256": "e217c5afb4134584ddea883c86a85151e44661ed3a43ef36cfb0f7067ec71b86",
+      "browser_version": "Chrome/153.0.8010.52",
+      "child_credentials_absent": true,
+      "agent_status": "done",
+      "actions": 7,
+      "decisions": 8,
+      "actor_elapsed_ms": 6172,
+      "text_entry": "NOT_TESTED",
+      "evidence_complete": true,
+      "budget": {
+        "limit_usd": "0.10",
+        "attempts_this_checkpoint": 8,
+        "accounted_input_tokens_including_history": 95495,
+        "accounted_usd": "0.004010790",
+        "billing": "Published-rate estimate; non-success/unknown requests retain maximum reservation."
+      },
+      "resources_closed": true,
+      "profile_removed": true,
+      "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-a73cff944b5d40ebb2b3d0c4c9839b25",
+      "exit_code": 0,
+      "worker_wall_ms": 21148,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "artifacts_secret_free": true,
+      "passed": true,
+      "timing": {
+        "through_first_report_persistence_ms": 21160
+      }
+    },
+    {
+      "schema_version": 1,
+      "status": "COMPLETED",
+      "mode": "autonomous",
+      "source_sha256": "e217c5afb4134584ddea883c86a85151e44661ed3a43ef36cfb0f7067ec71b86",
+      "browser_version": "Chrome/153.0.8010.52",
+      "child_credentials_absent": true,
+      "agent_status": "done",
+      "actions": 7,
+      "decisions": 8,
+      "actor_elapsed_ms": 6004,
+      "text_entry": "NOT_TESTED",
+      "evidence_complete": true,
+      "budget": {
+        "limit_usd": "0.10",
+        "attempts_this_checkpoint": 8,
+        "accounted_input_tokens_including_history": 108521,
+        "accounted_usd": "0.004557882",
+        "billing": "Published-rate estimate; non-success/unknown requests retain maximum reservation."
+      },
+      "resources_closed": true,
+      "profile_removed": true,
+      "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-0fc83518d9f446598cfc7fd449d793cf",
+      "exit_code": 0,
+      "worker_wall_ms": 21178,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "artifacts_secret_free": true,
+      "passed": true,
+      "timing": {
+        "through_first_report_persistence_ms": 21187
+      }
+    },
+    {
+      "schema_version": 1,
+      "status": "ERROR",
+      "mode": "autonomous",
+      "source_sha256": "e217c5afb4134584ddea883c86a85151e44661ed3a43ef36cfb0f7067ec71b86",
+      "browser_version": "Chrome/153.0.8010.52",
+      "child_credentials_absent": true,
+      "agent_status": "done",
+      "actions": 7,
+      "decisions": 8,
+      "actor_elapsed_ms": 6899,
+      "text_entry": "NOT_TESTED",
+      "evidence_complete": true,
+      "budget": {
+        "limit_usd": "0.10",
+        "attempts_this_checkpoint": 8,
+        "accounted_input_tokens_including_history": 121547,
+        "accounted_usd": "0.005104974",
+        "billing": "Published-rate estimate; non-success/unknown requests retain maximum reservation."
+      },
+      "error": "PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\source\\\\projects\\\\jev-test\\\\artifacts\\\\feasibility\\\\work\\\\browser-btq06gpi\\\\process.log'",
+      "resources_closed": true,
+      "profile_removed": false,
+      "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-f778e529955e4df5a52a256c32f37211",
+      "exit_code": 1,
+      "worker_wall_ms": 27648,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "artifacts_secret_free": true,
+      "passed": false,
+      "timing": {
+        "through_first_report_persistence_ms": 27666
+      }
+    }
+  ],
+  "text_entry": "NOT_TESTED",
+  "source_sha256": "e217c5afb4134584ddea883c86a85151e44661ed3a43ef36cfb0f7067ec71b86",
+  "schema_version": 1,
+  "checkpoint": "cp2",
+  "timestamp": "2026-09-18T11:12:22.842482+00:00",
+  "attempt_id": "8f63d2f36e804c2ea00eb6aee4946287"
+}

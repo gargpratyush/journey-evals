@@ -1,0 +1,137 @@
+{
+  "status": "GREEN",
+  "batch_id": "e449d6fc2f5a44bfa2fafc7d51dc9650",
+  "planned": 3,
+  "completed_and_verified": 3,
+  "runs": [
+    {
+      "schema_version": 1,
+      "status": "COMPLETED",
+      "mode": "autonomous",
+      "source_sha256": "4df588be7ee52ec6955874d5e166d76c6a381f79ec459c539fdb606dbfbb0f95",
+      "browser_version": "Chrome/153.0.8010.52",
+      "child_credentials_absent": true,
+      "agent_status": "done",
+      "actions": 7,
+      "decisions": 8,
+      "actor_elapsed_ms": 7123,
+      "text_entry": "NOT_TESTED",
+      "evidence_complete": true,
+      "budget": {
+        "limit_usd": "0.10",
+        "attempts_this_checkpoint": 8,
+        "accounted_input_tokens_including_history": 248251,
+        "accounted_usd": "0.010426542",
+        "billing": "Published-rate estimate; non-success/unknown requests retain maximum reservation."
+      },
+      "resources_closed": true,
+      "profile_removed": true,
+      "cleanup_retries": 0,
+      "cleanup_events": [],
+      "cleanup_errors": [],
+      "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-c1400ba24dbd43b2b33474147fc59a51",
+      "exit_code": 0,
+      "worker_wall_ms": 11441,
+      "inference_started": true,
+      "abandoned_browser_stalls": [],
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "artifacts_secret_free": true,
+      "passed": true,
+      "timing": {
+        "through_first_report_persistence_ms": 11448
+      }
+    },
+    {
+      "schema_version": 1,
+      "status": "COMPLETED",
+      "mode": "autonomous",
+      "source_sha256": "4df588be7ee52ec6955874d5e166d76c6a381f79ec459c539fdb606dbfbb0f95",
+      "browser_version": "Chrome/153.0.8010.52",
+      "child_credentials_absent": true,
+      "agent_status": "done",
+      "actions": 7,
+      "decisions": 8,
+      "actor_elapsed_ms": 4869,
+      "text_entry": "NOT_TESTED",
+      "evidence_complete": true,
+      "budget": {
+        "limit_usd": "0.10",
+        "attempts_this_checkpoint": 8,
+        "accounted_input_tokens_including_history": 261277,
+        "accounted_usd": "0.010973634",
+        "billing": "Published-rate estimate; non-success/unknown requests retain maximum reservation."
+      },
+      "resources_closed": true,
+      "profile_removed": true,
+      "cleanup_retries": 0,
+      "cleanup_events": [],
+      "cleanup_errors": [],
+      "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-ff5c0651c7e34880a34f9d1ff24eeb00",
+      "exit_code": 0,
+      "worker_wall_ms": 9936,
+      "inference_started": true,
+      "abandoned_browser_stalls": [],
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "artifacts_secret_free": true,
+      "passed": true,
+      "timing": {
+        "through_first_report_persistence_ms": 9941
+      }
+    },
+    {
+      "schema_version": 1,
+      "status": "COMPLETED",
+      "mode": "autonomous",
+      "source_sha256": "4df588be7ee52ec6955874d5e166d76c6a381f79ec459c539fdb606dbfbb0f95",
+      "browser_version": "Chrome/153.0.8010.52",
+      "child_credentials_absent": true,
+      "agent_status": "done",
+      "actions": 7,
+      "decisions": 8,
+      "actor_elapsed_ms": 4788,
+      "text_entry": "NOT_TESTED",
+      "evidence_complete": true,
+      "budget": {
+        "limit_usd": "0.10",
+        "attempts_this_checkpoint": 8,
+        "accounted_input_tokens_including_history": 274303,
+        "accounted_usd": "0.011520726",
+        "billing": "Published-rate estimate; non-success/unknown requests retain maximum reservation."
+      },
+      "resources_closed": true,
+      "profile_removed": true,
+      "cleanup_retries": 0,
+      "cleanup_events": [],
+      "cleanup_errors": [],
+      "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-34a7fe0e8d3643f6928efd1468d052c2",
+      "exit_code": 0,
+      "worker_wall_ms": 9971,
+      "inference_started": true,
+      "abandoned_browser_stalls": [],
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "artifacts_secret_free": true,
+      "passed": true,
+      "timing": {
+        "through_first_report_persistence_ms": 9978
+      }
+    }
+  ],
+  "text_entry": "NOT_TESTED",
+  "source_sha256": "4df588be7ee52ec6955874d5e166d76c6a381f79ec459c539fdb606dbfbb0f95",
+  "schema_version": 1,
+  "checkpoint": "cp2",
+  "timestamp": "2026-09-18T12:46:40.658835+00:00",
+  "attempt_id": "bc2990e6d5d647c6b5b3e5e0645ea51d"
+}

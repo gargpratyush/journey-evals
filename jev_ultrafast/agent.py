@@ -2,25 +2,27 @@
 
 import base64
 import time
+from copy import deepcopy
 from pathlib import Path
 
 from .browser import Browser, StalePage
 from .model import action_space, choose, field_context, field_text
-from .questions import MAX_STEPS
+from .questions import MAX_STEPS, MAX_UNCHANGED_WAITS
 
 
 class Agent:
-    def __init__(self, url, goals, *, record_dir=None, screenshots=False):
+    def __init__(self, url, goals, *, record_dir=None, screenshots=False, browser_factory=None, event_sink=None):
         task = goals.strip() if isinstance(goals, str) else "\n".join(goals).strip()
         if not task:
             raise ValueError("Supply a task")
         plan = [task]
         self.pending_text = None
-        self.browser = Browser(url)
+        self.event_sink = event_sink
+        self.browser = (browser_factory or Browser)(url)
         self.record_dir = Path(record_dir) if record_dir else None
         self.screenshots = screenshots or bool(record_dir)
         try:
-            page = self.browser.observe(screenshot=self.screenshots)
+            page = self._observe(self.browser, "initial")
         except Exception:
             self.browser.close()
             raise
@@ -44,10 +46,24 @@ class Agent:
             (self.record_dir / "000000.jpg").write_bytes(base64.b64decode(page["screenshot"]))
 
     def snapshot(self):
-        return {
+        return deepcopy({
             **{k: v for k, v in self.state.items() if k != "browser"},
             "elements": action_space(self.state["page"]["actions"])[0],
-        }
+        })
+
+    def _emit(self, kind, **data):
+        sink = getattr(self, "event_sink", None)
+        if sink:
+            sink(kind, deepcopy(data))
+
+    def _observe(self, browser, phase):
+        try:
+            page = browser.observe(screenshot=self.screenshots)
+        except Exception as error:
+            self._emit("observation_failed", phase=phase, error_type=type(error).__name__)
+            raise
+        self._emit("observation", phase=phase, page=page)
+        return page
 
     def command(self, name, body=None):
         body = body or {}
@@ -59,7 +75,7 @@ class Agent:
             except StalePage:
                 state["decision"] = None
                 state["status"] = "ready"
-                state["page"] = state["browser"].observe(screenshot=self.screenshots)
+                state["page"] = self._observe(state["browser"], "stale_recovery")
                 state["elapsed_ms"] = round((time.perf_counter() - state["started_at"]) * 1000)
                 return self.snapshot()
         elif name == "predict":
@@ -68,7 +84,7 @@ class Agent:
             if state["started_at"] is None:
                 state["started_at"] = time.perf_counter()
             if not state["browser"].fresh(state["page"]):
-                state["page"] = state["browser"].observe(screenshot=self.screenshots)
+                state["page"] = self._observe(state["browser"], "refresh")
             state["decision"] = None
             if state["status"] in {"done", "blocked"}:
                 raise ValueError("This run has stopped. Start a fresh demo.")
@@ -89,6 +105,7 @@ class Agent:
                 raise ValueError("Observe and choose before acting")
             # Consume once, before any mutation or model call. A retry cannot double-click.
             state["decision"] = None
+            self._emit("decision_consumed", decision=decision)
             selected = decision["choice"]
             if selected in {"DONE", "BLOCKED"}:
                 if not state["browser"].fresh(page):
@@ -97,6 +114,7 @@ class Agent:
                 state["status"] = "done" if selected == "DONE" else "blocked"
                 state["plan_index"] = int(selected == "DONE")
                 state["elapsed_ms"] = round((time.perf_counter() - state["started_at"]) * 1000)
+                self._emit("terminal_decision", status=state["status"])
                 return self.snapshot()
             action = next(a for a in page["actions"] if a["id"] == selected)
             if len(state["history"]) >= MAX_STEPS:
@@ -114,7 +132,16 @@ class Agent:
                     self.pending_text = (context, text, helper)
                     state["text_calls"].append({**helper, "field": action["label"], "value": text})
             # Browser.act checks freshness immediately before input, including after text generation.
-            state["browser"].act(action, page, text=text)
+            self._emit("action_attempt", action=action, before_fingerprint=page["fingerprint"])
+            try:
+                state["browser"].act(action, page, text=text)
+            except StalePage:
+                self._emit("action_rejected_stale", action=action)
+                raise
+            except Exception as error:
+                state["status"] = "blocked"
+                self._emit("action_uncertain", action=action, error_type=type(error).__name__)
+                raise
             self.pending_text = None
             state["elapsed_ms"] = round((time.perf_counter() - state["started_at"]) * 1000)
             # Record execution before observing. A stale post-action observation must not erase the action.
@@ -139,7 +166,8 @@ class Agent:
                     "elapsed_ms": state["elapsed_ms"],
                 }
             )
-            state["page"] = state["browser"].observe(screenshot=self.screenshots)
+            self._emit("action_executed", entry=state["history"][-1])
+            state["page"] = self._observe(state["browser"], "after_action")
             state["elapsed_ms"] = round((time.perf_counter() - state["started_at"]) * 1000)
             state["history"][-1].update(
                 page_changed=state["page"]["fingerprint"] != page["fingerprint"],
@@ -151,9 +179,15 @@ class Agent:
                     base64.b64decode(state["page"]["screenshot"])
                 )
             repeated = state["history"][-3:]
+            waits = 0
+            for entry in reversed(state["history"]):
+                if entry["kind"] != "wait" or entry["page_changed"] is not False:
+                    break
+                waits += 1
             state["status"] = (
                 "blocked"
-                if len(repeated) == 3 and all(h["page_changed"] is False and h["kind"] != "wait" for h in repeated)
+                if (len(repeated) == 3 and all(h["page_changed"] is False and h["kind"] != "wait" for h in repeated))
+                or waits >= MAX_UNCHANGED_WAITS
                 else "ready"
             )
         else:

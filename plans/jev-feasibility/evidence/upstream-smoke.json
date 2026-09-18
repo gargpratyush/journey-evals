@@ -1,0 +1,600 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-18",
+  "scope": "Preliminary investigation; no formal feasibility checkpoint passed.",
+  "source_changed": false,
+  "reference_checkout": "C:\\source\\projects\\jev-ultrafast",
+  "chrome": "153.0.8010.36; installed Chrome, not Chrome for Testing",
+  "python": "3.12.10",
+  "isolation": "Owned headless profile and daemon; new tab/reset fake store per attempt, not fresh profile per attempt.",
+  "actor_timing": "Upstream elapsed_ms excludes initial setup and cleanup.",
+  "wall_timing": "Setup, actor, and tab cleanup; excludes final verifier calculations and artifact writes.",
+  "initial_failed_batch": {
+    "timestamp_utc": "20260918T101557Z",
+    "upstream_revision": "452c1ad2dd628008f1d5608f28158d76e49e6cc0",
+    "upstream_source_modified": false,
+    "packages": {
+      "jev-ultrafast": "0.1.0",
+      "browser-harness": "0.1.13",
+      "httpx": "0.28.1",
+      "h2": "4.4.1",
+      "pytest": "8.4.2"
+    },
+    "attempt_cap": 25,
+    "published_rate_worst_case_usd": 0.06881280000000001,
+    "helper_enabled": false,
+    "observation_probes": {
+      "disabled_control_actionable": false,
+      "disabled_control_text_visible": true,
+      "shadow_control_actionable": false,
+      "iframe_control_actionable": false,
+      "canvas_text_observed": false,
+      "pulse_in_endpoint_snapshots": false,
+      "fixture_pulse_events": [
+        {
+          "visible": true,
+          "at": 51.10000002384186
+        },
+        {
+          "visible": false,
+          "at": 82.60000002384186
+        }
+      ]
+    },
+    "text_helper_probe": "TYPE_TEXT needs TEXT_MODEL_API_KEY; no text is hardcoded or guessed by the executor.",
+    "runs": [
+      {
+        "case": "clean",
+        "expected_selected_fare": 100,
+        "error": "_IPCResponseTimeout: Page.captureScreenshot timed out after 5s waiting for the daemon",
+        "wall_ms": 6348,
+        "bookings": [],
+        "independently_verified_booking": false,
+        "fare_invariant_passed": false
+      },
+      {
+        "case": "silent-fare-increase",
+        "expected_selected_fare": 100,
+        "error": "_IPCResponseTimeout: Page.captureScreenshot timed out after 5s waiting for the daemon",
+        "wall_ms": 6269,
+        "bookings": [],
+        "independently_verified_booking": false,
+        "fare_invariant_passed": false
+      }
+    ],
+    "semantic_probes": [
+      {
+        "case": "observed-review",
+        "status": "NOT_RUN",
+        "reason": "No browser evidence"
+      },
+      {
+        "case": "disclosed-control",
+        "expected": "explained",
+        "answer": {
+          "type": "choice",
+          "choice": "explained",
+          "confidence": 1.0,
+          "probabilities": {
+            "unexplained": 0.0,
+            "unknown": 0.0,
+            "explained": 1.0
+          }
+        }
+      },
+      {
+        "case": "vague-control",
+        "expected": "unexplained",
+        "answer": {
+          "type": "choice",
+          "choice": "unexplained",
+          "confidence": 1.0,
+          "probabilities": {
+            "explained": 0.0,
+            "unexplained": 1.0,
+            "unknown": 0.0
+          }
+        }
+      },
+      {
+        "case": "missing-evidence",
+        "outcome": "UNKNOWN",
+        "enforced_by": "code",
+        "model_called": false
+      }
+    ],
+    "http_attempts_cumulative": 4,
+    "reported_input_tokens_cumulative": 5522,
+    "estimated_reported_usage_usd": 0.00023192400000000002,
+    "cost_note": "Published input-token rate estimate; not an invoice. Failed/unknown usage reserved."
+  },
+  "default_mode_batch": {
+    "timestamp_utc": "20260918T101647Z",
+    "upstream_revision": "452c1ad2dd628008f1d5608f28158d76e49e6cc0",
+    "upstream_source_modified": false,
+    "packages": {
+      "jev-ultrafast": "0.1.0",
+      "browser-harness": "0.1.13",
+      "httpx": "0.28.1",
+      "h2": "4.4.1",
+      "pytest": "8.4.2"
+    },
+    "attempt_cap": 25,
+    "published_rate_worst_case_usd": 0.06881280000000001,
+    "helper_enabled": false,
+    "observation_probes": {
+      "disabled_control_actionable": false,
+      "disabled_control_text_visible": true,
+      "shadow_control_actionable": false,
+      "iframe_control_actionable": false,
+      "canvas_text_observed": false,
+      "pulse_in_endpoint_snapshots": false,
+      "fixture_pulse_events": [
+        {
+          "visible": true,
+          "at": 96.60000002384186
+        },
+        {
+          "visible": false,
+          "at": 155.20000004768372
+        }
+      ]
+    },
+    "text_helper_probe": "TYPE_TEXT needs TEXT_MODEL_API_KEY; no text is hardcoded or guessed by the executor.",
+    "runs": [
+      {
+        "case": "clean",
+        "expected_selected_fare": 100,
+        "agent_status": "done",
+        "actor_elapsed_ms": 4657,
+        "actions": 8,
+        "decisions": 9,
+        "text_calls": 0,
+        "wall_ms": 4737,
+        "bookings": [
+          {
+            "destination": "London",
+            "cabin": "Economy",
+            "passenger": "Test Passenger",
+            "id": "TEST-1",
+            "fare": 100
+          }
+        ],
+        "independently_verified_booking": true,
+        "fare_invariant_passed": true
+      },
+      {
+        "case": "silent-fare-increase",
+        "expected_selected_fare": 100,
+        "agent_status": "done",
+        "actor_elapsed_ms": 3743,
+        "actions": 7,
+        "decisions": 8,
+        "text_calls": 0,
+        "wall_ms": 3883,
+        "bookings": [
+          {
+            "destination": "London",
+            "cabin": "Economy",
+            "passenger": "Test Passenger",
+            "id": "TEST-1",
+            "fare": 120
+          }
+        ],
+        "independently_verified_booking": true,
+        "fare_invariant_passed": false
+      }
+    ],
+    "semantic_probes": [
+      {
+        "case": "observed-review",
+        "expected": "unexplained",
+        "answer": {
+          "type": "choice",
+          "choice": "unexplained",
+          "confidence": 1.0,
+          "probabilities": {
+            "unexplained": 1.0,
+            "explained": 0.0,
+            "unknown": 0.0
+          }
+        }
+      },
+      {
+        "case": "disclosed-control",
+        "expected": "explained",
+        "answer": {
+          "type": "choice",
+          "choice": "explained",
+          "confidence": 1.0,
+          "probabilities": {
+            "explained": 1.0,
+            "unknown": 0.0,
+            "unexplained": 0.0
+          }
+        }
+      },
+      {
+        "case": "vague-control",
+        "expected": "unexplained",
+        "answer": {
+          "type": "choice",
+          "choice": "unexplained",
+          "confidence": 1.0,
+          "probabilities": {
+            "unknown": 0.0,
+            "explained": 0.0,
+            "unexplained": 1.0
+          }
+        }
+      },
+      {
+        "case": "missing-evidence",
+        "outcome": "UNKNOWN",
+        "enforced_by": "code",
+        "model_called": false
+      }
+    ],
+    "http_attempts_cumulative": 24,
+    "reported_input_tokens_cumulative": 43000,
+    "estimated_reported_usage_usd": 0.0018060000000000003,
+    "cost_note": "Published input-token rate estimate; not an invoice. Failed/unknown usage reserved."
+  },
+  "http_attempts": {
+    "attempts": [
+      {
+        "run": "20260918T101557Z",
+        "index": 0,
+        "reserved_input_tokens": 65536,
+        "status": 200,
+        "model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 2313,
+          "output_tokens": 156
+        }
+      },
+      {
+        "run": "20260918T101557Z",
+        "index": 1,
+        "reserved_input_tokens": 65536,
+        "status": 200,
+        "model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 2313,
+          "output_tokens": 156
+        }
+      },
+      {
+        "run": "20260918T101557Z",
+        "index": 2,
+        "reserved_input_tokens": 65536,
+        "status": 200,
+        "model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 461,
+          "output_tokens": 44
+        }
+      },
+      {
+        "run": "20260918T101557Z",
+        "index": 3,
+        "reserved_input_tokens": 65536,
+        "status": 200,
+        "model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 435,
+          "output_tokens": 45
+        }
+      },
+      {
+        "run": "20260918T101647Z",
+        "index": 4,
+        "reserved_input_tokens": 65536,
+        "status": 200,
+        "model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 2313,
+          "output_tokens": 156
+        }
+      },
+      {
+        "run": "20260918T101647Z",
+        "index": 5,
+        "reserved_input_tokens": 65536,
+        "status": 200,
+        "model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 2345,
+          "output_tokens": 156
+        }
+      },
+      {
+        "run": "20260918T101647Z",
+        "index": 6,
+        "reserved_input_tokens": 65536,
+        "status": 200,
+        "model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 2388,
+          "output_tokens": 156
+        }
+      },
+      {
+        "run": "20260918T101647Z",
+        "index": 7,
+        "reserved_input_tokens": 65536,
+        "status": 200,
+        "model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 2421,
+          "output_tokens": 156
+        }
+      },
+      {
+        "run": "20260918T101647Z",
+        "index": 8,
+        "reserved_input_tokens": 65536,
+        "status": 200,
+        "model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 2460,
+          "output_tokens": 156
+        }
+      },
+      {
+        "run": "20260918T101647Z",
+        "index": 9,
+        "reserved_input_tokens": 65536,
+        "status": 200,
+        "model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 2493,
+          "output_tokens": 156
+        }
+      },
+      {
+        "run": "20260918T101647Z",
+        "index": 10,
+        "reserved_input_tokens": 65536,
+        "status": 200,
+        "model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 2528,
+          "output_tokens": 156
+        }
+      },
+      {
+        "run": "20260918T101647Z",
+        "index": 11,
+        "reserved_input_tokens": 65536,
+        "status": 200,
+        "model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 1417,
+          "output_tokens": 69
+        }
+      },
+      {
+        "run": "20260918T101647Z",
+        "index": 12,
+        "reserved_input_tokens": 65536,
+        "status": 200,
+        "model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 979,
+          "output_tokens": 40
+        }
+      },
+      {
+        "run": "20260918T101647Z",
+        "index": 13,
+        "reserved_input_tokens": 65536,
+        "status": 200,
+        "model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 2313,
+          "output_tokens": 156
+        }
+      },
+      {
+        "run": "20260918T101647Z",
+        "index": 14,
+        "reserved_input_tokens": 65536,
+        "status": 200,
+        "model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 2345,
+          "output_tokens": 156
+        }
+      },
+      {
+        "run": "20260918T101647Z",
+        "index": 15,
+        "reserved_input_tokens": 65536,
+        "status": 200,
+        "model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 2388,
+          "output_tokens": 156
+        }
+      },
+      {
+        "run": "20260918T101647Z",
+        "index": 16,
+        "reserved_input_tokens": 65536,
+        "status": 200,
+        "model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 2427,
+          "output_tokens": 156
+        }
+      },
+      {
+        "run": "20260918T101647Z",
+        "index": 17,
+        "reserved_input_tokens": 65536,
+        "status": 200,
+        "model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 2460,
+          "output_tokens": 156
+        }
+      },
+      {
+        "run": "20260918T101647Z",
+        "index": 18,
+        "reserved_input_tokens": 65536,
+        "status": 200,
+        "model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 2495,
+          "output_tokens": 156
+        }
+      },
+      {
+        "run": "20260918T101647Z",
+        "index": 19,
+        "reserved_input_tokens": 65536,
+        "status": 200,
+        "model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 1384,
+          "output_tokens": 69
+        }
+      },
+      {
+        "run": "20260918T101647Z",
+        "index": 20,
+        "reserved_input_tokens": 65536,
+        "status": 200,
+        "model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 946,
+          "output_tokens": 40
+        }
+      },
+      {
+        "run": "20260918T101647Z",
+        "index": 21,
+        "reserved_input_tokens": 65536,
+        "status": 200,
+        "model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 480,
+          "output_tokens": 45
+        }
+      },
+      {
+        "run": "20260918T101647Z",
+        "index": 22,
+        "reserved_input_tokens": 65536,
+        "status": 200,
+        "model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 461,
+          "output_tokens": 44
+        }
+      },
+      {
+        "run": "20260918T101647Z",
+        "index": 23,
+        "reserved_input_tokens": 65536,
+        "status": 200,
+        "model": "jev-1.13.0",
+        "usage": {
+          "input_tokens": 435,
+          "output_tokens": 45
+        }
+      }
+    ]
+  },
+  "browser_diagnostics": {
+    "browser-diagnostics-prime-True-http-True-slow-True.json": {
+      "initial_capture_before_action": true,
+      "http_fixture": true,
+      "simulated_inference_ms": 1000,
+      "select_events": [
+        {
+          "trusted": false,
+          "value": "London"
+        }
+      ],
+      "background": {
+        "captured": true,
+        "elapsed_ms": 552
+      },
+      "activated": {
+        "captured": true,
+        "elapsed_ms": 43
+      }
+    },
+    "browser-diagnostics-prime-True-http-True.json": {
+      "initial_capture_before_action": true,
+      "http_fixture": true,
+      "select_events": [
+        {
+          "trusted": false,
+          "value": "London"
+        }
+      ],
+      "background": {
+        "captured": true,
+        "elapsed_ms": 93
+      },
+      "activated": {
+        "captured": true,
+        "elapsed_ms": 61
+      }
+    },
+    "browser-diagnostics-prime-True.json": {
+      "initial_capture_before_action": true,
+      "select_events": [
+        {
+          "trusted": false,
+          "value": "Business"
+        }
+      ],
+      "background": {
+        "captured": true,
+        "elapsed_ms": 108
+      },
+      "activated": {
+        "captured": true,
+        "elapsed_ms": 42
+      }
+    },
+    "browser-diagnostics.json": {
+      "select_events": [
+        {
+          "trusted": false,
+          "value": "Business"
+        }
+      ],
+      "background": {
+        "captured": true,
+        "elapsed_ms": 90
+      },
+      "activated": {
+        "captured": true,
+        "elapsed_ms": 67
+      }
+    }
+  },
+  "caveats": [
+    "Four browser attempts: two failed post-action captures, followed by two completed screenshot-free runs.",
+    "The Google Flights example and inspector UI were not run.",
+    "The fake-store verifier checks destination/cabin/passenger/count/fare; origin/date are fixture constants.",
+    "Clean and faulty actors made respectively three and two premature submissions.",
+    "Three distinct exposed semantic cases are not a scored holdout; two controls were evaluated in both batches.",
+    "Disclosure-window completeness was fixture knowledge, not collector proof.",
+    "The missing-evidence UNKNOWN entry illustrates code policy, not a tested evidence-gap detector.",
+    "Later offline screenshot probes passed; the original timeouts remain unexplained.",
+    "No text-helper generation, visual inference, repair, second-app transfer, or LLM cost comparison was performed.",
+    "Jev token-price cost is an estimate, not an invoice or total development cost."
+  ],
+  "raw_artifacts_relative_to_receipt": "raw",
+  "driver_sha256": {
+    "ultrafast-experiment.py": "83d314e52d736981802e519c5df71229e823d5f9e892db683bc44c45e8405406",
+    "ultrafast-browser-probes.py": "649ee0334b8379aa905dd911155723d73f66ffc7a284fb4015b10e75fab47633"
+  }
+}

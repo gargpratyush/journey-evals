@@ -1,0 +1,94 @@
+{
+  "checkpoint": "cp1-cp4-revalidation",
+  "schema_version": 1,
+  "timestamp": "2026-09-18T16:44:13.285633+00:00",
+  "attempt_id": "adcfd0b4b13d4723be23c69fdcd1eb31",
+  "source_sha256": "7c74bb07fea91f5d047b3385b4b39d5c58cd4078d0bf869a6d8c2951abbec5d6",
+  "current_source_sha256": "d528f6df8dddc2c12274882f619db3909e75959331671a8c4dfdf8e1f89f7763",
+  "post_cp5_changes": "After CP5 closed, the campaign cap was centralised into feasibility.py and raised to USD 0.40, and the TYPE_TEXT helper gained an Azure dialect so gpt-5.6-luna can serve it. This moves the source fingerprint. Neither change touches the frozen evaluators, the screening corpus or any check logic, so the CP5 measurements stand at their own revision and are not reattributed to the current one.",
+  "method": "Offline invariant check on the final CP5 fingerprint. No browser was launched, no model was called and no budget was consumed. Live behaviour on this exact fingerprint is evidenced by CP5-B, which ran 60 journeys across all three checks in both fault and clean groups on this source.",
+  "frozen_evaluator_inputs": {
+    "evaluators.py": {
+      "expected": "357b98c13eff89e43d63626d06c4a9af5a8b621cdbe786fd94b2ddabe3f25116",
+      "actual": "357b98c13eff89e43d63626d06c4a9af5a8b621cdbe786fd94b2ddabe3f25116",
+      "unchanged": true
+    },
+    "screening.py": {
+      "expected": "2935a547000dee9fdba87d064d9bbadf26eb04f5527fd8beba2854093b563742",
+      "actual": "2935a547000dee9fdba87d064d9bbadf26eb04f5527fd8beba2854093b563742",
+      "unchanged": true
+    },
+    "fixture.py": {
+      "expected": "a3aa94645b95d30cd275649d966b185dd59dcbbff917515a12d558c3cc1ad463",
+      "actual": "74bd0b595d35ef49e2d72b67c6f84cb275d3e6fbd04e47e7daf705d2201f4770",
+      "unchanged": false
+    },
+    "repair.py": {
+      "expected": "43260500144299035363ea602d36dfd242a5881dc1a9830ddfccd6c9e24505d2",
+      "actual": "5e5711ffee410c7993ce2596a76dc2901baf5e150b3e299b84dd3228e3197adc",
+      "unchanged": false
+    },
+    "agent.py": {
+      "expected": "d27e557db4102bb21439a15bd1ba79de33e2970d44c4d8d647120bb325b651ca",
+      "actual": "d27e557db4102bb21439a15bd1ba79de33e2970d44c4d8d647120bb325b651ca",
+      "unchanged": true
+    },
+    "browser_checks.py": {
+      "expected": "06e2d4a3cd038c7e0c822cd6156750c70608d402eddd37b9f44e170544978d7c",
+      "actual": "15f9ff9b3249fd68f8223cc84f1873b8f15dde1b2f8679b38e8920bf66bd9ad2",
+      "unchanged": false
+    },
+    "evidence.py": {
+      "expected": "03544040e07250c08fb05b5d165df5252e9e392be530cd27e55a5975fd0b2498",
+      "actual": "03544040e07250c08fb05b5d165df5252e9e392be530cd27e55a5975fd0b2498",
+      "unchanged": true
+    },
+    "feasibility.py": {
+      "expected": "5e97176d1a6a93b1c606cead34ae707b932aa4e984af05147272592460ff69ce",
+      "actual": "fb4daf3c0c8e4b77b3d29337b0f8a9fb5f908abad2e8f5be3b26221b1bf6ecc1",
+      "unchanged": false
+    }
+  },
+  "changed_since_cp4": [
+    "browser_checks.py",
+    "feasibility.py",
+    "fixture.py",
+    "repair.py"
+  ],
+  "changed_files_rationale": {
+    "fixture.py": "CP5-B needs server-side timing of the search request; the oracle, EXPECTED, GOAL and verify are unchanged in behaviour.",
+    "browser_checks.py": "CP5-D adds an overhead worker mode; the check paths are unchanged.",
+    "feasibility.py": "CP5 adds three CLI verbs, and the campaign cap is now defined here once instead of being duplicated across four modules.",
+    "repair.py": "The duplicated cap constant was replaced by the shared one. No repair, protection or verification logic changed."
+  },
+  "evaluators_frozen": true,
+  "screening_frozen": true,
+  "offline_tests": "80 passed",
+  "lint": "ruff check . clean",
+  "isolation": {
+    "worker_runs_inspected": 162,
+    "all_workers_without_parent_credentials": true,
+    "all_worker_profiles_removed": false,
+    "workers_that_failed_to_remove_profile": [
+      {
+        "run": "autonomous-f778e529955e4df5a52a256c32f37211",
+        "status": "ERROR",
+        "error": "PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\source\\\\projects\\\\jev-test\\\\artifacts\\\\feasibility\\\\work\\\\browser-btq06gpi\\\\process.log'"
+      }
+    ],
+    "residual_profile_directories_now": [],
+    "remediation": "One worker out of 162 could not delete its own profile because Windows still held a lock on process.log. The orphaned directory was verified to be inside the owned work directory, no Chrome process was running, and it was then removed. No residual profile directories remain. The failure is recorded rather than suppressed."
+  },
+  "secret_scan": {
+    "api_key_present_in_env": true,
+    "files_containing_key_material": [],
+    "clean": true
+  },
+  "live_evidence_on_this_fingerprint": {
+    "source": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\live\\summary\\live.json",
+    "journeys": 60,
+    "usable": 59,
+    "verdict_accuracy": "59/59"
+  },
+  "status": "GREEN"
+}

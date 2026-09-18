@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "model": "gpt-5.6-luna",
+  "max_tokens": 1000000,
+  "input_token_rate_usd": null,
+  "output_token_rate_usd": null,
+  "attempts": [
+    {
+      "id": 0,
+      "status": "200",
+      "accounted_tokens": 4081,
+      "request_sha256": "36dfd9b2eebbad78b988c553f725134ed4ce5e75c50215dfeb3f3ebf7aa9068a",
+      "timestamp": "2026-09-18T14:22:47.400446+00:00",
+      "latency_ms": 11688,
+      "usage": {
+        "input_tokens": 3079,
+        "output_tokens": 1002,
+        "reasoning_tokens": 305
+      }
+    },
+    {
+      "id": 1,
+      "status": "200",
+      "accounted_tokens": 4974,
+      "request_sha256": "e795b379047eb79a9441d2aead2fbf168c713c64ca39feebd0f48d852106b97e",
+      "timestamp": "2026-09-18T14:22:59.091638+00:00",
+      "latency_ms": 7981,
+      "usage": {
+        "input_tokens": 4277,
+        "output_tokens": 697,
+        "reasoning_tokens": 36
+      }
+    },
+    {
+      "id": 2,
+      "status": "200",
+      "accounted_tokens": 3770,
+      "request_sha256": "393ec00bf0178cb7678a89b6270365e39e0062c93b19d5c21fbceabc0203e5e1",
+      "timestamp": "2026-09-18T14:23:07.076967+00:00",
+      "latency_ms": 7243,
+      "usage": {
+        "input_tokens": 3089,
+        "output_tokens": 681,
+        "reasoning_tokens": 41
+      }
+    }
+  ]
+}

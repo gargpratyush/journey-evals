@@ -1,10 +1,32 @@
 .env
+.env.*
+!.env.example
 .venv/
 __pycache__/
 .pytest_cache/
 .ruff_cache/
 .DS_Store
-artifacts/
+
+# Campaign evidence is bulky: browser screenshots, per-journey application copies and full run
+# folders stay local. The receipts that gates actually read are small, so they are tracked, which
+# is what lets another machine resume a checkpoint instead of re-spending the budget to reproduce it.
+artifacts/*
+!artifacts/feasibility/
+artifacts/feasibility/*
+!artifacts/feasibility/checkpoints/
+!artifacts/feasibility/screening/
+!artifacts/feasibility/overhead/
+!artifacts/feasibility/reliability/
+!artifacts/feasibility/budget.json
+!artifacts/feasibility/cap-raise-0.10-to-0.40.json
+!artifacts/feasibility/budget-before-cap-raise.json
+!artifacts/feasibility/cp4-source-revalidation.json
+!artifacts/feasibility/live/
+artifacts/feasibility/live/*
+!artifacts/feasibility/live/summary/
+artifacts/visuals/
+
 *.egg-info/
 
 dist/
+.tools/

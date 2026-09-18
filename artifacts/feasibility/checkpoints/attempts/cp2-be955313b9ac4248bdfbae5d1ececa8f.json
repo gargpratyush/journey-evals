@@ -1,0 +1,157 @@
+{
+  "status": "GREEN",
+  "batch_id": "65567641f7234d7e91027cae52eed3ad",
+  "planned": 3,
+  "completed_and_verified": 3,
+  "runs": [
+    {
+      "schema_version": 1,
+      "status": "COMPLETED",
+      "mode": "autonomous",
+      "source_sha256": "1833d9bdd281e84ac270f52fe3124a033d159a8c75b12a515c52a3b95d01eb19",
+      "browser_version": "Chrome/153.0.8010.52",
+      "child_credentials_absent": true,
+      "agent_status": "done",
+      "actions": 7,
+      "decisions": 8,
+      "actor_elapsed_ms": 4685,
+      "text_entry": "NOT_TESTED",
+      "evidence_complete": true,
+      "budget": {
+        "limit_usd": "0.10",
+        "attempts_this_checkpoint": 8,
+        "accounted_input_tokens_including_history": 327492,
+        "accounted_usd": "0.013754664",
+        "billing": "Published-rate estimate; non-success/unknown requests retain maximum reservation."
+      },
+      "resources_closed": true,
+      "profile_removed": true,
+      "cleanup_retries": 0,
+      "cleanup_events": [],
+      "cleanup_errors": [],
+      "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-b8acb8c4d9354ac7a18b4cc591293672",
+      "exit_code": 0,
+      "worker_wall_ms": 9466,
+      "inference_started": true,
+      "abandoned_browser_stalls": [
+        {
+          "attempt": 0,
+          "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-3813baee5ea140c48ff683ffc0b7b03d",
+          "error": "_IPCResponseTimeout: Emulation.setDeviceMetricsOverride timed out after 60s waiting for the daemon",
+          "inference_started": false
+        }
+      ],
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "artifacts_secret_free": true,
+      "passed": true,
+      "timing": {
+        "through_first_report_persistence_ms": 132267
+      }
+    },
+    {
+      "schema_version": 1,
+      "status": "COMPLETED",
+      "mode": "autonomous",
+      "source_sha256": "1833d9bdd281e84ac270f52fe3124a033d159a8c75b12a515c52a3b95d01eb19",
+      "browser_version": "Chrome/153.0.8010.52",
+      "child_credentials_absent": true,
+      "agent_status": "done",
+      "actions": 7,
+      "decisions": 8,
+      "actor_elapsed_ms": 5111,
+      "text_entry": "NOT_TESTED",
+      "evidence_complete": true,
+      "budget": {
+        "limit_usd": "0.10",
+        "attempts_this_checkpoint": 8,
+        "accounted_input_tokens_including_history": 340518,
+        "accounted_usd": "0.014301756",
+        "billing": "Published-rate estimate; non-success/unknown requests retain maximum reservation."
+      },
+      "resources_closed": true,
+      "profile_removed": true,
+      "cleanup_retries": 0,
+      "cleanup_events": [],
+      "cleanup_errors": [],
+      "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-0b6a190821ed4db5912bbaa5b58001ed",
+      "exit_code": 0,
+      "worker_wall_ms": 17805,
+      "inference_started": true,
+      "abandoned_browser_stalls": [
+        {
+          "attempt": 0,
+          "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-3fa9fd87564548eda9a1e7b763400845",
+          "error": "_IPCResponseTimeout: Emulation.setDeviceMetricsOverride timed out after 60s waiting for the daemon",
+          "inference_started": false
+        },
+        {
+          "attempt": 1,
+          "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-46396a32874b41419cc512130570be7f",
+          "error": "_IPCResponseTimeout: Emulation.setDeviceMetricsOverride timed out after 60s waiting for the daemon",
+          "inference_started": false
+        }
+      ],
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "artifacts_secret_free": true,
+      "passed": true,
+      "timing": {
+        "through_first_report_persistence_ms": 263227
+      }
+    },
+    {
+      "schema_version": 1,
+      "status": "COMPLETED",
+      "mode": "autonomous",
+      "source_sha256": "1833d9bdd281e84ac270f52fe3124a033d159a8c75b12a515c52a3b95d01eb19",
+      "browser_version": "Chrome/153.0.8010.52",
+      "child_credentials_absent": true,
+      "agent_status": "done",
+      "actions": 7,
+      "decisions": 8,
+      "actor_elapsed_ms": 4914,
+      "text_entry": "NOT_TESTED",
+      "evidence_complete": true,
+      "budget": {
+        "limit_usd": "0.10",
+        "attempts_this_checkpoint": 8,
+        "accounted_input_tokens_including_history": 353544,
+        "accounted_usd": "0.014848848",
+        "billing": "Published-rate estimate; non-success/unknown requests retain maximum reservation."
+      },
+      "resources_closed": true,
+      "profile_removed": true,
+      "cleanup_retries": 0,
+      "cleanup_events": [],
+      "cleanup_errors": [],
+      "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-031e535dfcad4faa84aa0811421572e3",
+      "exit_code": 0,
+      "worker_wall_ms": 17616,
+      "inference_started": true,
+      "abandoned_browser_stalls": [],
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "artifacts_secret_free": true,
+      "passed": true,
+      "timing": {
+        "through_first_report_persistence_ms": 17621
+      }
+    }
+  ],
+  "text_entry": "NOT_TESTED",
+  "source_sha256": "1833d9bdd281e84ac270f52fe3124a033d159a8c75b12a515c52a3b95d01eb19",
+  "schema_version": 1,
+  "checkpoint": "cp2",
+  "timestamp": "2026-09-18T13:23:52.794800+00:00",
+  "attempt_id": "be955313b9ac4248bdfbae5d1ececa8f"
+}

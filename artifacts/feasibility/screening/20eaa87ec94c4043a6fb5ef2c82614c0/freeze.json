@@ -1,0 +1,13 @@
+{
+  "source_sha256": "6ff69d55d004405421cb93b45319167d0fb80258331377ad9c0b4096f79eff9b",
+  "evaluator_sha256": "357b98c13eff89e43d63626d06c4a9af5a8b621cdbe786fd94b2ddabe3f25116",
+  "dataset_sha256": "3fefb4ef9cf219d3a5ec77e9746eb8f766ebb7f1d0267b41fa282889c4d94d2d",
+  "dataset_content_sha256": "4eda4fbd596fd9ff96d6626c497a8d6d4f20bc1e898ae28c9a7afddda1cb1bce",
+  "thresholds": {
+    "minimum_true_positive": 8,
+    "maximum_false_positive": 1,
+    "minimum_definitive_controls": 8
+  },
+  "labels": "Constructed and independently labeled in code; not model-generated ground truth.",
+  "holdout_rule": "Families remain in one split; scored cases retire if used to change the candidate."
+}

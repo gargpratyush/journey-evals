@@ -1,0 +1,192 @@
+{
+  "reason": "Application source was split out of the fixture so CP4 defects are real source edits",
+  "changed_files": [
+    "jev_ultrafast\\browser.py",
+    "jev_ultrafast\\browser_checks.py",
+    "jev_ultrafast\\evidence.py",
+    "jev_ultrafast\\feasibility.py",
+    "jev_ultrafast\\fixture.py",
+    "jev_ultrafast\\isolation.py"
+  ],
+  "relocated_files": [
+    "jev_ultrafast\\booking.html"
+  ],
+  "source_sha256": "1833d9bdd281e84ac270f52fe3124a033d159a8c75b12a515c52a3b95d01eb19",
+  "live_trio": [
+    {
+      "run": {
+        "schema_version": 1,
+        "status": "COMPLETED",
+        "mode": "autonomous",
+        "source_sha256": "1833d9bdd281e84ac270f52fe3124a033d159a8c75b12a515c52a3b95d01eb19",
+        "browser_version": "Chrome/153.0.8010.52",
+        "child_credentials_absent": true,
+        "agent_status": "done",
+        "actions": 7,
+        "decisions": 8,
+        "actor_elapsed_ms": 4904,
+        "text_entry": "NOT_TESTED",
+        "evidence_complete": true,
+        "budget": {
+          "limit_usd": "0.10",
+          "attempts_this_checkpoint": 8,
+          "accounted_input_tokens_including_history": 366570,
+          "accounted_usd": "0.015395940",
+          "billing": "Published-rate estimate; non-success/unknown requests retain maximum reservation."
+        },
+        "resources_closed": true,
+        "profile_removed": true,
+        "cleanup_retries": 0,
+        "cleanup_events": [],
+        "cleanup_errors": [],
+        "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-3f8ce63e316045b5bbb29dc15e9d284d",
+        "exit_code": 0,
+        "worker_wall_ms": 9654,
+        "inference_started": true,
+        "abandoned_browser_stalls": []
+      },
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "finding": {
+        "outcome": "clean",
+        "source": "code",
+        "reason": "No measured price increase",
+        "evidence_id": "15768551e1904138939131f38aeb910b",
+        "category": "fare",
+        "advisory": true,
+        "requires_review": false
+      },
+      "acknowledgement_observed": false,
+      "passed": true
+    },
+    {
+      "run": {
+        "schema_version": 1,
+        "status": "COMPLETED",
+        "mode": "autonomous",
+        "source_sha256": "1833d9bdd281e84ac270f52fe3124a033d159a8c75b12a515c52a3b95d01eb19",
+        "browser_version": "Chrome/153.0.8010.52",
+        "child_credentials_absent": true,
+        "agent_status": "done",
+        "actions": 7,
+        "decisions": 8,
+        "actor_elapsed_ms": 4973,
+        "text_entry": "NOT_TESTED",
+        "evidence_complete": true,
+        "budget": {
+          "limit_usd": "0.10",
+          "attempts_this_checkpoint": 8,
+          "accounted_input_tokens_including_history": 379596,
+          "accounted_usd": "0.015943032",
+          "billing": "Published-rate estimate; non-success/unknown requests retain maximum reservation."
+        },
+        "resources_closed": true,
+        "profile_removed": true,
+        "cleanup_retries": 0,
+        "cleanup_events": [],
+        "cleanup_errors": [],
+        "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-ad1028f19ae1410b960c9a2ae647f5b6",
+        "exit_code": 0,
+        "worker_wall_ms": 17781,
+        "inference_started": true,
+        "abandoned_browser_stalls": []
+      },
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "finding": {
+        "outcome": "defect",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "defect",
+          "confidence": 0.98,
+          "probabilities": {
+            "clean": 0.01,
+            "defect": 0.99,
+            "unknown": 0.0
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "ee1bf04abd004c5bbfb1785c8f740698",
+        "category": "fare",
+        "advisory": true,
+        "requires_review": true
+      },
+      "acknowledgement_observed": false,
+      "passed": true
+    },
+    {
+      "run": {
+        "schema_version": 1,
+        "status": "COMPLETED",
+        "mode": "autonomous",
+        "source_sha256": "1833d9bdd281e84ac270f52fe3124a033d159a8c75b12a515c52a3b95d01eb19",
+        "browser_version": "Chrome/153.0.8010.52",
+        "child_credentials_absent": true,
+        "agent_status": "done",
+        "actions": 7,
+        "decisions": 8,
+        "actor_elapsed_ms": 4816,
+        "text_entry": "NOT_TESTED",
+        "evidence_complete": true,
+        "budget": {
+          "limit_usd": "0.10",
+          "attempts_this_checkpoint": 8,
+          "accounted_input_tokens_including_history": 393169,
+          "accounted_usd": "0.016513098",
+          "billing": "Published-rate estimate; non-success/unknown requests retain maximum reservation."
+        },
+        "resources_closed": true,
+        "profile_removed": true,
+        "cleanup_retries": 0,
+        "cleanup_events": [],
+        "cleanup_errors": [],
+        "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-681b114683b6472dadb7b1a8924481fc",
+        "exit_code": 0,
+        "worker_wall_ms": 9617,
+        "inference_started": true,
+        "abandoned_browser_stalls": [
+          {
+            "attempt": 0,
+            "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-8a45c4b2fafc45ccba4beba7ff6b85c8",
+            "error": "_IPCResponseTimeout: Emulation.setDeviceMetricsOverride timed out after 60s waiting for the daemon",
+            "inference_started": false
+          }
+        ]
+      },
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "finding": {
+        "outcome": "clean",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "clean",
+          "confidence": 1.0,
+          "probabilities": {
+            "defect": 0.0,
+            "clean": 1.0,
+            "unknown": 0.0
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "0f22e4915cc9425ea2d41e27232723d3",
+        "category": "fare",
+        "advisory": true,
+        "requires_review": false
+      },
+      "acknowledgement_observed": true,
+      "passed": true
+    }
+  ],
+  "holdout_rescored": false
+}

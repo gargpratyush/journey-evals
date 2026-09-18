@@ -9,6 +9,7 @@ dependencies = ["browser-harness==0.1.13", "httpx[http2]>=0.28,<1"]
 
 [project.scripts]
 jev = "jev_ultrafast.demo:main"
+jev-eval = "jev_ultrafast.feasibility:main"
 
 [build-system]
 requires = ["hatchling"]

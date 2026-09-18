@@ -1,0 +1,209 @@
+{
+  "status": "GREEN",
+  "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\screening\\20eaa87ec94c4043a6fb5ef2c82614c0",
+  "freeze": {
+    "source_sha256": "6ff69d55d004405421cb93b45319167d0fb80258331377ad9c0b4096f79eff9b",
+    "evaluator_sha256": "357b98c13eff89e43d63626d06c4a9af5a8b621cdbe786fd94b2ddabe3f25116",
+    "dataset_sha256": "3fefb4ef9cf219d3a5ec77e9746eb8f766ebb7f1d0267b41fa282889c4d94d2d",
+    "dataset_content_sha256": "4eda4fbd596fd9ff96d6626c497a8d6d4f20bc1e898ae28c9a7afddda1cb1bce",
+    "thresholds": {
+      "minimum_true_positive": 8,
+      "maximum_false_positive": 1,
+      "minimum_definitive_controls": 8
+    },
+    "labels": "Constructed and independently labeled in code; not model-generated ground truth.",
+    "holdout_rule": "Families remain in one split; scored cases retire if used to change the candidate."
+  },
+  "development": {
+    "positives": 9,
+    "negatives": 9,
+    "true_positive": 9,
+    "false_positive": 0,
+    "definitive_controls": 9,
+    "unknown": 0
+  },
+  "holdout": {
+    "positives": 9,
+    "negatives": 9,
+    "true_positive": 9,
+    "false_positive": 0,
+    "definitive_controls": 9,
+    "unknown": 0
+  },
+  "missing_evidence_all_unknown": true,
+  "screening_budget": {
+    "limit_usd": "0.10",
+    "attempts_this_checkpoint": 6,
+    "accounted_input_tokens_including_history": 169010,
+    "accounted_usd": "0.007098420",
+    "billing": "Published-rate estimate; non-success/unknown requests retain maximum reservation."
+  },
+  "screening_gate_passed": true,
+  "live_trio": [
+    {
+      "run": {
+        "schema_version": 1,
+        "status": "COMPLETED",
+        "mode": "autonomous",
+        "source_sha256": "6ff69d55d004405421cb93b45319167d0fb80258331377ad9c0b4096f79eff9b",
+        "browser_version": "Chrome/153.0.8010.52",
+        "child_credentials_absent": true,
+        "agent_status": "done",
+        "actions": 7,
+        "decisions": 8,
+        "actor_elapsed_ms": 5684,
+        "text_entry": "NOT_TESTED",
+        "evidence_complete": true,
+        "budget": {
+          "limit_usd": "0.10",
+          "attempts_this_checkpoint": 8,
+          "accounted_input_tokens_including_history": 182036,
+          "accounted_usd": "0.007645512",
+          "billing": "Published-rate estimate; non-success/unknown requests retain maximum reservation."
+        },
+        "resources_closed": true,
+        "profile_removed": true,
+        "cleanup_retries": 0,
+        "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-914ff1e4cdcb4d9f82e0d7e5947def8c",
+        "exit_code": 0,
+        "worker_wall_ms": 21276
+      },
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "expected": "clean",
+      "finding": {
+        "outcome": "clean",
+        "source": "code",
+        "reason": "No measured price increase",
+        "evidence_id": "70d7e1f184bc40d4af59faca95b6b6fd",
+        "category": "fare",
+        "advisory": true,
+        "requires_review": false
+      },
+      "acknowledgement_observed": false,
+      "passed": true,
+      "elapsed_ms": 21434
+    },
+    {
+      "run": {
+        "schema_version": 1,
+        "status": "COMPLETED",
+        "mode": "autonomous",
+        "source_sha256": "6ff69d55d004405421cb93b45319167d0fb80258331377ad9c0b4096f79eff9b",
+        "browser_version": "Chrome/153.0.8010.52",
+        "child_credentials_absent": true,
+        "agent_status": "done",
+        "actions": 7,
+        "decisions": 8,
+        "actor_elapsed_ms": 6061,
+        "text_entry": "NOT_TESTED",
+        "evidence_complete": true,
+        "budget": {
+          "limit_usd": "0.10",
+          "attempts_this_checkpoint": 8,
+          "accounted_input_tokens_including_history": 195062,
+          "accounted_usd": "0.008192604",
+          "billing": "Published-rate estimate; non-success/unknown requests retain maximum reservation."
+        },
+        "resources_closed": true,
+        "profile_removed": true,
+        "cleanup_retries": 0,
+        "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-3a83fee624e3428ab5d8b76767e4a4fe",
+        "exit_code": 0,
+        "worker_wall_ms": 22079
+      },
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "expected": "defect",
+      "finding": {
+        "outcome": "defect",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "defect",
+          "confidence": 0.97,
+          "probabilities": {
+            "unknown": 0.0,
+            "clean": 0.01,
+            "defect": 0.99
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "4b5c07fe3030458a9b6f1e5b5e1f4571",
+        "category": "fare",
+        "advisory": true,
+        "requires_review": true
+      },
+      "acknowledgement_observed": false,
+      "passed": true,
+      "elapsed_ms": 23111
+    },
+    {
+      "run": {
+        "schema_version": 1,
+        "status": "COMPLETED",
+        "mode": "autonomous",
+        "source_sha256": "6ff69d55d004405421cb93b45319167d0fb80258331377ad9c0b4096f79eff9b",
+        "browser_version": "Chrome/153.0.8010.52",
+        "child_credentials_absent": true,
+        "agent_status": "done",
+        "actions": 7,
+        "decisions": 8,
+        "actor_elapsed_ms": 6019,
+        "text_entry": "NOT_TESTED",
+        "evidence_complete": true,
+        "budget": {
+          "limit_usd": "0.10",
+          "attempts_this_checkpoint": 8,
+          "accounted_input_tokens_including_history": 208635,
+          "accounted_usd": "0.008762670",
+          "billing": "Published-rate estimate; non-success/unknown requests retain maximum reservation."
+        },
+        "resources_closed": true,
+        "profile_removed": true,
+        "cleanup_retries": 0,
+        "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-2e46c39b0d8843d08e5fa99319b885c3",
+        "exit_code": 0,
+        "worker_wall_ms": 21612
+      },
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "expected": "clean",
+      "finding": {
+        "outcome": "clean",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "clean",
+          "confidence": 1.0,
+          "probabilities": {
+            "defect": 0.0,
+            "clean": 1.0,
+            "unknown": 0.0
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "6d90024715214314b5742dec2b572ea6",
+        "category": "fare",
+        "advisory": true,
+        "requires_review": false
+      },
+      "acknowledgement_observed": true,
+      "passed": true,
+      "elapsed_ms": 22709
+    }
+  ],
+  "schema_version": 1,
+  "checkpoint": "cp3",
+  "timestamp": "2026-09-18T11:19:52.295751+00:00",
+  "attempt_id": "d8643e9cea7a48fb99de0fddb6d95dca"
+}

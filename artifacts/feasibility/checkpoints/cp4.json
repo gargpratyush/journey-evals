@@ -1,0 +1,286 @@
+{
+  "status": "GREEN",
+  "source_sha256": "1833d9bdd281e84ac270f52fe3124a033d159a8c75b12a515c52a3b95d01eb19",
+  "targets": {
+    "fare-surcharge": {
+      "case_id": "490fd609632f4b57aa383d6ae1aacbac",
+      "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\repair\\fare-surcharge-490fd609632f4b57aa383d6ae1aacbac",
+      "repair_criterion": "After the repair the traveller is charged the fare they selected (USD 100.00), or any higher total is explicitly explained at checkout and acknowledged before booking (recorded as acknowledged_cents). The frozen fare evaluator must return clean, the checkout total shown must equal the amount charged, and the independent verifier must pass with exactly one booking.",
+      "protected_inputs": {
+        "C:\\source\\projects\\jev-test\\jev_ultrafast\\evaluators.py": "357b98c13eff89e43d63626d06c4a9af5a8b621cdbe786fd94b2ddabe3f25116",
+        "C:\\source\\projects\\jev-test\\jev_ultrafast\\screening.py": "2935a547000dee9fdba87d064d9bbadf26eb04f5527fd8beba2854093b563742",
+        "C:\\source\\projects\\jev-test\\jev_ultrafast\\fixture.py": "a3aa94645b95d30cd275649d966b185dd59dcbbff917515a12d558c3cc1ad463",
+        "C:\\source\\projects\\jev-test\\jev_ultrafast\\repair.py": "43260500144299035363ea602d36dfd242a5881dc1a9830ddfccd6c9e24505d2",
+        "C:\\source\\projects\\jev-test\\jev_ultrafast\\agent.py": "d27e557db4102bb21439a15bd1ba79de33e2970d44c4d8d647120bb325b651ca",
+        "C:\\source\\projects\\jev-test\\jev_ultrafast\\browser_checks.py": "06e2d4a3cd038c7e0c822cd6156750c70608d402eddd37b9f44e170544978d7c",
+        "C:\\source\\projects\\jev-test\\jev_ultrafast\\evidence.py": "03544040e07250c08fb05b5d165df5252e9e392be530cd27e55a5975fd0b2498",
+        "C:\\source\\projects\\jev-test\\jev_ultrafast\\feasibility.py": "5e97176d1a6a93b1c606cead34ae707b932aa4e984af05147272592460ff69ce"
+      },
+      "pre_fix": {
+        "run": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-ad72947ff3a5401887cea6768e70a15f",
+        "finding": {
+          "outcome": "defect",
+          "source": "jev",
+          "answer": {
+            "type": "choice",
+            "choice": "defect",
+            "confidence": 0.99,
+            "probabilities": {
+              "clean": 0.0,
+              "defect": 1.0,
+              "unknown": 0.0
+            }
+          },
+          "model": "jev-1.13.0",
+          "evidence_id": "bd3f575065f84ec4815fc0a0346c7624",
+          "category": "fare",
+          "advisory": true,
+          "requires_review": true
+        },
+        "finding_is_valid": true,
+        "agent_status": "done"
+      },
+      "attempts_used": 1,
+      "verification": {
+        "case_id": "490fd609632f4b57aa383d6ae1aacbac",
+        "defect": "fare-surcharge",
+        "attempt": 1,
+        "protected_inputs_unchanged": true,
+        "repair_criterion": "After the repair the traveller is charged the fare they selected (USD 100.00), or any higher total is explicitly explained at checkout and acknowledged before booking (recorded as acknowledged_cents). The frozen fare evaluator must return clean, the checkout total shown must equal the amount charged, and the independent verifier must pass with exactly one booking.",
+        "application_files_changed": [
+          "pricing.py"
+        ],
+        "repaired_app": {
+          "booking.html": "8baf5817f8fe3860cd9f6bb0075b4a596ba1e5abbf56c358116bc6107bd6c6dc",
+          "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+        },
+        "application_patch": "--- as-injected/pricing.py\n+++ repaired/pricing.py\n@@ -5,9 +5,8 @@\n \"\"\"\n \n SELECTED_CENTS = 10000\n-PEAK_SURCHARGE_CENTS = 2000\n \n \n def quote():\n     \"\"\"Return the checkout quote for the fare the traveller selected.\"\"\"\n-    return {\"cents\": SELECTED_CENTS + PEAK_SURCHARGE_CENTS, \"disclosure\": \"\"}\n+    return {\"cents\": SELECTED_CENTS, \"disclosure\": \"\"}\n",
+        "post_fix": {
+          "run": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-e57ce1d331dc426f9ecc74fdebf47e03",
+          "accepted": true,
+          "finding": {
+            "outcome": "clean",
+            "source": "code",
+            "reason": "No measured price increase",
+            "evidence_id": "614bd5d07d5142c59222b89b428a4806",
+            "category": "fare",
+            "advisory": true,
+            "requires_review": false
+          },
+          "independent_verifier": {
+            "passed": true,
+            "failures": [],
+            "booking_count": 1
+          },
+          "confirmation_visible": true,
+          "served_quote": {
+            "cents": 10000,
+            "disclosure": ""
+          }
+        },
+        "control": {
+          "run": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-2b11f64a7936446089f24060cdb39a53",
+          "accepted": true,
+          "finding": {
+            "outcome": "clean",
+            "source": "jev",
+            "answer": {
+              "type": "choice",
+              "choice": "clean",
+              "confidence": 1.0,
+              "probabilities": {
+                "clean": 1.0,
+                "unknown": 0.0,
+                "defect": 0.0
+              }
+            },
+            "model": "jev-1.13.0",
+            "evidence_id": "12acc3cc70e14ac0a42b5a5251191730",
+            "category": "fare",
+            "advisory": true,
+            "requires_review": false
+          },
+          "independent_verifier": {
+            "passed": true,
+            "failures": [],
+            "booking_count": 1
+          }
+        },
+        "restored": {
+          "run": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-0685694a389b40d499d750ed91aa7fad",
+          "caught_again": true,
+          "finding": {
+            "outcome": "defect",
+            "source": "jev",
+            "answer": {
+              "type": "choice",
+              "choice": "defect",
+              "confidence": 0.99,
+              "probabilities": {
+                "unknown": 0.0,
+                "clean": 0.0,
+                "defect": 1.0
+              }
+            },
+            "model": "jev-1.13.0",
+            "evidence_id": "200448e933fa4a2ab30d9ff470423a82",
+            "category": "fare",
+            "advisory": true,
+            "requires_review": true
+          },
+          "restored_file_matches_injected": true
+        },
+        "status": "GREEN"
+      },
+      "passed": true
+    },
+    "silent-confirmation": {
+      "case_id": "8d0f062bef364c8c82fd64d7ea3f53af",
+      "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\repair\\silent-confirmation-8d0f062bef364c8c82fd64d7ea3f53af",
+      "repair_criterion": "After the repair a booking confirmation including its confirmation identifier is visible on the page at least 1000 ms after the confirm action. The frozen effect evaluator must return clean and the independent verifier must pass with exactly one booking.",
+      "protected_inputs": {
+        "C:\\source\\projects\\jev-test\\jev_ultrafast\\evaluators.py": "357b98c13eff89e43d63626d06c4a9af5a8b621cdbe786fd94b2ddabe3f25116",
+        "C:\\source\\projects\\jev-test\\jev_ultrafast\\screening.py": "2935a547000dee9fdba87d064d9bbadf26eb04f5527fd8beba2854093b563742",
+        "C:\\source\\projects\\jev-test\\jev_ultrafast\\fixture.py": "a3aa94645b95d30cd275649d966b185dd59dcbbff917515a12d558c3cc1ad463",
+        "C:\\source\\projects\\jev-test\\jev_ultrafast\\repair.py": "43260500144299035363ea602d36dfd242a5881dc1a9830ddfccd6c9e24505d2",
+        "C:\\source\\projects\\jev-test\\jev_ultrafast\\agent.py": "d27e557db4102bb21439a15bd1ba79de33e2970d44c4d8d647120bb325b651ca",
+        "C:\\source\\projects\\jev-test\\jev_ultrafast\\browser_checks.py": "06e2d4a3cd038c7e0c822cd6156750c70608d402eddd37b9f44e170544978d7c",
+        "C:\\source\\projects\\jev-test\\jev_ultrafast\\evidence.py": "03544040e07250c08fb05b5d165df5252e9e392be530cd27e55a5975fd0b2498",
+        "C:\\source\\projects\\jev-test\\jev_ultrafast\\feasibility.py": "5e97176d1a6a93b1c606cead34ae707b932aa4e984af05147272592460ff69ce"
+      },
+      "pre_fix": {
+        "run": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-ca75d6fcfeb14df4bf6775d9a72af938",
+        "finding": {
+          "outcome": "defect",
+          "source": "jev",
+          "answer": {
+            "type": "choice",
+            "choice": "defect",
+            "confidence": 0.95,
+            "probabilities": {
+              "unknown": 0.03,
+              "clean": 0.0,
+              "defect": 0.97
+            }
+          },
+          "model": "jev-1.13.0",
+          "evidence_id": "03c030e05ab5476a89020b1dd3cf826c",
+          "category": "effect",
+          "advisory": true,
+          "requires_review": true
+        },
+        "finding_is_valid": true,
+        "agent_status": "done"
+      },
+      "attempts_used": 1,
+      "verification": {
+        "case_id": "8d0f062bef364c8c82fd64d7ea3f53af",
+        "defect": "silent-confirmation",
+        "attempt": 1,
+        "protected_inputs_unchanged": true,
+        "repair_criterion": "After the repair a booking confirmation including its confirmation identifier is visible on the page at least 1000 ms after the confirm action. The frozen effect evaluator must return clean and the independent verifier must pass with exactly one booking.",
+        "application_files_changed": [
+          "booking.html"
+        ],
+        "repaired_app": {
+          "booking.html": "bb35d26fd4146d39c0fc60598217dfe46ceb78e5ab7073982633e32bd2f3d38b",
+          "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+        },
+        "application_patch": "--- as-injected/booking.html\n+++ repaired/booking.html\n@@ -77,6 +77,7 @@\n           document.title='Sandbox confirmation';\n           const confirmation=`<h2>Booking confirmed</h2><p>${facts()} ${booking.cabin}, ${booking.passenger}</p>\n             <p>Confirmation ${booking.id}</p><p>Charged: USD ${money(booking.cents)}</p>`;\n+          app.innerHTML=confirmation;\n         };\n       };\n     };\n",
+        "post_fix": {
+          "run": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-6eae853672724500bf3d29f5801181f3",
+          "accepted": true,
+          "finding": {
+            "outcome": "clean",
+            "source": "jev",
+            "answer": {
+              "type": "choice",
+              "choice": "clean",
+              "confidence": 0.96,
+              "probabilities": {
+                "clean": 0.97,
+                "unknown": 0.02,
+                "defect": 0.01
+              }
+            },
+            "model": "jev-1.13.0",
+            "evidence_id": "e91e628d0ac84b1eafdb325a8bc874df",
+            "category": "effect",
+            "advisory": true,
+            "requires_review": false
+          },
+          "independent_verifier": {
+            "passed": true,
+            "failures": [],
+            "booking_count": 1
+          },
+          "confirmation_visible": true,
+          "served_quote": {
+            "cents": 10000,
+            "disclosure": ""
+          }
+        },
+        "control": {
+          "run": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-6248a246ba91411ab1a5babd6c71d6fc",
+          "accepted": true,
+          "finding": {
+            "outcome": "clean",
+            "source": "jev",
+            "answer": {
+              "type": "choice",
+              "choice": "clean",
+              "confidence": 0.97,
+              "probabilities": {
+                "unknown": 0.01,
+                "clean": 0.98,
+                "defect": 0.01
+              }
+            },
+            "model": "jev-1.13.0",
+            "evidence_id": "9f87ac7c5e7c4bc991d7ba104aca7033",
+            "category": "effect",
+            "advisory": true,
+            "requires_review": false
+          },
+          "independent_verifier": {
+            "passed": true,
+            "failures": [],
+            "booking_count": 1
+          }
+        },
+        "restored": {
+          "run": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-b4542551489b406fbc39c46cc0bb7b85",
+          "caught_again": true,
+          "finding": {
+            "outcome": "defect",
+            "source": "jev",
+            "answer": {
+              "type": "choice",
+              "choice": "defect",
+              "confidence": 0.95,
+              "probabilities": {
+                "defect": 0.97,
+                "unknown": 0.03,
+                "clean": 0.0
+              }
+            },
+            "model": "jev-1.13.0",
+            "evidence_id": "08a2db32d9b94f45949a1169ac541411",
+            "category": "effect",
+            "advisory": true,
+            "requires_review": true
+          },
+          "restored_file_matches_injected": true
+        },
+        "status": "GREEN"
+      },
+      "passed": true
+    }
+  },
+  "repairing_agent": "coding sub-agent in this session, given the brief, evidence and application source only; never told which fault was injected",
+  "text_entry": "NOT_TESTED",
+  "schema_version": 1,
+  "checkpoint": "cp4",
+  "timestamp": "2026-09-18T13:43:39.939700+00:00",
+  "attempt_id": "7db7c0c55d94429682a18035165c1e88"
+}

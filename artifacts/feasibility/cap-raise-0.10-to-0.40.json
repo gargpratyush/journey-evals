@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "change": "cumulative campaign cap raised",
+  "from_usd": "0.10",
+  "to_usd": "0.40",
+  "authorised_by": "repository owner, in session, in response to the CP5 AMBER decision prompt",
+  "reason": "CP0-CP5 consumed USD 0.0597 of the USD 0.10 cap, leaving too little headroom for CP6 second-application transfer and CP7. The owner chose to restate the value proposition around latency and continue, and raised the cap to USD 0.40.",
+  "spend_at_change_usd": "0.059735886",
+  "attempts_at_change": 862,
+  "accounted_input_tokens_including_history": 1422283,
+  "history_preserved": true,
+  "backup": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\budget-before-cap-raise.json",
+  "note": "Only limit_usd changed. No attempt record was edited or removed, and the model and rate are unchanged, so every prior receipt remains valid at its original denominator.",
+  "timestamp": "2026-09-18T16:41:56.074095+00:00",
+  "attempt_id": "9c56485c449242a19eb2e87b47d55da6"
+}

@@ -1,0 +1,71 @@
+{
+  "status": "GREEN",
+  "source_sha256": "6ff69d55d004405421cb93b45319167d0fb80258331377ad9c0b4096f79eff9b",
+  "offline_tests_passed": true,
+  "workers": [
+    {
+      "schema_version": 1,
+      "status": "COMPLETED",
+      "mode": "scripted",
+      "source_sha256": "6ff69d55d004405421cb93b45319167d0fb80258331377ad9c0b4096f79eff9b",
+      "browser_version": "Chrome/153.0.8010.52",
+      "child_credentials_absent": true,
+      "booking_evidence_complete": true,
+      "disabled_controls_observed_not_actionable": true,
+      "capture_regression_rounds": 10,
+      "transient_feedback_captured": true,
+      "navigation_gap_explicit": true,
+      "stale_navigation_rejected": true,
+      "native_guard_checks": 21,
+      "resources_closed": true,
+      "profile_removed": true,
+      "cleanup_retries": 0,
+      "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\scripted-085470d40984456a9003fa71a948b280",
+      "exit_code": 0,
+      "worker_wall_ms": 40231,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      }
+    },
+    {
+      "schema_version": 1,
+      "status": "COMPLETED",
+      "mode": "isolation",
+      "source_sha256": "6ff69d55d004405421cb93b45319167d0fb80258331377ad9c0b4096f79eff9b",
+      "browser_version": "Chrome/153.0.8010.52",
+      "child_credentials_absent": true,
+      "fresh_profile_isolated": true,
+      "resources_closed": true,
+      "profile_removed": true,
+      "cleanup_retries": 0,
+      "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\isolation-5ff4993281cd4ec7b9544accae03c063",
+      "exit_code": 0,
+      "worker_wall_ms": 15254
+    },
+    {
+      "schema_version": 1,
+      "status": "CANCELLED_AS_EXPECTED",
+      "mode": "cancel",
+      "source_sha256": "6ff69d55d004405421cb93b45319167d0fb80258331377ad9c0b4096f79eff9b",
+      "browser_version": "Chrome/153.0.8010.52",
+      "child_credentials_absent": true,
+      "resources_closed": true,
+      "profile_removed": true,
+      "cleanup_retries": 0,
+      "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\cancel-bd5bbe8949204d4ea7e4208a3b33cd9d",
+      "exit_code": 0,
+      "worker_wall_ms": 16204
+    }
+  ],
+  "inference_attempts": 0,
+  "secret_scan": {
+    "files": 388,
+    "passed": true
+  },
+  "schema_version": 1,
+  "checkpoint": "cp1",
+  "timestamp": "2026-09-18T11:17:32.445340+00:00",
+  "attempt_id": "6d015dc668bd4c4d9688f70708d9ecde"
+}

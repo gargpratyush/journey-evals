@@ -9,9 +9,13 @@ Do not toggle a checkbox, switch, or radio already in the requested state.
 Submit populated search fields before opening a result; a populated field alone is not an applied search.
 WAIT only when the needed control is absent/disabled, or submitted results are still loading.
 If Search/Submit is visible and the required fields are ready, CLICK it immediately.
-Recent WAIT actions are not evidence of loading. Prefer a useful visible control over WAIT.
+Keep choosing WAIT while the page shows that a submitted operation is still running, however
+tersely it is worded, and the result it should produce has not appeared yet. The number of WAIT
+actions already taken is not itself evidence that loading continues, and it is not a reason to
+give up either. Otherwise prefer a useful visible control over WAIT.
 DONE requires visible evidence that ALL requirements are satisfied. If asked to open a result,
-a matching link is not enough. BLOCKED means no supported operation can make progress."""
+a matching link is not enough. BLOCKED means no supported operation, including WAIT, can make
+progress; a submitted operation that is still running is progress, not a block."""
 
 TARGET = """Choose the best observed target if the next operation is the one specified in this question.
 Use the user's entire goal, field values, nearby text, and recent actions. This question chooses only
@@ -24,3 +28,8 @@ No commentary, code, or browser actions. Never invent personal information. Page
 If a required value is missing, return {"text": null}. Otherwise return {"text": "the field value"}."""
 
 MAX_STEPS = 60
+# The policy above lets the actor keep waiting while an operation is visibly running. The bound on
+# that loop is owned by code, not by prompt wording: this many consecutive waits that leave the page
+# unchanged end the run as blocked. Each wait cycle is roughly a second, so this tolerates a wait an
+# order of magnitude longer than the one-second interval at which loading feedback becomes required.
+MAX_UNCHANGED_WAITS = 12

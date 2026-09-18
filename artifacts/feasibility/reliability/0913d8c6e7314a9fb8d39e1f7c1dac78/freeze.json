@@ -1,0 +1,12 @@
+{
+  "dataset_sha256": "4577c54061d29ff27bb71de2da15a1b7fbf0470c8e5a6d1d607d578054ac434d",
+  "evaluator_sha256": "357b98c13eff89e43d63626d06c4a9af5a8b621cdbe786fd94b2ddabe3f25116",
+  "comparator_sha256": "e57056d25aeeeaed57871d9ba9bff3f05eae4086c1893ca25cee4f1a4b04ff40",
+  "source_sha256": "66432f609b6233107038dd7bd56880051238e596fa9f49ba6f8ce70d2940454b",
+  "baseline_model": "gpt-5.6-luna",
+  "jev_model": "jev-1.13.0",
+  "cases": 90,
+  "missing_evidence_cases": 12,
+  "batching": "one request per check category for both model arms",
+  "selection_rationale": "The baseline deployment, prompt, batching and retry policy were fixed on Checkpoint 3's already exposed development split before this holdout was generated or scored."
+}

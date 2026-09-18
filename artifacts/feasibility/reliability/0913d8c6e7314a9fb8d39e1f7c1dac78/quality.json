@@ -1,0 +1,312 @@
+{
+  "status": "GREEN",
+  "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\reliability\\0913d8c6e7314a9fb8d39e1f7c1dac78",
+  "freeze": {
+    "dataset_sha256": "4577c54061d29ff27bb71de2da15a1b7fbf0470c8e5a6d1d607d578054ac434d",
+    "evaluator_sha256": "357b98c13eff89e43d63626d06c4a9af5a8b621cdbe786fd94b2ddabe3f25116",
+    "comparator_sha256": "e57056d25aeeeaed57871d9ba9bff3f05eae4086c1893ca25cee4f1a4b04ff40",
+    "source_sha256": "66432f609b6233107038dd7bd56880051238e596fa9f49ba6f8ce70d2940454b",
+    "baseline_model": "gpt-5.6-luna",
+    "jev_model": "jev-1.13.0",
+    "cases": 90,
+    "missing_evidence_cases": 12,
+    "batching": "one request per check category for both model arms",
+    "selection_rationale": "The baseline deployment, prompt, batching and retry policy were fixed on Checkpoint 3's already exposed development split before this holdout was generated or scored."
+  },
+  "arms": [
+    {
+      "arm": "deterministic",
+      "metrics": {
+        "per_check": {
+          "fare": {
+            "positives": 15,
+            "negatives": 15,
+            "detected": 0,
+            "missed": 15,
+            "false_positive": 0,
+            "definitive_controls": 5,
+            "abstained_controls": 10,
+            "resolved": 5,
+            "correct": 5
+          },
+          "effect": {
+            "positives": 15,
+            "negatives": 15,
+            "detected": 0,
+            "missed": 15,
+            "false_positive": 0,
+            "definitive_controls": 0,
+            "abstained_controls": 15,
+            "resolved": 0,
+            "correct": 0
+          },
+          "loading": {
+            "positives": 15,
+            "negatives": 15,
+            "detected": 0,
+            "missed": 15,
+            "false_positive": 0,
+            "definitive_controls": 5,
+            "abstained_controls": 10,
+            "resolved": 5,
+            "correct": 5
+          }
+        },
+        "totals": {
+          "positives": 45,
+          "negatives": 45,
+          "detected": 0,
+          "missed": 45,
+          "false_positive": 0,
+          "definitive_controls": 10,
+          "abstained_controls": 35,
+          "resolved": 10,
+          "correct": 10,
+          "precision": null,
+          "recall": 0.0,
+          "decision_coverage": 0.1111
+        }
+      },
+      "missing_evidence": {
+        "cases": 12,
+        "abstained": 12,
+        "all_abstained": true,
+        "outcomes": {
+          "missing-fare-0": "unknown",
+          "missing-effect-0": "unknown",
+          "missing-basis-0": "unknown",
+          "missing-fare-1": "unknown",
+          "missing-effect-1": "unknown",
+          "missing-basis-1": "unknown",
+          "missing-fare-2": "unknown",
+          "missing-effect-2": "unknown",
+          "missing-basis-2": "unknown",
+          "missing-fare-3": "unknown",
+          "missing-effect-3": "unknown",
+          "missing-basis-3": "unknown"
+        }
+      },
+      "receipt": null,
+      "wall_ms": 0,
+      "tokens": 0
+    },
+    {
+      "arm": "jev",
+      "metrics": {
+        "per_check": {
+          "fare": {
+            "positives": 15,
+            "negatives": 15,
+            "detected": 15,
+            "missed": 0,
+            "false_positive": 0,
+            "definitive_controls": 15,
+            "abstained_controls": 0,
+            "resolved": 30,
+            "correct": 30
+          },
+          "effect": {
+            "positives": 15,
+            "negatives": 15,
+            "detected": 15,
+            "missed": 0,
+            "false_positive": 0,
+            "definitive_controls": 15,
+            "abstained_controls": 0,
+            "resolved": 30,
+            "correct": 30
+          },
+          "loading": {
+            "positives": 15,
+            "negatives": 15,
+            "detected": 15,
+            "missed": 0,
+            "false_positive": 0,
+            "definitive_controls": 15,
+            "abstained_controls": 0,
+            "resolved": 30,
+            "correct": 30
+          }
+        },
+        "totals": {
+          "positives": 45,
+          "negatives": 45,
+          "detected": 45,
+          "missed": 0,
+          "false_positive": 0,
+          "definitive_controls": 45,
+          "abstained_controls": 0,
+          "resolved": 90,
+          "correct": 90,
+          "precision": 1.0,
+          "recall": 1.0,
+          "decision_coverage": 1.0
+        }
+      },
+      "missing_evidence": {
+        "cases": 12,
+        "abstained": 12,
+        "all_abstained": true,
+        "outcomes": {
+          "missing-fare-0": "unknown",
+          "missing-effect-0": "unknown",
+          "missing-basis-0": "unknown",
+          "missing-fare-1": "unknown",
+          "missing-effect-1": "unknown",
+          "missing-basis-1": "unknown",
+          "missing-fare-2": "unknown",
+          "missing-effect-2": "unknown",
+          "missing-basis-2": "unknown",
+          "missing-fare-3": "unknown",
+          "missing-effect-3": "unknown",
+          "missing-basis-3": "unknown"
+        }
+      },
+      "receipt": {
+        "limit_usd": "0.10",
+        "attempts_this_checkpoint": 3,
+        "accounted_input_tokens_including_history": 536026,
+        "accounted_usd": "0.022513092",
+        "billing": "Published-rate estimate; non-success/unknown requests retain maximum reservation.",
+        "arm_requests": 3,
+        "arm_input_tokens": 16198
+      },
+      "wall_ms": 1923,
+      "tokens": 16198
+    },
+    {
+      "arm": "baseline",
+      "metrics": {
+        "per_check": {
+          "fare": {
+            "positives": 15,
+            "negatives": 15,
+            "detected": 15,
+            "missed": 0,
+            "false_positive": 0,
+            "definitive_controls": 15,
+            "abstained_controls": 0,
+            "resolved": 30,
+            "correct": 30
+          },
+          "effect": {
+            "positives": 15,
+            "negatives": 15,
+            "detected": 15,
+            "missed": 0,
+            "false_positive": 0,
+            "definitive_controls": 15,
+            "abstained_controls": 0,
+            "resolved": 30,
+            "correct": 30
+          },
+          "loading": {
+            "positives": 15,
+            "negatives": 15,
+            "detected": 15,
+            "missed": 0,
+            "false_positive": 0,
+            "definitive_controls": 15,
+            "abstained_controls": 0,
+            "resolved": 30,
+            "correct": 30
+          }
+        },
+        "totals": {
+          "positives": 45,
+          "negatives": 45,
+          "detected": 45,
+          "missed": 0,
+          "false_positive": 0,
+          "definitive_controls": 45,
+          "abstained_controls": 0,
+          "resolved": 90,
+          "correct": 90,
+          "precision": 1.0,
+          "recall": 1.0,
+          "decision_coverage": 1.0
+        }
+      },
+      "missing_evidence": {
+        "cases": 12,
+        "abstained": 12,
+        "all_abstained": true,
+        "outcomes": {
+          "missing-fare-0": "unknown",
+          "missing-effect-0": "unknown",
+          "missing-basis-0": "unknown",
+          "missing-fare-1": "unknown",
+          "missing-effect-1": "unknown",
+          "missing-basis-1": "unknown",
+          "missing-fare-2": "unknown",
+          "missing-effect-2": "unknown",
+          "missing-basis-2": "unknown",
+          "missing-fare-3": "unknown",
+          "missing-effect-3": "unknown",
+          "missing-basis-3": "unknown"
+        }
+      },
+      "receipt": {
+        "model": "gpt-5.6-luna",
+        "requests": 3,
+        "successful_requests": 3,
+        "retries": 0,
+        "input_tokens": 10445,
+        "output_tokens": 2380,
+        "reasoning_tokens": 382,
+        "latency_ms": 26912,
+        "pricing": "rate not configured; token counts are the measured quantity",
+        "run_id": "9a8cc6e0ccfa4edba664c6acb81eb1e7"
+      },
+      "wall_ms": 26924,
+      "tokens": 12825
+    }
+  ],
+  "quality_gates": {
+    "detection_per_check": {
+      "fare": true,
+      "effect": true,
+      "loading": true
+    },
+    "false_positives_total": true,
+    "false_positives_per_check": {
+      "fare": true,
+      "effect": true,
+      "loading": true
+    },
+    "precision": true,
+    "decision_coverage": true,
+    "definitive_controls_per_check": {
+      "fare": true,
+      "effect": true,
+      "loading": true
+    },
+    "missing_evidence_abstained": true,
+    "semantic_contribution": true
+  },
+  "economics": {
+    "jev": {
+      "tokens": 16198,
+      "correct_resolved": 90,
+      "tokens_per_correct": 179.98,
+      "wall_ms": 1923,
+      "requests": 3
+    },
+    "baseline": {
+      "tokens": 12825,
+      "correct_resolved": 90,
+      "tokens_per_correct": 142.5,
+      "wall_ms": 26924,
+      "requests": 3,
+      "reasoning_tokens": 382
+    },
+    "token_ratio_baseline_over_jev": 0.79,
+    "quality_delta": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "decision_coverage": 0.0
+    },
+    "usd_comparison": "NOT COMPUTED: the Jev rate is published (USD 0.042/M input tokens) but no authorized rate for the baseline deployment was supplied, so a USD ratio would be invented. Token counts, request counts and latency are the measured quantities."
+  },
+  "scope": "Arm A only: frozen observation holdout. Live repeatability and overhead are separate."
+}

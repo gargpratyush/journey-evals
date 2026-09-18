@@ -1,0 +1,169 @@
+{
+  "status": "AMBER",
+  "source_sha256": "1da064b49a03cb7d371e30ba0c2e9c2fef64ac555e8f212384518fbef9dcebde",
+  "seed": 20260918,
+  "summary": {
+    "pairs_planned": 2,
+    "pairs_usable": 2,
+    "steps_per_run": 16,
+    "native_total_median_ms": {
+      "instrumented": 743,
+      "bare": 587
+    },
+    "native_median_step_ms": {
+      "instrumented": 48.52,
+      "bare": 32.09
+    },
+    "median_slowdown": 0.267,
+    "median_step_delta_ms": 16.44,
+    "collector_events_median": 24.0,
+    "within_tolerance": true,
+    "tolerance": "investigate above 10% median slowdown or 20 ms per scripted step, whichever is larger"
+  },
+  "inference": "none; this arm never enables a model client",
+  "scope": "Arm D only: collector overhead on this fixture, not a browser-wide guarantee.",
+  "pairs": [
+    {
+      "pair": 0,
+      "order": [
+        "overhead-on",
+        "overhead-off"
+      ],
+      "overhead-on": {
+        "mode": "overhead-on",
+        "status": "COMPLETED",
+        "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\overhead-on-0c526e64194d45bc8bd6ae37daad979e",
+        "wall_ms": 4397,
+        "steps": {
+          "instrumented": true,
+          "steps": 16,
+          "native_step_ms": [
+            57.25,
+            32.13,
+            41.906,
+            33.356,
+            37.23,
+            44.521,
+            81.479,
+            19.43,
+            27.981,
+            49.945,
+            6.912,
+            37.736,
+            39.516,
+            52.492,
+            13.256,
+            53.649
+          ],
+          "native_total_ms": 628.789,
+          "native_median_step_ms": 38.626,
+          "collector_events": 24
+        },
+        "error": null
+      },
+      "overhead-off": {
+        "mode": "overhead-off",
+        "status": "COMPLETED",
+        "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\overhead-off-795411fa8dfc43f89dadb61364c682cb",
+        "wall_ms": 4110,
+        "steps": {
+          "instrumented": false,
+          "steps": 16,
+          "native_step_ms": [
+            89.102,
+            30.253,
+            14.402,
+            59.874,
+            17.73,
+            27.233,
+            56.202,
+            3.065,
+            24.892,
+            39.644,
+            21.464,
+            62.993,
+            28.818,
+            61.447,
+            31.803,
+            43.958
+          ],
+          "native_total_ms": 612.88,
+          "native_median_step_ms": 31.028,
+          "collector_events": 0
+        },
+        "error": null
+      }
+    },
+    {
+      "pair": 1,
+      "order": [
+        "overhead-off",
+        "overhead-on"
+      ],
+      "overhead-off": {
+        "mode": "overhead-off",
+        "status": "COMPLETED",
+        "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\overhead-off-a91351de8aa9421f903b24444e3aad55",
+        "wall_ms": 3985,
+        "steps": {
+          "instrumented": false,
+          "steps": 16,
+          "native_step_ms": [
+            67.892,
+            9.811,
+            17.549,
+            36.202,
+            5.725,
+            27.458,
+            69.932,
+            4.04,
+            49.25,
+            54.743,
+            7.144,
+            30.396,
+            13.713,
+            35.898,
+            57.03,
+            73.658
+          ],
+          "native_total_ms": 560.441,
+          "native_median_step_ms": 33.147,
+          "collector_events": 0
+        },
+        "error": null
+      },
+      "overhead-on": {
+        "mode": "overhead-on",
+        "status": "COMPLETED",
+        "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\overhead-on-f1201240509a4accb1bdc951b297c03d",
+        "wall_ms": 127405,
+        "steps": {
+          "instrumented": true,
+          "steps": 16,
+          "native_step_ms": [
+            64.882,
+            7.711,
+            31.832,
+            56.771,
+            12.161,
+            88.06,
+            88.915,
+            19.86,
+            60.072,
+            75.661,
+            29.82,
+            77.591,
+            47.57,
+            89.545,
+            46.065,
+            61.289
+          ],
+          "native_total_ms": 857.805,
+          "native_median_step_ms": 58.422,
+          "collector_events": 24
+        },
+        "error": null
+      }
+    }
+  ]
+}

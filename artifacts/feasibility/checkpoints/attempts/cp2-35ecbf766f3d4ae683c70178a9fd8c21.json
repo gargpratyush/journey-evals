@@ -1,0 +1,122 @@
+{
+  "status": "GREEN",
+  "batch_id": "b14cd333d5524fa289d8892ae90ada1c",
+  "planned": 3,
+  "completed_and_verified": 3,
+  "runs": [
+    {
+      "schema_version": 1,
+      "status": "COMPLETED",
+      "mode": "autonomous",
+      "source_sha256": "e7d2bb3bd699decf29d1ba4b184fadc3fb74432c78da906eb49b3079ba16b994",
+      "browser_version": "Chrome/153.0.8010.52",
+      "child_credentials_absent": true,
+      "agent_status": "done",
+      "actions": 7,
+      "decisions": 8,
+      "actor_elapsed_ms": 4902,
+      "text_entry": "NOT_TESTED",
+      "evidence_complete": true,
+      "budget": {
+        "limit_usd": "0.10",
+        "attempts_this_checkpoint": 8,
+        "accounted_input_tokens_including_history": 56417,
+        "accounted_usd": "0.002369514",
+        "billing": "Published-rate estimate; non-success/unknown requests retain maximum reservation."
+      },
+      "resources_closed": true,
+      "profile_removed": true,
+      "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-5e4d930db9104e0e83d91afc55910e56",
+      "exit_code": 0,
+      "worker_wall_ms": 14542,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "artifacts_secret_free": true,
+      "passed": true,
+      "timing": {
+        "through_first_report_persistence_ms": 14547
+      }
+    },
+    {
+      "schema_version": 1,
+      "status": "COMPLETED",
+      "mode": "autonomous",
+      "source_sha256": "e7d2bb3bd699decf29d1ba4b184fadc3fb74432c78da906eb49b3079ba16b994",
+      "browser_version": "Chrome/153.0.8010.52",
+      "child_credentials_absent": true,
+      "agent_status": "done",
+      "actions": 7,
+      "decisions": 8,
+      "actor_elapsed_ms": 4922,
+      "text_entry": "NOT_TESTED",
+      "evidence_complete": true,
+      "budget": {
+        "limit_usd": "0.10",
+        "attempts_this_checkpoint": 8,
+        "accounted_input_tokens_including_history": 69443,
+        "accounted_usd": "0.002916606",
+        "billing": "Published-rate estimate; non-success/unknown requests retain maximum reservation."
+      },
+      "resources_closed": true,
+      "profile_removed": true,
+      "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-b5b28570a51745b3b5f6c9e223374074",
+      "exit_code": 0,
+      "worker_wall_ms": 14670,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "artifacts_secret_free": true,
+      "passed": true,
+      "timing": {
+        "through_first_report_persistence_ms": 14676
+      }
+    },
+    {
+      "schema_version": 1,
+      "status": "COMPLETED",
+      "mode": "autonomous",
+      "source_sha256": "e7d2bb3bd699decf29d1ba4b184fadc3fb74432c78da906eb49b3079ba16b994",
+      "browser_version": "Chrome/153.0.8010.52",
+      "child_credentials_absent": true,
+      "agent_status": "done",
+      "actions": 7,
+      "decisions": 8,
+      "actor_elapsed_ms": 4873,
+      "text_entry": "NOT_TESTED",
+      "evidence_complete": true,
+      "budget": {
+        "limit_usd": "0.10",
+        "attempts_this_checkpoint": 8,
+        "accounted_input_tokens_including_history": 82469,
+        "accounted_usd": "0.003463698",
+        "billing": "Published-rate estimate; non-success/unknown requests retain maximum reservation."
+      },
+      "resources_closed": true,
+      "profile_removed": true,
+      "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-681bf0e5d5f448ecac2e6677bb9e1678",
+      "exit_code": 0,
+      "worker_wall_ms": 14352,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "artifacts_secret_free": true,
+      "passed": true,
+      "timing": {
+        "through_first_report_persistence_ms": 14357
+      }
+    }
+  ],
+  "text_entry": "NOT_TESTED",
+  "source_sha256": "e7d2bb3bd699decf29d1ba4b184fadc3fb74432c78da906eb49b3079ba16b994",
+  "schema_version": 1,
+  "checkpoint": "cp2",
+  "timestamp": "2026-09-18T11:00:44.783067+00:00",
+  "attempt_id": "35ecbf766f3d4ae683c70178a9fd8c21"
+}

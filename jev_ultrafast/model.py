@@ -157,24 +157,53 @@ def field_context(goal, action, page, history):
     }
 
 
+def text_dialect(base):
+    """Which chat/completions spelling the configured text endpoint accepts.
+
+    Azure Foundry's v1 surface rejects `max_tokens` and the OpenRouter-style
+    `reasoning` object, requiring `max_completion_tokens` and `reasoning_effort`.
+    """
+    declared = os.environ.get("TEXT_MODEL_DIALECT")
+    if declared:
+        if declared not in ("deepseek", "openrouter", "azure"):
+            raise ValueError("TEXT_MODEL_DIALECT must be deepseek, openrouter or azure")
+        return declared
+    if "api.deepseek.com/" in base:
+        return "deepseek"
+    if ".services.ai.azure.com/" in base or ".openai.azure.com/" in base:
+        return "azure"
+    return "openrouter"
+
+
+def text_tuning(dialect, max_tokens=1024):
+    """Token-limit and reasoning parameters for one dialect. No vendor is assumed by default."""
+    disabled = os.environ.get("TEXT_MODEL_REASONING") == "none"
+    if dialect == "azure":
+        tuning = {"max_completion_tokens": max_tokens}
+        if not disabled:
+            tuning["reasoning_effort"] = "low"
+        return tuning
+    if dialect == "deepseek":
+        return {"max_tokens": max_tokens, "thinking": {"type": "disabled"}}
+    return {"max_tokens": max_tokens,
+            "reasoning": {"enabled": False} if disabled else {"effort": "low"}}
+
+
 def field_text(context):
     key = os.environ.get("TEXT_MODEL_API_KEY")
     if not key:
         raise ValueError("TYPE_TEXT needs TEXT_MODEL_API_KEY; no text is hardcoded or guessed by the executor.")
     base = os.environ.get("TEXT_MODEL_BASE_URL", "https://api.deepseek.com/v1").rstrip("/")
     model = os.environ.get("TEXT_MODEL", "deepseek-chat")
-    reasoning = {"thinking": {"type": "disabled"}} if "api.deepseek.com/" in base else {"reasoning": {"effort": "low"}}
-    if os.environ.get("TEXT_MODEL_REASONING") == "none":
-        reasoning = {"reasoning": {"enabled": False}}
+    tuning = text_tuning(text_dialect(base))
     started = time.perf_counter()
     result = post_json(
         base + "/chat/completions",
         key,
         {
             "model": model,
-            "max_tokens": 1024,
             "response_format": {"type": "json_object"},
-            **reasoning,
+            **tuning,
             "messages": [
                 {"role": "system", "content": TEXT_VALUE},
                 {

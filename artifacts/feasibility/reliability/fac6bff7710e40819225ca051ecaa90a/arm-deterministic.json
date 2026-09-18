@@ -1,0 +1,792 @@
+{
+  "arm": "deterministic",
+  "metrics": {
+    "per_check": {
+      "fare": {
+        "positives": 15,
+        "negatives": 15,
+        "detected": 0,
+        "missed": 15,
+        "false_positive": 0,
+        "definitive_controls": 5,
+        "abstained_controls": 10,
+        "resolved": 5,
+        "correct": 5
+      },
+      "effect": {
+        "positives": 15,
+        "negatives": 15,
+        "detected": 0,
+        "missed": 15,
+        "false_positive": 0,
+        "definitive_controls": 0,
+        "abstained_controls": 15,
+        "resolved": 0,
+        "correct": 0
+      },
+      "loading": {
+        "positives": 15,
+        "negatives": 15,
+        "detected": 0,
+        "missed": 15,
+        "false_positive": 0,
+        "definitive_controls": 5,
+        "abstained_controls": 10,
+        "resolved": 5,
+        "correct": 5
+      }
+    },
+    "totals": {
+      "positives": 45,
+      "negatives": 45,
+      "detected": 0,
+      "missed": 45,
+      "false_positive": 0,
+      "definitive_controls": 10,
+      "abstained_controls": 35,
+      "resolved": 10,
+      "correct": 10,
+      "precision": null,
+      "recall": 0.0,
+      "decision_coverage": 0.1111
+    }
+  },
+  "missing_evidence": {
+    "cases": 12,
+    "abstained": 12,
+    "all_abstained": true,
+    "outcomes": {
+      "missing-fare-0": "unknown",
+      "missing-effect-0": "unknown",
+      "missing-basis-0": "unknown",
+      "missing-fare-1": "unknown",
+      "missing-effect-1": "unknown",
+      "missing-basis-1": "unknown",
+      "missing-fare-2": "unknown",
+      "missing-effect-2": "unknown",
+      "missing-basis-2": "unknown",
+      "missing-fare-3": "unknown",
+      "missing-effect-3": "unknown",
+      "missing-basis-3": "unknown"
+    }
+  },
+  "receipt": null,
+  "wall_ms": 0,
+  "tokens": 0,
+  "results": [
+    {
+      "evidence_id": "d34cf631eaa54c0a823170db24a07857",
+      "category": "effect",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "11e1a2fe9f864d0bbfa80a7142bdb40c",
+      "category": "fare",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "3a691fa5471d4edea54436a3c25d459f",
+      "category": "fare",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "af0f49ad7b3948e182a3190f1476e205",
+      "category": "fare",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "c86dd26b5f63495e93cb480e01a014f2",
+      "category": "fare",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "abc203b882b6493a9a9a41b6bc02e484",
+      "category": "loading",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "ca59eb26ab1542a2b5da0bc25fd2b302",
+      "category": "effect",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "941979f08943483a843227d6e5e8bd06",
+      "category": "loading",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "2bcb049c7fa047c3933d84719ee50806",
+      "category": "fare",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "bccb7d85384d481c8f243ad26e80fce2",
+      "category": "fare",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "f670b8ea11644bf4b363265c7e6d3f0a",
+      "category": "loading",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "ec0ada2587e2439fa70a20ee3117e197",
+      "category": "effect",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "f0c5479167cb4bd2bf4123d488506cf8",
+      "category": "fare",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "6b5a2da49e824025aa101f1a319e9c96",
+      "category": "loading",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "24f5e0dfc741479394737182bf7d8c26",
+      "category": "fare",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "e9bb1bbb80454ca39a320c6a149428bc",
+      "category": "loading",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "c530cd468a52460f84830efbf29f6392",
+      "category": "effect",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "4466e8a6e6d54966bdb8994b4179675f",
+      "category": "effect",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "24bdb5d7c9b848ac953a234897006ebc",
+      "category": "loading",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "67f8d722f0b1485093f7c8fdba4af375",
+      "category": "loading",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "cfb4c7ea979946c59e59df2baf51b041",
+      "category": "loading",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "064bc64a88db4505a502914724257f54",
+      "category": "fare",
+      "outcome": "clean",
+      "source": "code",
+      "reason": "No measured price increase"
+    },
+    {
+      "evidence_id": "6d21e3fb5cd644278e256228c61593ec",
+      "category": "fare",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "88ab1d998e09490f885e519eb8b58316",
+      "category": "loading",
+      "outcome": "clean",
+      "source": "code",
+      "reason": "Response is below this fixture's declared loading-feedback threshold"
+    },
+    {
+      "evidence_id": "d1e905f8552f49ed8b8a6d5f3b1c9932",
+      "category": "effect",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "2f5cfc3bce1d4d2d8951ea3486087c00",
+      "category": "loading",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "3c260f239ce74104bcc1f7d83ec0b360",
+      "category": "effect",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "1af13cbc389e4b119de356e4526d5715",
+      "category": "fare",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "bf4cdf90f5b84c6cb5a840033211f0e9",
+      "category": "loading",
+      "outcome": "clean",
+      "source": "code",
+      "reason": "Response is below this fixture's declared loading-feedback threshold"
+    },
+    {
+      "evidence_id": "599cbf88f06d4374bd1bf895b1b5d5ca",
+      "category": "loading",
+      "outcome": "clean",
+      "source": "code",
+      "reason": "Response is below this fixture's declared loading-feedback threshold"
+    },
+    {
+      "evidence_id": "749641af10df4218922f4bc7cb21c831",
+      "category": "fare",
+      "outcome": "clean",
+      "source": "code",
+      "reason": "No measured price increase"
+    },
+    {
+      "evidence_id": "ac243af87d004d2fa3d27ab7a8ed7f92",
+      "category": "fare",
+      "outcome": "clean",
+      "source": "code",
+      "reason": "No measured price increase"
+    },
+    {
+      "evidence_id": "8183b7b8380a4f0ba40f7e41e9eca453",
+      "category": "fare",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "969175d997e744d092dee566d35be38c",
+      "category": "effect",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "ea2396def8f9478ca3d08d13917c68cd",
+      "category": "fare",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "44c54a8f7d2049c09f2e1babb23a7a53",
+      "category": "fare",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "6d8611c7541f41a7b568e43de401b3c7",
+      "category": "effect",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "54b0972d5ae0423cafe90485ee068ca5",
+      "category": "effect",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "d2e312c1b7d24adcb1803f8ec7718bcb",
+      "category": "fare",
+      "outcome": "clean",
+      "source": "code",
+      "reason": "No measured price increase"
+    },
+    {
+      "evidence_id": "02b6e09a012846df82392ea4418686f2",
+      "category": "loading",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "59828e1b901b440286a6a43dd06845df",
+      "category": "loading",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "9488c71765e04a2e94a63fd65d85509b",
+      "category": "loading",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "80bfee835f3b41c49f15199f3fdb69bf",
+      "category": "fare",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "a57115e772424140aa0b8c252fd7aaf9",
+      "category": "loading",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "9af5ec89f6d145ecb86f3be993c8f4dd",
+      "category": "fare",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "2dffbf7ead79439fb416c54cc1224377",
+      "category": "fare",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "6d7bb21219a349b1947e1ab2276058fd",
+      "category": "loading",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "c35e1106d97245ecbff5b7ee9909c677",
+      "category": "effect",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "ee65bab5b628403d826b89df586d23b2",
+      "category": "loading",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "314510c36110413db07862cfcc84a468",
+      "category": "loading",
+      "outcome": "clean",
+      "source": "code",
+      "reason": "Response is below this fixture's declared loading-feedback threshold"
+    },
+    {
+      "evidence_id": "3b176811705d4af49f1ac2931f2b069f",
+      "category": "fare",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "661c06f396ec4fc59d0016d752a45352",
+      "category": "fare",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "4aca70a37b4c49b2affb89c57e0bef5f",
+      "category": "effect",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "ccb5619b85f14bbaaec8f9799196d23c",
+      "category": "effect",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "814c334dbcd2491897e7adc21cbf69a2",
+      "category": "fare",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "dd242fa4d2744b0bac63f1dde1ae648d",
+      "category": "loading",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "c70e33e054594d5493e0a100d3f84f00",
+      "category": "effect",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "8a1352113b7e41acb3e9a7ede2bd9483",
+      "category": "effect",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "4e54d55f7a034f34acb1b4f71af006f6",
+      "category": "effect",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "aaf152856ef346d6b2c63b44425505c2",
+      "category": "effect",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "15d53f7c691840549ae78d4bcc6f8316",
+      "category": "effect",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "fdf3858541ff4ab7bdeefc280f01c6e3",
+      "category": "loading",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "a813240fa4364aebb64c5fb0ca766ec0",
+      "category": "effect",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "1e2c9f10099544a5b897ae570bee8e98",
+      "category": "loading",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "ec3eca131212489fbe283c7f73475d3e",
+      "category": "fare",
+      "outcome": "clean",
+      "source": "code",
+      "reason": "No measured price increase"
+    },
+    {
+      "evidence_id": "f3ada7748e3c42698a0c7dceba6883d1",
+      "category": "fare",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "2f3f5bab516246d795c2c49ff180bd0a",
+      "category": "loading",
+      "outcome": "clean",
+      "source": "code",
+      "reason": "Response is below this fixture's declared loading-feedback threshold"
+    },
+    {
+      "evidence_id": "8dd245c59e634c1183ba237d8024ccbd",
+      "category": "loading",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "39dc6aa2cb4945d693f016d159e75bbb",
+      "category": "fare",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "187cb38cfd4548448c69c20207dd2b28",
+      "category": "fare",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "f4d3f6d553a24f36a717a4ff5b622155",
+      "category": "effect",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "e6f74d13ce184a3ca5d925842f652886",
+      "category": "effect",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "ebec4f6fd9c548fe8fee5e7958266c01",
+      "category": "loading",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "2704c92f5498403bb5e6f82eb85aecf0",
+      "category": "effect",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "1ea74ff876e24bbc88a56f471c89d8d5",
+      "category": "fare",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "6bf848a8c39b45a187ab430c02a39f96",
+      "category": "loading",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "d0cbbf7d8c1e4454940d9698f492bfd4",
+      "category": "loading",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "3721f711a35d43aab69c94c9122a2409",
+      "category": "effect",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "5b4f2ad89fed4a2b9bb10f3aab4079b6",
+      "category": "effect",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "fd5e2144e3b649ab8e938c63742b8fd8",
+      "category": "fare",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "53e4fd1631b944848cc85a2e895f13cc",
+      "category": "effect",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "daa4658239cc4b89ac57ba170e3f5d81",
+      "category": "loading",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "d78e1b6046f14544b8dcb23fed5e3932",
+      "category": "loading",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "ef176a2a3745458d9f5490911c617762",
+      "category": "effect",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "fdc4cdc6c2ab440ca19997f66f19030c",
+      "category": "loading",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "b75fdc86a6c34b719d06647f0fd07b3e",
+      "category": "effect",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "246d956bc45646538602c89580443f07",
+      "category": "effect",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "2dd9824ba67b4579b0cd02eee7a31190",
+      "category": "effect",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "5813f59c33e34bc29fb5974a361ce38f",
+      "category": "effect",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "7bd1b5e0fdfa45cc9f38c1b994a09be9",
+      "category": "fare",
+      "outcome": "no_finding",
+      "source": "code",
+      "reason": "No deterministic rule applies"
+    },
+    {
+      "evidence_id": "dfb105524c454fa8be2b4125b7db0dd4",
+      "category": "fare",
+      "outcome": "unknown",
+      "source": "code",
+      "reason": "Required evidence window is incomplete"
+    },
+    {
+      "evidence_id": "f0e83be631014598b0f8219f72a2d720",
+      "category": "effect",
+      "outcome": "unknown",
+      "source": "code",
+      "reason": "Action execution or observation deadline is not established"
+    },
+    {
+      "evidence_id": "6c8044bdcca344aa9ae3e2521f450a05",
+      "category": "fare",
+      "outcome": "unknown",
+      "source": "code",
+      "reason": "Price association/currency/fare basis is not established"
+    },
+    {
+      "evidence_id": "4b0dbea2929547e8992ac6d7818be03d",
+      "category": "fare",
+      "outcome": "unknown",
+      "source": "code",
+      "reason": "Required evidence window is incomplete"
+    },
+    {
+      "evidence_id": "c3d53dc357cb4f2abb519d58e7c0f6a3",
+      "category": "effect",
+      "outcome": "unknown",
+      "source": "code",
+      "reason": "Action execution or observation deadline is not established"
+    },
+    {
+      "evidence_id": "ce4accd9869543e7bafee803b4bf2554",
+      "category": "fare",
+      "outcome": "unknown",
+      "source": "code",
+      "reason": "Price association/currency/fare basis is not established"
+    },
+    {
+      "evidence_id": "3983166430924c1f9197b7e4f5d2ce86",
+      "category": "fare",
+      "outcome": "unknown",
+      "source": "code",
+      "reason": "Required evidence window is incomplete"
+    },
+    {
+      "evidence_id": "5f1dccbab9b34f41b20411a4b2e0632c",
+      "category": "effect",
+      "outcome": "unknown",
+      "source": "code",
+      "reason": "Action execution or observation deadline is not established"
+    },
+    {
+      "evidence_id": "f2fea42f7fcf4fbe934addf05dfeff32",
+      "category": "fare",
+      "outcome": "unknown",
+      "source": "code",
+      "reason": "Price association/currency/fare basis is not established"
+    },
+    {
+      "evidence_id": "ce7ff88515404ecabd6be92a1e5e419d",
+      "category": "fare",
+      "outcome": "unknown",
+      "source": "code",
+      "reason": "Required evidence window is incomplete"
+    },
+    {
+      "evidence_id": "6cddde92c5f7461ba90bfd17bbe58127",
+      "category": "effect",
+      "outcome": "unknown",
+      "source": "code",
+      "reason": "Action execution or observation deadline is not established"
+    },
+    {
+      "evidence_id": "f4c2752e2b284144b99f32dc699d68a2",
+      "category": "fare",
+      "outcome": "unknown",
+      "source": "code",
+      "reason": "Price association/currency/fare basis is not established"
+    }
+  ]
+}

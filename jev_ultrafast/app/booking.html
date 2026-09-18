@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Sandbox flight search</title>
+<style>
+body { font:18px system-ui; margin:32px; max-width:880px; }
+label { display:block; margin:16px 0; }
+select,button { font:inherit; padding:10px; }
+main { padding:20px; border:1px solid #777; }
+[role=status] { min-height:26px; }
+</style>
+<h1>Sandbox travel</h1>
+<p>Local synthetic bookings only. No payment or real travel.</p>
+<div role="status" id="status" aria-live="polite"></div>
+<main id="app">
+  <h2>Search one-way flights</h2>
+  <label>Origin <select id="origin"><option>Zurich</option><option>Paris</option></select></label>
+  <label>Destination <select id="destination"><option value="">Choose destination</option>
+    <option>London</option><option>Rome</option></select></label>
+  <label>Departure <select id="date"><option value="">Choose departure</option>
+    <option value="2026-09-20">September 20, 2026</option>
+    <option value="2026-09-21">September 21, 2026</option></select></label>
+  <button id="search" disabled>Search flights</button>
+</main>
+<script>
+const app=document.querySelector('#app'), status=document.querySelector('#status');
+let itinerary;
+const money=cents=>(cents/100).toFixed(2);
+const facts=()=>`${itinerary.origin} to ${itinerary.destination}, ${itinerary.date}, one adult. Flight F001.`;
+const request=async(path,body)=>{
+  const response=await fetch(path,body ? {method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(body)} : {});
+  if(!response.ok) throw new Error(`Request failed: ${response.status}`);
+  return response.json();
+};
+for(const id of ['origin','destination','date']) {
+  document.getElementById(id).addEventListener('change',()=>{
+    document.querySelector('#search').disabled=!['origin','destination','date'].every(
+      field=>document.getElementById(field).value);
+  });
+}
+document.querySelector('#search').onclick=async()=>{
+  itinerary=Object.fromEntries(['origin','destination','date'].map(id=>[id,document.getElementById(id).value]));
+  document.querySelector('#search').disabled=true;
+  status.textContent='Searching flights';
+  try {
+    await request('/search',itinerary);
+    status.textContent='';
+    document.title='Sandbox flight results';
+    app.innerHTML=`<h2>Flight results</h2><p>${facts()}</p>
+      <button id="fare">Choose Economy fare USD 100.00</button>`;
+    document.querySelector('#fare').onclick=()=>{
+      itinerary.fare_id='F001'; itinerary.cabin='Economy'; itinerary.selected_cents=10000;
+      document.title='Sandbox passenger';
+      app.innerHTML=`<h2>Passenger</h2><p>${facts()}</p><p>Selected fare: USD 100.00</p>
+        <label>Passenger <select id="passenger"><option value="">Choose passenger</option>
+          <option>Test Passenger</option><option>Other Passenger</option></select></label>
+        <button id="review" disabled>Review booking</button>`;
+      document.querySelector('#passenger').onchange=()=>{
+        document.querySelector('#review').disabled=!document.querySelector('#passenger').value;
+      };
+      document.querySelector('#review').onclick=async()=>{
+        itinerary.passenger=document.querySelector('#passenger').value;
+        const quote=await request('/quote');
+        document.title='Sandbox checkout';
+        app.innerHTML=`<h2>Review booking</h2><p>${facts()} ${itinerary.cabin}, ${itinerary.passenger}</p>
+          <p>Selected fare: USD 100.00</p><p>Checkout total: USD ${money(quote.cents)}</p>
+          <p id="disclosure"></p><button id="confirm">Confirm sandbox booking</button>`;
+        document.querySelector('#disclosure').textContent=quote.disclosure;
+        if(quote.disclosure) {
+          document.querySelector('#confirm').textContent='Accept fare increase and confirm booking';
+        }
+        document.querySelector('#confirm').onclick=async()=>{
+          document.querySelector('#confirm').disabled=true;
+          if(quote.disclosure) itinerary.acknowledged_cents=quote.cents;
+          const booking=await request('/book',itinerary);
+          document.title='Sandbox confirmation';
+          app.innerHTML=`<h2>Booking confirmed</h2><p>${facts()} ${booking.cabin}, ${booking.passenger}</p>
+            <p>Confirmation ${booking.id}</p><p>Charged: USD ${money(booking.cents)}</p>`;
+        };
+      };
+    };
+  } catch(error) {
+    status.textContent='Search failed';
+    console.error(error);
+  }
+};
+</script>
+</html>
