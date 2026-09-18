@@ -284,6 +284,8 @@ def main():
     live = commands.add_parser("live-runs", help="CP5-B: 60 randomized live journeys")
     live.add_argument("--seed", type=int, default=20260918)
     commands.add_parser("measure-overhead", help="CP5-D: matched scripted pairs, no model calls")
+    second = commands.add_parser("second-app", help="CP6: 20 declared cases on the second application")
+    second.add_argument("--seed", type=int, default=20260919)
     args = parser.parse_args()
     try:
         if args.command == "preflight":
@@ -300,6 +302,9 @@ def main():
         if args.command == "measure-overhead":
             from .overhead import overhead_checkpoint
             return overhead_checkpoint()
+        if args.command == "second-app":
+            from .subscription import second_app_checkpoint
+            return second_app_checkpoint(args.seed)
         if args.command.startswith("repair-") or args.command == "verify-repair-loop":
             from .repair import prepare, repair_checkpoint, verify_repair
             if args.command == "repair-prepare":
@@ -320,7 +325,8 @@ def main():
                 message = message.replace(os.environ[name], "[REDACTED]")
         name = {"preflight": "cp0", "verify-browser": "cp1", "verify-clean": "cp2", "screen-detection": "cp3",
                 "repair-prepare": "cp4", "repair-verify": "cp4", "verify-repair-loop": "cp4",
-                "screen-reliability": "cp5", "live-runs": "cp5", "measure-overhead": "cp5"}[args.command]
+                "screen-reliability": "cp5", "live-runs": "cp5", "measure-overhead": "cp5",
+                "second-app": "cp6"}[args.command]
         result = checkpoint_receipt(name, {
             "status": "AMBER", "source_sha256": source_fingerprint(), "error": message,
         })
