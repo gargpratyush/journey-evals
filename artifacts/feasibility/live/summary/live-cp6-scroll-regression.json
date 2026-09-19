@@ -1,0 +1,4810 @@
+{
+  "status": "GREEN",
+  "source_sha256": "2202bb0c7a4143e722bb4fb801539cfdd1ce5c339c7072dfa31bdf66a5b1e986",
+  "seed": 20260920,
+  "planned": 60,
+  "metrics": {
+    "fare": {
+      "fault": {
+        "planned": 10,
+        "completed": 9,
+        "execution_failures": 1,
+        "defect": 9,
+        "clean": 0,
+        "unknown": 1,
+        "within_budget": 10,
+        "browser_stalls": 0,
+        "median_journey_ms": 12171
+      },
+      "clean": {
+        "planned": 10,
+        "completed": 10,
+        "execution_failures": 0,
+        "defect": 0,
+        "clean": 10,
+        "unknown": 0,
+        "within_budget": 10,
+        "browser_stalls": 0,
+        "median_journey_ms": 12017
+      }
+    },
+    "effect": {
+      "fault": {
+        "planned": 10,
+        "completed": 10,
+        "execution_failures": 0,
+        "defect": 10,
+        "clean": 0,
+        "unknown": 0,
+        "within_budget": 10,
+        "browser_stalls": 0,
+        "median_journey_ms": 11900
+      },
+      "clean": {
+        "planned": 10,
+        "completed": 9,
+        "execution_failures": 1,
+        "defect": 0,
+        "clean": 9,
+        "unknown": 1,
+        "within_budget": 10,
+        "browser_stalls": 0,
+        "median_journey_ms": 12260
+      }
+    },
+    "loading": {
+      "fault": {
+        "planned": 10,
+        "completed": 10,
+        "execution_failures": 0,
+        "defect": 10,
+        "clean": 0,
+        "unknown": 0,
+        "within_budget": 10,
+        "browser_stalls": 0,
+        "median_journey_ms": 13092
+      },
+      "clean": {
+        "planned": 10,
+        "completed": 9,
+        "execution_failures": 1,
+        "defect": 0,
+        "clean": 9,
+        "unknown": 1,
+        "within_budget": 10,
+        "browser_stalls": 0,
+        "median_journey_ms": 13302
+      }
+    }
+  },
+  "gates": {
+    "clean_journeys_complete": true,
+    "detection_per_check": {
+      "fare": true,
+      "effect": true,
+      "loading": true
+    },
+    "spurious_total": true,
+    "spurious_per_group": {
+      "fare": true,
+      "effect": true,
+      "loading": true
+    },
+    "definitive_controls_per_check": {
+      "fare": true,
+      "effect": true,
+      "loading": true
+    },
+    "no_false_pass": true,
+    "latency_budget": true
+  },
+  "spurious_finding_ids": [],
+  "false_pass_ids": [],
+  "receipt": {
+    "arm_requests": 578,
+    "arm_input_tokens": 1020146,
+    "arm_usd": "0.042846132",
+    "cap_usd": "0.40"
+  },
+  "all_attempt_rates": {
+    "planned": 60,
+    "completed": 57,
+    "execution_failures": 3,
+    "median_wall_ms": 12652,
+    "median_journey_ms": 12234,
+    "browser_stalls_retried": 0,
+    "latency_note": "within_budget uses the successful worker attempt; stall retries are reported separately as runner errors, not hidden in the elapsed time"
+  },
+  "scope": "Arm B only: live repeatability. Held-out quality and overhead are separate arms.",
+  "records": [
+    {
+      "id": "68aa12a64fe44482a55c141c4012f3a5",
+      "position": 0,
+      "check": "fare",
+      "group": "clean",
+      "index": 7,
+      "defect": null,
+      "controls": {
+        "delay": 0.076
+      },
+      "app_digests": {
+        "booking.html": "8baf5817f8fe3860cd9f6bb0075b4a596ba1e5abbf56c358116bc6107bd6c6dc",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 12452,
+      "search_ms": 76.245,
+      "execution_error": null,
+      "journey_ms": 12008,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-89b5403ba47040028b3ddfab2e9a41c0",
+      "window": {
+        "id": "f475040907dd4e53981687d1c967bfdc",
+        "kind": "fare",
+        "complete": true,
+        "same_basis": true,
+        "before_cents": 10000,
+        "after_cents": 10000,
+        "checkout_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 100.00\nConfirm sandbox booking"
+      },
+      "finding": {
+        "outcome": "clean",
+        "source": "code",
+        "reason": "No measured price increase",
+        "evidence_id": "f475040907dd4e53981687d1c967bfdc",
+        "category": "fare",
+        "advisory": true,
+        "requires_review": false
+      },
+      "acknowledgement_observed": false,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "49be065ecfb544dd856b8cd943da7195",
+      "position": 1,
+      "check": "effect",
+      "group": "clean",
+      "index": 0,
+      "defect": null,
+      "controls": {
+        "delay": 0.365
+      },
+      "app_digests": {
+        "booking.html": "8baf5817f8fe3860cd9f6bb0075b4a596ba1e5abbf56c358116bc6107bd6c6dc",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 12914,
+      "search_ms": 365.295,
+      "execution_error": null,
+      "journey_ms": 12481,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-819a4762a1a048ffa9630745b5756e5e",
+      "window": {
+        "id": "47bef7f5b211412f86f2ab745d2080ac",
+        "kind": "effect",
+        "complete": true,
+        "action_acknowledged": true,
+        "deadline_elapsed": true,
+        "action": "Confirm the sandbox booking",
+        "expected_effect": "A booking confirmation, including its confirmation identifier, becomes visible.",
+        "before_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 100.00\nConfirm sandbox booking",
+        "after_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nBooking confirmed\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nConfirmation TEST-1\nCharged: USD 100.00",
+        "observed_after_ms": 1802,
+        "settle_ms": 1200
+      },
+      "finding": {
+        "outcome": "clean",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "clean",
+          "confidence": 0.96,
+          "probabilities": {
+            "defect": 0.01,
+            "unknown": 0.02,
+            "clean": 0.97
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "47bef7f5b211412f86f2ab745d2080ac",
+        "category": "effect",
+        "advisory": true,
+        "requires_review": false
+      },
+      "acknowledgement_observed": null,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": true
+    },
+    {
+      "id": "81b5ba08988f47708315f86c17cab251",
+      "position": 2,
+      "check": "loading",
+      "group": "fault",
+      "index": 7,
+      "defect": "silent-search",
+      "controls": {
+        "delay": 1.419
+      },
+      "app_digests": {
+        "booking.html": "415b223549a6d9016bc2da2388290f9ace793cf6cfc320f59777bf8ec3e96ee2",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 13844,
+      "search_ms": 1419.135,
+      "execution_error": null,
+      "journey_ms": 13669,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-e82a33a1e508479dbf165ca40298d844",
+      "window": {
+        "id": "16f7ebc1afc04553a823396ac2fe8c22",
+        "kind": "loading",
+        "complete": true,
+        "operation": "Searching for available flights",
+        "visible_feedback": [],
+        "response_ms": 1419,
+        "threshold_ms": 1000,
+        "interval_source": "server-side duration of the search request the journey triggered"
+      },
+      "finding": {
+        "outcome": "defect",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "defect",
+          "confidence": 0.86,
+          "probabilities": {
+            "clean": 0.02,
+            "defect": 0.91,
+            "unknown": 0.07
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "16f7ebc1afc04553a823396ac2fe8c22",
+        "category": "loading",
+        "advisory": true,
+        "requires_review": true
+      },
+      "acknowledgement_observed": null,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "966983dca3e54ac99737b5df02a4130c",
+      "position": 3,
+      "check": "fare",
+      "group": "fault",
+      "index": 7,
+      "defect": "fare-surcharge-5000",
+      "controls": {
+        "delay": 0.364
+      },
+      "app_digests": {
+        "booking.html": "8baf5817f8fe3860cd9f6bb0075b4a596ba1e5abbf56c358116bc6107bd6c6dc",
+        "pricing.py": "5dafef10ecda686888990c7f8ccb1eb302000f1eb021e8c6a81bd753750c4b94"
+      },
+      "served_quote": {
+        "cents": 15000,
+        "disclosure": ""
+      },
+      "wall_ms": 12782,
+      "search_ms": 364.346,
+      "execution_error": null,
+      "journey_ms": 12296,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-84806e9a5f09450bb18db0cd973cbe8d",
+      "window": {
+        "id": "bbed86dc6afb411b9e14b84a7ce8d410",
+        "kind": "fare",
+        "complete": true,
+        "same_basis": true,
+        "before_cents": 10000,
+        "after_cents": 15000,
+        "checkout_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 150.00\nConfirm sandbox booking"
+      },
+      "finding": {
+        "outcome": "defect",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "defect",
+          "confidence": 0.98,
+          "probabilities": {
+            "defect": 0.99,
+            "clean": 0.01,
+            "unknown": 0.0
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "bbed86dc6afb411b9e14b84a7ce8d410",
+        "category": "fare",
+        "advisory": true,
+        "requires_review": true
+      },
+      "acknowledgement_observed": false,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 15000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "c0c351b4f41840529f264d52863ca544",
+      "position": 4,
+      "check": "loading",
+      "group": "clean",
+      "index": 9,
+      "defect": null,
+      "controls": {
+        "delay": 0.174
+      },
+      "app_digests": {
+        "booking.html": "8baf5817f8fe3860cd9f6bb0075b4a596ba1e5abbf56c358116bc6107bd6c6dc",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 61823,
+      "search_ms": null,
+      "execution_error": null,
+      "journey_ms": 61774,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "ERROR",
+      "usable": false,
+      "evidence_complete": false,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-a33d5dba909a4992bbba3168c4d1af5b",
+      "window": {
+        "id": "8775fbaab3c14bb397ca80048fecdbe5",
+        "kind": "loading",
+        "complete": false,
+        "operation": "Searching for available flights",
+        "visible_feedback": [],
+        "response_ms": 0,
+        "threshold_ms": 1000,
+        "interval_source": "server-side duration of the search request the journey triggered"
+      },
+      "finding": null,
+      "acknowledgement_observed": null,
+      "independent_verifier": {
+        "passed": false,
+        "failures": [
+          "Expected exactly one booking"
+        ],
+        "booking_count": 0
+      },
+      "bookings": [],
+      "confirmation_visible": false
+    },
+    {
+      "id": "59584c8a16b04603a69c2f4726ca6d91",
+      "position": 5,
+      "check": "loading",
+      "group": "fault",
+      "index": 3,
+      "defect": "silent-search",
+      "controls": {
+        "delay": 1.464
+      },
+      "app_digests": {
+        "booking.html": "415b223549a6d9016bc2da2388290f9ace793cf6cfc320f59777bf8ec3e96ee2",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 13927,
+      "search_ms": 1464.101,
+      "execution_error": null,
+      "journey_ms": 13408,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-b82a36828e504dea9cc95a83e11fb759",
+      "window": {
+        "id": "95884d8a43344574844b383559bb5a58",
+        "kind": "loading",
+        "complete": true,
+        "operation": "Searching for available flights",
+        "visible_feedback": [],
+        "response_ms": 1464,
+        "threshold_ms": 1000,
+        "interval_source": "server-side duration of the search request the journey triggered"
+      },
+      "finding": {
+        "outcome": "defect",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "defect",
+          "confidence": 0.9,
+          "probabilities": {
+            "defect": 0.9299999999999999,
+            "clean": 0.02,
+            "unknown": 0.05
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "95884d8a43344574844b383559bb5a58",
+        "category": "loading",
+        "advisory": true,
+        "requires_review": true
+      },
+      "acknowledgement_observed": null,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "31bf2f04a5f14e5491315076e392a973",
+      "position": 6,
+      "check": "loading",
+      "group": "fault",
+      "index": 9,
+      "defect": "silent-search",
+      "controls": {
+        "delay": 1.437
+      },
+      "app_digests": {
+        "booking.html": "415b223549a6d9016bc2da2388290f9ace793cf6cfc320f59777bf8ec3e96ee2",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 13681,
+      "search_ms": 1437.515,
+      "execution_error": null,
+      "journey_ms": 13238,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-38374d5214c1488ab9881c99f8145f7c",
+      "window": {
+        "id": "9e3829cb150047778aefe842c2738379",
+        "kind": "loading",
+        "complete": true,
+        "operation": "Searching for available flights",
+        "visible_feedback": [],
+        "response_ms": 1438,
+        "threshold_ms": 1000,
+        "interval_source": "server-side duration of the search request the journey triggered"
+      },
+      "finding": {
+        "outcome": "defect",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "defect",
+          "confidence": 0.9,
+          "probabilities": {
+            "unknown": 0.05,
+            "clean": 0.01,
+            "defect": 0.94
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "9e3829cb150047778aefe842c2738379",
+        "category": "loading",
+        "advisory": true,
+        "requires_review": true
+      },
+      "acknowledgement_observed": null,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "8da65596200640e289182cfc3faa120a",
+      "position": 7,
+      "check": "effect",
+      "group": "fault",
+      "index": 2,
+      "defect": "unrendered-confirmation",
+      "controls": {
+        "delay": 0.116
+      },
+      "app_digests": {
+        "booking.html": "86bfd997ded2cdcc5f653a26fec869b1751aaee39325df84a904ed0080bb8a2d",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 12274,
+      "search_ms": 116.389,
+      "execution_error": null,
+      "journey_ms": 11750,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-6982424cc9f04fadb5dc04295fc6319d",
+      "window": {
+        "id": "5bfd535c1bca4c87b6757c2ddfcb0410",
+        "kind": "effect",
+        "complete": true,
+        "action_acknowledged": true,
+        "deadline_elapsed": true,
+        "action": "Confirm the sandbox booking",
+        "expected_effect": "A booking confirmation, including its confirmation identifier, becomes visible.",
+        "before_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 100.00\nConfirm sandbox booking",
+        "after_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 100.00\nConfirm sandbox booking",
+        "observed_after_ms": 1753,
+        "settle_ms": 1200
+      },
+      "finding": {
+        "outcome": "defect",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "defect",
+          "confidence": 0.96,
+          "probabilities": {
+            "clean": 0.0,
+            "defect": 0.97,
+            "unknown": 0.03
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "5bfd535c1bca4c87b6757c2ddfcb0410",
+        "category": "effect",
+        "advisory": true,
+        "requires_review": true
+      },
+      "acknowledgement_observed": null,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "0dd682d5d90e43a88637195d48245e49",
+      "position": 8,
+      "check": "effect",
+      "group": "fault",
+      "index": 1,
+      "defect": "unrendered-confirmation",
+      "controls": {
+        "delay": 0.303
+      },
+      "app_digests": {
+        "booking.html": "86bfd997ded2cdcc5f653a26fec869b1751aaee39325df84a904ed0080bb8a2d",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 11993,
+      "search_ms": 303.544,
+      "execution_error": null,
+      "journey_ms": 11964,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-f3e45dea4642483ebf65dab86c3b4484",
+      "window": {
+        "id": "ea92e6b3e10b4bb8b065aa0017c9f889",
+        "kind": "effect",
+        "complete": true,
+        "action_acknowledged": true,
+        "deadline_elapsed": true,
+        "action": "Confirm the sandbox booking",
+        "expected_effect": "A booking confirmation, including its confirmation identifier, becomes visible.",
+        "before_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 100.00\nConfirm sandbox booking",
+        "after_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 100.00\nConfirm sandbox booking",
+        "observed_after_ms": 1726,
+        "settle_ms": 1200
+      },
+      "finding": {
+        "outcome": "defect",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "defect",
+          "confidence": 0.95,
+          "probabilities": {
+            "defect": 0.97,
+            "clean": 0.0,
+            "unknown": 0.03
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "ea92e6b3e10b4bb8b065aa0017c9f889",
+        "category": "effect",
+        "advisory": true,
+        "requires_review": true
+      },
+      "acknowledgement_observed": null,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "68bfca6736ea4f559d1398277b0a80e9",
+      "position": 9,
+      "check": "fare",
+      "group": "fault",
+      "index": 3,
+      "defect": "fare-surcharge-3000",
+      "controls": {
+        "delay": 0.217
+      },
+      "app_digests": {
+        "booking.html": "8baf5817f8fe3860cd9f6bb0075b4a596ba1e5abbf56c358116bc6107bd6c6dc",
+        "pricing.py": "6a75d3051af5835dabd1913537130a483a38173541a0026355807a39760166b3"
+      },
+      "served_quote": {
+        "cents": 13000,
+        "disclosure": ""
+      },
+      "wall_ms": 12681,
+      "search_ms": 217.435,
+      "execution_error": null,
+      "journey_ms": 12187,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-7a316b27a55c44b5b58e9e31bcc178f6",
+      "window": {
+        "id": "ffbdad1d02ab43b7ab8b4133077899da",
+        "kind": "fare",
+        "complete": true,
+        "same_basis": true,
+        "before_cents": 10000,
+        "after_cents": 13000,
+        "checkout_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 130.00\nConfirm sandbox booking"
+      },
+      "finding": {
+        "outcome": "defect",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "defect",
+          "confidence": 0.98,
+          "probabilities": {
+            "defect": 0.99,
+            "clean": 0.01,
+            "unknown": 0.0
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "ffbdad1d02ab43b7ab8b4133077899da",
+        "category": "fare",
+        "advisory": true,
+        "requires_review": true
+      },
+      "acknowledgement_observed": false,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 13000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "64f75dc784554147827b7f74fb514427",
+      "position": 10,
+      "check": "fare",
+      "group": "fault",
+      "index": 2,
+      "defect": "fare-surcharge-2500",
+      "controls": {
+        "delay": 0.353
+      },
+      "app_digests": {
+        "booking.html": "8baf5817f8fe3860cd9f6bb0075b4a596ba1e5abbf56c358116bc6107bd6c6dc",
+        "pricing.py": "8b89489d3fa3554f2d60a4dad7940064531030066facdf35cf358ade7b755c26"
+      },
+      "served_quote": {
+        "cents": 12500,
+        "disclosure": ""
+      },
+      "wall_ms": 62338,
+      "search_ms": null,
+      "execution_error": null,
+      "journey_ms": 62097,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "ERROR",
+      "usable": false,
+      "evidence_complete": false,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-538fcab4920d45ba94a6b36fb5a22c64",
+      "window": {
+        "id": "95adf999cabf49acab705f7fb26fbc96",
+        "kind": "fare",
+        "complete": false,
+        "same_basis": false,
+        "before_cents": null,
+        "after_cents": null,
+        "checkout_text": ""
+      },
+      "finding": null,
+      "acknowledgement_observed": false,
+      "independent_verifier": {
+        "passed": false,
+        "failures": [
+          "Expected exactly one booking"
+        ],
+        "booking_count": 0
+      },
+      "bookings": [],
+      "confirmation_visible": false
+    },
+    {
+      "id": "042c140a31334d5eb20470a3b43049c8",
+      "position": 11,
+      "check": "loading",
+      "group": "fault",
+      "index": 8,
+      "defect": "silent-search",
+      "controls": {
+        "delay": 1.272
+      },
+      "app_digests": {
+        "booking.html": "415b223549a6d9016bc2da2388290f9ace793cf6cfc320f59777bf8ec3e96ee2",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 13465,
+      "search_ms": 1272.441,
+      "execution_error": null,
+      "journey_ms": 12972,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-162817a4ab3b4e898136122be83cc181",
+      "window": {
+        "id": "070f9a63953f4ba9aea36d49e463ff63",
+        "kind": "loading",
+        "complete": true,
+        "operation": "Searching for available flights",
+        "visible_feedback": [],
+        "response_ms": 1272,
+        "threshold_ms": 1000,
+        "interval_source": "server-side duration of the search request the journey triggered"
+      },
+      "finding": {
+        "outcome": "defect",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "defect",
+          "confidence": 0.91,
+          "probabilities": {
+            "unknown": 0.04,
+            "defect": 0.94,
+            "clean": 0.02
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "070f9a63953f4ba9aea36d49e463ff63",
+        "category": "loading",
+        "advisory": true,
+        "requires_review": true
+      },
+      "acknowledgement_observed": null,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "2ca765f3a4454fbdac803f892fc68de4",
+      "position": 12,
+      "check": "fare",
+      "group": "clean",
+      "index": 9,
+      "defect": null,
+      "controls": {
+        "delay": 0.306
+      },
+      "app_digests": {
+        "booking.html": "8baf5817f8fe3860cd9f6bb0075b4a596ba1e5abbf56c358116bc6107bd6c6dc",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 12750,
+      "search_ms": 306.378,
+      "execution_error": null,
+      "journey_ms": 12231,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-576a1c03f91142ceb316e6db3cd3d7c9",
+      "window": {
+        "id": "984961eccd2c47b482a5a80ed114f60a",
+        "kind": "fare",
+        "complete": true,
+        "same_basis": true,
+        "before_cents": 10000,
+        "after_cents": 10000,
+        "checkout_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 100.00\nConfirm sandbox booking"
+      },
+      "finding": {
+        "outcome": "clean",
+        "source": "code",
+        "reason": "No measured price increase",
+        "evidence_id": "984961eccd2c47b482a5a80ed114f60a",
+        "category": "fare",
+        "advisory": true,
+        "requires_review": false
+      },
+      "acknowledgement_observed": false,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "333e20469a9c477fb2d9fcd532e23e13",
+      "position": 13,
+      "check": "fare",
+      "group": "clean",
+      "index": 8,
+      "defect": null,
+      "controls": {
+        "delay": 0.244
+      },
+      "app_digests": {
+        "booking.html": "8baf5817f8fe3860cd9f6bb0075b4a596ba1e5abbf56c358116bc6107bd6c6dc",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 12445,
+      "search_ms": 244.187,
+      "execution_error": null,
+      "journey_ms": 11965,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-ca5766c69a6a4912a8c7501f223d6f59",
+      "window": {
+        "id": "021eac3bed9d43e5ab001937220d8327",
+        "kind": "fare",
+        "complete": true,
+        "same_basis": true,
+        "before_cents": 10000,
+        "after_cents": 10000,
+        "checkout_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 100.00\nConfirm sandbox booking"
+      },
+      "finding": {
+        "outcome": "clean",
+        "source": "code",
+        "reason": "No measured price increase",
+        "evidence_id": "021eac3bed9d43e5ab001937220d8327",
+        "category": "fare",
+        "advisory": true,
+        "requires_review": false
+      },
+      "acknowledgement_observed": false,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "263c0e14741f4821bc64ecf261bef659",
+      "position": 14,
+      "check": "fare",
+      "group": "fault",
+      "index": 6,
+      "defect": "fare-surcharge-4500",
+      "controls": {
+        "delay": 0.289
+      },
+      "app_digests": {
+        "booking.html": "8baf5817f8fe3860cd9f6bb0075b4a596ba1e5abbf56c358116bc6107bd6c6dc",
+        "pricing.py": "296b3711ff76a3ed7957409d6daf9f1a0ad930ca7736350bf53d9af9c9f43593"
+      },
+      "served_quote": {
+        "cents": 14500,
+        "disclosure": ""
+      },
+      "wall_ms": 12929,
+      "search_ms": 289.223,
+      "execution_error": null,
+      "journey_ms": 12465,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-4c9b2d9b7a864511814003655c7c3dc8",
+      "window": {
+        "id": "04658874eaaa41de9a8d422c7bf490a0",
+        "kind": "fare",
+        "complete": true,
+        "same_basis": true,
+        "before_cents": 10000,
+        "after_cents": 14500,
+        "checkout_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 145.00\nConfirm sandbox booking"
+      },
+      "finding": {
+        "outcome": "defect",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "defect",
+          "confidence": 0.98,
+          "probabilities": {
+            "unknown": 0.0,
+            "defect": 0.99,
+            "clean": 0.01
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "04658874eaaa41de9a8d422c7bf490a0",
+        "category": "fare",
+        "advisory": true,
+        "requires_review": true
+      },
+      "acknowledgement_observed": false,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 14500,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "b61c68601b624534b50b03ff040f56ff",
+      "position": 15,
+      "check": "fare",
+      "group": "fault",
+      "index": 9,
+      "defect": "fare-surcharge-6000",
+      "controls": {
+        "delay": 0.072
+      },
+      "app_digests": {
+        "booking.html": "8baf5817f8fe3860cd9f6bb0075b4a596ba1e5abbf56c358116bc6107bd6c6dc",
+        "pricing.py": "b076aa4ee6b992463bfac7ba26ca468cd86853295988ace2b2f8623ba82f9a1e"
+      },
+      "served_quote": {
+        "cents": 16000,
+        "disclosure": ""
+      },
+      "wall_ms": 12548,
+      "search_ms": 72.529,
+      "execution_error": null,
+      "journey_ms": 12101,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-2928860e9a6e4f72ae8ffd33d97b77f4",
+      "window": {
+        "id": "8eb2e724a01742b3b886394f7288f49d",
+        "kind": "fare",
+        "complete": true,
+        "same_basis": true,
+        "before_cents": 10000,
+        "after_cents": 16000,
+        "checkout_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 160.00\nConfirm sandbox booking"
+      },
+      "finding": {
+        "outcome": "defect",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "defect",
+          "confidence": 0.98,
+          "probabilities": {
+            "clean": 0.01,
+            "unknown": 0.0,
+            "defect": 0.99
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "8eb2e724a01742b3b886394f7288f49d",
+        "category": "fare",
+        "advisory": true,
+        "requires_review": true
+      },
+      "acknowledgement_observed": false,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 16000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "9d25e8d1f0b04de2af3e5acb58337ca0",
+      "position": 16,
+      "check": "effect",
+      "group": "clean",
+      "index": 3,
+      "defect": null,
+      "controls": {
+        "delay": 0.279
+      },
+      "app_digests": {
+        "booking.html": "8baf5817f8fe3860cd9f6bb0075b4a596ba1e5abbf56c358116bc6107bd6c6dc",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 13359,
+      "search_ms": 279.509,
+      "execution_error": null,
+      "journey_ms": 12853,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-0e038ef240994aed81d29fd06fa759ee",
+      "window": {
+        "id": "7689c4ac35b0413981fc8094fadf327c",
+        "kind": "effect",
+        "complete": true,
+        "action_acknowledged": true,
+        "deadline_elapsed": true,
+        "action": "Confirm the sandbox booking",
+        "expected_effect": "A booking confirmation, including its confirmation identifier, becomes visible.",
+        "before_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 100.00\nConfirm sandbox booking",
+        "after_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nBooking confirmed\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nConfirmation TEST-1\nCharged: USD 100.00",
+        "observed_after_ms": 1749,
+        "settle_ms": 1200
+      },
+      "finding": {
+        "outcome": "clean",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "clean",
+          "confidence": 0.96,
+          "probabilities": {
+            "unknown": 0.02,
+            "defect": 0.01,
+            "clean": 0.97
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "7689c4ac35b0413981fc8094fadf327c",
+        "category": "effect",
+        "advisory": true,
+        "requires_review": false
+      },
+      "acknowledgement_observed": null,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": true
+    },
+    {
+      "id": "552faf030a534947b3640fe7427a2318",
+      "position": 17,
+      "check": "fare",
+      "group": "fault",
+      "index": 4,
+      "defect": "fare-surcharge-3500",
+      "controls": {
+        "delay": 0.213
+      },
+      "app_digests": {
+        "booking.html": "8baf5817f8fe3860cd9f6bb0075b4a596ba1e5abbf56c358116bc6107bd6c6dc",
+        "pricing.py": "7be823ff88e8291341485eb2c4eb1214fea6738a0e3f1a72ae121fcf74c9695f"
+      },
+      "served_quote": {
+        "cents": 13500,
+        "disclosure": ""
+      },
+      "wall_ms": 12335,
+      "search_ms": 213.518,
+      "execution_error": null,
+      "journey_ms": 12297,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-a65798d152d342b784d3db096c4bafed",
+      "window": {
+        "id": "ab295dfbee504f8db2220157d7fe077c",
+        "kind": "fare",
+        "complete": true,
+        "same_basis": true,
+        "before_cents": 10000,
+        "after_cents": 13500,
+        "checkout_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 135.00\nConfirm sandbox booking"
+      },
+      "finding": {
+        "outcome": "defect",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "defect",
+          "confidence": 0.98,
+          "probabilities": {
+            "unknown": 0.0,
+            "defect": 0.99,
+            "clean": 0.01
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "ab295dfbee504f8db2220157d7fe077c",
+        "category": "fare",
+        "advisory": true,
+        "requires_review": true
+      },
+      "acknowledgement_observed": false,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 13500,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "2860e07c383c49068b67d1ddeec32d77",
+      "position": 18,
+      "check": "fare",
+      "group": "fault",
+      "index": 5,
+      "defect": "fare-surcharge-4000",
+      "controls": {
+        "delay": 0.236
+      },
+      "app_digests": {
+        "booking.html": "8baf5817f8fe3860cd9f6bb0075b4a596ba1e5abbf56c358116bc6107bd6c6dc",
+        "pricing.py": "00f859b0313c4f8069a5ce73cba5245c24c4ac7c233c2eb846c178cdc183d0a5"
+      },
+      "served_quote": {
+        "cents": 14000,
+        "disclosure": ""
+      },
+      "wall_ms": 11928,
+      "search_ms": 236.304,
+      "execution_error": null,
+      "journey_ms": 11883,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-184eadb48a964660be17bf460a6cc905",
+      "window": {
+        "id": "dddb66bac2b94d99a40d1d1deb9d0e98",
+        "kind": "fare",
+        "complete": true,
+        "same_basis": true,
+        "before_cents": 10000,
+        "after_cents": 14000,
+        "checkout_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 140.00\nConfirm sandbox booking"
+      },
+      "finding": {
+        "outcome": "defect",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "defect",
+          "confidence": 0.98,
+          "probabilities": {
+            "clean": 0.01,
+            "defect": 0.99,
+            "unknown": 0.0
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "dddb66bac2b94d99a40d1d1deb9d0e98",
+        "category": "fare",
+        "advisory": true,
+        "requires_review": true
+      },
+      "acknowledgement_observed": false,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 14000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "6e19ae69f05b4680a32a49dcdc458940",
+      "position": 19,
+      "check": "fare",
+      "group": "clean",
+      "index": 6,
+      "defect": null,
+      "controls": {
+        "cents": 12300,
+        "disclosure": "Price update. You selected USD 100; this date is USD 123. Accept the new total.",
+        "delay": 0.08
+      },
+      "app_digests": {
+        "booking.html": "8baf5817f8fe3860cd9f6bb0075b4a596ba1e5abbf56c358116bc6107bd6c6dc",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 12300,
+        "disclosure": "Price update. You selected USD 100; this date is USD 123. Accept the new total."
+      },
+      "wall_ms": 11888,
+      "search_ms": 80.563,
+      "execution_error": null,
+      "journey_ms": 11502,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-622921a42d6e4f14a63409bb8d3c7c7c",
+      "window": {
+        "id": "4149df6cec1e42559380cefb7648690e",
+        "kind": "fare",
+        "complete": true,
+        "same_basis": true,
+        "before_cents": 10000,
+        "after_cents": 12300,
+        "checkout_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 123.00\nPrice update. You selected USD 100; this date is USD 123. Accept the new total.\nAccept fare increase and confirm booking"
+      },
+      "finding": {
+        "outcome": "clean",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "clean",
+          "confidence": 0.99,
+          "probabilities": {
+            "clean": 0.99,
+            "unknown": 0.0,
+            "defect": 0.01
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "4149df6cec1e42559380cefb7648690e",
+        "category": "fare",
+        "advisory": true,
+        "requires_review": false
+      },
+      "acknowledgement_observed": true,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 12300,
+          "currency": "USD",
+          "acknowledged_cents": 12300
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "b13d5a16eb5b4ec196515f343cd3f620",
+      "position": 20,
+      "check": "effect",
+      "group": "fault",
+      "index": 5,
+      "defect": "unrendered-confirmation",
+      "controls": {
+        "delay": 0.286
+      },
+      "app_digests": {
+        "booking.html": "86bfd997ded2cdcc5f653a26fec869b1751aaee39325df84a904ed0080bb8a2d",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 12446,
+      "search_ms": 286.133,
+      "execution_error": null,
+      "journey_ms": 11978,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-e3c6806bb9bf4e5da1a51490257ed842",
+      "window": {
+        "id": "d8b16946ee654344811d48cb146f7f95",
+        "kind": "effect",
+        "complete": true,
+        "action_acknowledged": true,
+        "deadline_elapsed": true,
+        "action": "Confirm the sandbox booking",
+        "expected_effect": "A booking confirmation, including its confirmation identifier, becomes visible.",
+        "before_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 100.00\nConfirm sandbox booking",
+        "after_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 100.00\nConfirm sandbox booking",
+        "observed_after_ms": 1823,
+        "settle_ms": 1200
+      },
+      "finding": {
+        "outcome": "defect",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "defect",
+          "confidence": 0.94,
+          "probabilities": {
+            "clean": 0.0,
+            "unknown": 0.04,
+            "defect": 0.96
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "d8b16946ee654344811d48cb146f7f95",
+        "category": "effect",
+        "advisory": true,
+        "requires_review": true
+      },
+      "acknowledgement_observed": null,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "5798ef59486e429785012ae0aecd09e6",
+      "position": 21,
+      "check": "fare",
+      "group": "clean",
+      "index": 0,
+      "defect": null,
+      "controls": {
+        "cents": 10500,
+        "disclosure": "Fare changed: USD 100 to USD 105. Accept to book.",
+        "delay": 0.298
+      },
+      "app_digests": {
+        "booking.html": "8baf5817f8fe3860cd9f6bb0075b4a596ba1e5abbf56c358116bc6107bd6c6dc",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10500,
+        "disclosure": "Fare changed: USD 100 to USD 105. Accept to book."
+      },
+      "wall_ms": 13080,
+      "search_ms": 298.143,
+      "execution_error": null,
+      "journey_ms": 12710,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-287caa8641304e9eab357afbbbfab35c",
+      "window": {
+        "id": "75c6864552fb43b8888df9322d52265f",
+        "kind": "fare",
+        "complete": true,
+        "same_basis": true,
+        "before_cents": 10000,
+        "after_cents": 10500,
+        "checkout_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 105.00\nFare changed: USD 100 to USD 105. Accept to book.\nAccept fare increase and confirm booking"
+      },
+      "finding": {
+        "outcome": "clean",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "clean",
+          "confidence": 0.99,
+          "probabilities": {
+            "unknown": 0.0,
+            "clean": 1.0,
+            "defect": 0.0
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "75c6864552fb43b8888df9322d52265f",
+        "category": "fare",
+        "advisory": true,
+        "requires_review": false
+      },
+      "acknowledgement_observed": true,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10500,
+          "currency": "USD",
+          "acknowledged_cents": 10500
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "ae0eac1898af4198b637aa47d75bcc4b",
+      "position": 22,
+      "check": "effect",
+      "group": "fault",
+      "index": 3,
+      "defect": "unrendered-confirmation",
+      "controls": {
+        "delay": 0.163
+      },
+      "app_digests": {
+        "booking.html": "86bfd997ded2cdcc5f653a26fec869b1751aaee39325df84a904ed0080bb8a2d",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 12220,
+      "search_ms": 163.341,
+      "execution_error": null,
+      "journey_ms": 12108,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-69809101d46f45d0861858962eeafcaf",
+      "window": {
+        "id": "293b1b36d7ef46d78d4c2c719340ca1f",
+        "kind": "effect",
+        "complete": true,
+        "action_acknowledged": true,
+        "deadline_elapsed": true,
+        "action": "Confirm the sandbox booking",
+        "expected_effect": "A booking confirmation, including its confirmation identifier, becomes visible.",
+        "before_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 100.00\nConfirm sandbox booking",
+        "after_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 100.00\nConfirm sandbox booking",
+        "observed_after_ms": 1703,
+        "settle_ms": 1200
+      },
+      "finding": {
+        "outcome": "defect",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "defect",
+          "confidence": 0.94,
+          "probabilities": {
+            "clean": 0.0,
+            "defect": 0.96,
+            "unknown": 0.04
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "293b1b36d7ef46d78d4c2c719340ca1f",
+        "category": "effect",
+        "advisory": true,
+        "requires_review": true
+      },
+      "acknowledgement_observed": null,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "dd219fcc69ab460faace47db03069f68",
+      "position": 23,
+      "check": "effect",
+      "group": "clean",
+      "index": 2,
+      "defect": null,
+      "controls": {
+        "delay": 0.2
+      },
+      "app_digests": {
+        "booking.html": "8baf5817f8fe3860cd9f6bb0075b4a596ba1e5abbf56c358116bc6107bd6c6dc",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 11861,
+      "search_ms": 200.191,
+      "execution_error": null,
+      "journey_ms": 11360,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-e37b1585febc4cf59fdef7fc284b6ce0",
+      "window": {
+        "id": "a67a55fd8c134faaa94687497b3d520d",
+        "kind": "effect",
+        "complete": true,
+        "action_acknowledged": true,
+        "deadline_elapsed": true,
+        "action": "Confirm the sandbox booking",
+        "expected_effect": "A booking confirmation, including its confirmation identifier, becomes visible.",
+        "before_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 100.00\nConfirm sandbox booking",
+        "after_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nBooking confirmed\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nConfirmation TEST-1\nCharged: USD 100.00",
+        "observed_after_ms": 1797,
+        "settle_ms": 1200
+      },
+      "finding": {
+        "outcome": "clean",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "clean",
+          "confidence": 0.96,
+          "probabilities": {
+            "defect": 0.01,
+            "clean": 0.97,
+            "unknown": 0.02
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "a67a55fd8c134faaa94687497b3d520d",
+        "category": "effect",
+        "advisory": true,
+        "requires_review": false
+      },
+      "acknowledgement_observed": null,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": true
+    },
+    {
+      "id": "48b6ab216df14bcfb986e22bf88d42f8",
+      "position": 24,
+      "check": "loading",
+      "group": "fault",
+      "index": 1,
+      "defect": "silent-search",
+      "controls": {
+        "delay": 1.432
+      },
+      "app_digests": {
+        "booking.html": "415b223549a6d9016bc2da2388290f9ace793cf6cfc320f59777bf8ec3e96ee2",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 13209,
+      "search_ms": 1432.452,
+      "execution_error": null,
+      "journey_ms": 12750,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-cd7649454f3c4acbadb665e25c596388",
+      "window": {
+        "id": "3225f43fda90425cb2082e63f2c34df9",
+        "kind": "loading",
+        "complete": true,
+        "operation": "Searching for available flights",
+        "visible_feedback": [],
+        "response_ms": 1432,
+        "threshold_ms": 1000,
+        "interval_source": "server-side duration of the search request the journey triggered"
+      },
+      "finding": {
+        "outcome": "defect",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "defect",
+          "confidence": 0.89,
+          "probabilities": {
+            "clean": 0.02,
+            "defect": 0.93,
+            "unknown": 0.05
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "3225f43fda90425cb2082e63f2c34df9",
+        "category": "loading",
+        "advisory": true,
+        "requires_review": true
+      },
+      "acknowledgement_observed": null,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "9660715f27be4f40b5ebf26d0a1a4a50",
+      "position": 25,
+      "check": "fare",
+      "group": "clean",
+      "index": 1,
+      "defect": null,
+      "controls": {
+        "cents": 10800,
+        "disclosure": "Price update. You selected USD 100; this date is USD 108. Accept the new total.",
+        "delay": 0.057
+      },
+      "app_digests": {
+        "booking.html": "8baf5817f8fe3860cd9f6bb0075b4a596ba1e5abbf56c358116bc6107bd6c6dc",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10800,
+        "disclosure": "Price update. You selected USD 100; this date is USD 108. Accept the new total."
+      },
+      "wall_ms": 11872,
+      "search_ms": 57.123,
+      "execution_error": null,
+      "journey_ms": 11580,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-73531ba6ddd14e7e97335ce3194a8839",
+      "window": {
+        "id": "977a80b151fb4c5795f4c42e03302fd3",
+        "kind": "fare",
+        "complete": true,
+        "same_basis": true,
+        "before_cents": 10000,
+        "after_cents": 10800,
+        "checkout_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 108.00\nPrice update. You selected USD 100; this date is USD 108. Accept the new total.\nAccept fare increase and confirm booking"
+      },
+      "finding": {
+        "outcome": "clean",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "clean",
+          "confidence": 0.98,
+          "probabilities": {
+            "defect": 0.01,
+            "clean": 0.99,
+            "unknown": 0.0
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "977a80b151fb4c5795f4c42e03302fd3",
+        "category": "fare",
+        "advisory": true,
+        "requires_review": false
+      },
+      "acknowledgement_observed": true,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10800,
+          "currency": "USD",
+          "acknowledged_cents": 10800
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "b46fb4b9f8ad4f7e8a9510a99619d904",
+      "position": 26,
+      "check": "effect",
+      "group": "fault",
+      "index": 4,
+      "defect": "unrendered-confirmation",
+      "controls": {
+        "delay": 0.267
+      },
+      "app_digests": {
+        "booking.html": "86bfd997ded2cdcc5f653a26fec869b1751aaee39325df84a904ed0080bb8a2d",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 12554,
+      "search_ms": 267.127,
+      "execution_error": null,
+      "journey_ms": 12129,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-07a6613f9138483ea73c9962c2a2e144",
+      "window": {
+        "id": "1f84f1b3fe3640f79de8ff49d0a6dd5d",
+        "kind": "effect",
+        "complete": true,
+        "action_acknowledged": true,
+        "deadline_elapsed": true,
+        "action": "Confirm the sandbox booking",
+        "expected_effect": "A booking confirmation, including its confirmation identifier, becomes visible.",
+        "before_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 100.00\nConfirm sandbox booking",
+        "after_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 100.00\nConfirm sandbox booking",
+        "observed_after_ms": 1827,
+        "settle_ms": 1200
+      },
+      "finding": {
+        "outcome": "defect",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "defect",
+          "confidence": 0.95,
+          "probabilities": {
+            "defect": 0.97,
+            "clean": 0.0,
+            "unknown": 0.03
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "1f84f1b3fe3640f79de8ff49d0a6dd5d",
+        "category": "effect",
+        "advisory": true,
+        "requires_review": true
+      },
+      "acknowledgement_observed": null,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "78f3dd4d204c438ca8719b6b05d80e2f",
+      "position": 27,
+      "check": "effect",
+      "group": "fault",
+      "index": 6,
+      "defect": "unrendered-confirmation",
+      "controls": {
+        "delay": 0.127
+      },
+      "app_digests": {
+        "booking.html": "86bfd997ded2cdcc5f653a26fec869b1751aaee39325df84a904ed0080bb8a2d",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 12120,
+      "search_ms": 127.256,
+      "execution_error": null,
+      "journey_ms": 12090,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-45a55f6c7feb4a3b905745df0c67be5d",
+      "window": {
+        "id": "169402e25dc44fb894842d9c4037e7f0",
+        "kind": "effect",
+        "complete": true,
+        "action_acknowledged": true,
+        "deadline_elapsed": true,
+        "action": "Confirm the sandbox booking",
+        "expected_effect": "A booking confirmation, including its confirmation identifier, becomes visible.",
+        "before_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 100.00\nConfirm sandbox booking",
+        "after_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 100.00\nConfirm sandbox booking",
+        "observed_after_ms": 1729,
+        "settle_ms": 1200
+      },
+      "finding": {
+        "outcome": "defect",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "defect",
+          "confidence": 0.95,
+          "probabilities": {
+            "defect": 0.97,
+            "clean": 0.0,
+            "unknown": 0.03
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "169402e25dc44fb894842d9c4037e7f0",
+        "category": "effect",
+        "advisory": true,
+        "requires_review": true
+      },
+      "acknowledgement_observed": null,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "c0ee832df6dc42be9946551f6e805cc0",
+      "position": 28,
+      "check": "fare",
+      "group": "clean",
+      "index": 4,
+      "defect": null,
+      "controls": {
+        "cents": 11700,
+        "disclosure": "Repriced to USD 117 from USD 100 because your cabin sold out. Accept to proceed.",
+        "delay": 0.242
+      },
+      "app_digests": {
+        "booking.html": "8baf5817f8fe3860cd9f6bb0075b4a596ba1e5abbf56c358116bc6107bd6c6dc",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 11700,
+        "disclosure": "Repriced to USD 117 from USD 100 because your cabin sold out. Accept to proceed."
+      },
+      "wall_ms": 12428,
+      "search_ms": 242.106,
+      "execution_error": null,
+      "journey_ms": 12393,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-69a807e723fc4b869f9adbf54b440787",
+      "window": {
+        "id": "a1d0f462660d432baaaed39b7a5c8f08",
+        "kind": "fare",
+        "complete": true,
+        "same_basis": true,
+        "before_cents": 10000,
+        "after_cents": 11700,
+        "checkout_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 117.00\nRepriced to USD 117 from USD 100 because your cabin sold out. Accept to proceed.\nAccept fare increase and confirm booking"
+      },
+      "finding": {
+        "outcome": "clean",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "clean",
+          "confidence": 1.0,
+          "probabilities": {
+            "clean": 1.0,
+            "defect": 0.0,
+            "unknown": 0.0
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "a1d0f462660d432baaaed39b7a5c8f08",
+        "category": "fare",
+        "advisory": true,
+        "requires_review": false
+      },
+      "acknowledgement_observed": true,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 11700,
+          "currency": "USD",
+          "acknowledged_cents": 11700
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "a377880a3be24c87af04152168d3a3a8",
+      "position": 29,
+      "check": "fare",
+      "group": "fault",
+      "index": 0,
+      "defect": "fare-surcharge-1500",
+      "controls": {
+        "delay": 0.255
+      },
+      "app_digests": {
+        "booking.html": "8baf5817f8fe3860cd9f6bb0075b4a596ba1e5abbf56c358116bc6107bd6c6dc",
+        "pricing.py": "275fa8c6d76d58568ef2652095955d69e8aa6b0b8d690395187e47c566600746"
+      },
+      "served_quote": {
+        "cents": 11500,
+        "disclosure": ""
+      },
+      "wall_ms": 12444,
+      "search_ms": 255.09,
+      "execution_error": null,
+      "journey_ms": 12023,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-380f5c4d310d40d79db79501786cfb82",
+      "window": {
+        "id": "821aba4a16794ffea5e85afc8a17cb87",
+        "kind": "fare",
+        "complete": true,
+        "same_basis": true,
+        "before_cents": 10000,
+        "after_cents": 11500,
+        "checkout_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 115.00\nConfirm sandbox booking"
+      },
+      "finding": {
+        "outcome": "defect",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "defect",
+          "confidence": 0.98,
+          "probabilities": {
+            "defect": 0.99,
+            "clean": 0.01,
+            "unknown": 0.0
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "821aba4a16794ffea5e85afc8a17cb87",
+        "category": "fare",
+        "advisory": true,
+        "requires_review": true
+      },
+      "acknowledgement_observed": false,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 11500,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "07734155e7b0481493b455c829bc92cb",
+      "position": 30,
+      "check": "loading",
+      "group": "fault",
+      "index": 5,
+      "defect": "silent-search",
+      "controls": {
+        "delay": 1.267
+      },
+      "app_digests": {
+        "booking.html": "415b223549a6d9016bc2da2388290f9ace793cf6cfc320f59777bf8ec3e96ee2",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 12572,
+      "search_ms": 1267.336,
+      "execution_error": null,
+      "journey_ms": 12526,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-05e6aa1bd18c46eea45873c047cfe519",
+      "window": {
+        "id": "e0c1e3c3aba84755a49f5d97863fe4e8",
+        "kind": "loading",
+        "complete": true,
+        "operation": "Searching for available flights",
+        "visible_feedback": [],
+        "response_ms": 1267,
+        "threshold_ms": 1000,
+        "interval_source": "server-side duration of the search request the journey triggered"
+      },
+      "finding": {
+        "outcome": "defect",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "defect",
+          "confidence": 0.9,
+          "probabilities": {
+            "unknown": 0.05,
+            "clean": 0.02,
+            "defect": 0.93
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "e0c1e3c3aba84755a49f5d97863fe4e8",
+        "category": "loading",
+        "advisory": true,
+        "requires_review": true
+      },
+      "acknowledgement_observed": null,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "316a16b8351542ea8c6e209427467310",
+      "position": 31,
+      "check": "loading",
+      "group": "clean",
+      "index": 1,
+      "defect": null,
+      "controls": {
+        "delay": 1.727,
+        "feedback": "One moment"
+      },
+      "app_digests": {
+        "booking.html": "f9c646eb4eaac3cea4e0e50680d4fe9dd3fe9afcb36e18f1bfa5882956269c12",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 13199,
+      "search_ms": 1727.479,
+      "execution_error": null,
+      "journey_ms": 13166,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-5b349ff088954c239da2662d97e296fd",
+      "window": {
+        "id": "8ba56ddaed7b4b0096ef254cf075c1a0",
+        "kind": "loading",
+        "complete": true,
+        "operation": "Searching for available flights",
+        "visible_feedback": [
+          "One moment"
+        ],
+        "response_ms": 1727,
+        "threshold_ms": 1000,
+        "interval_source": "server-side duration of the search request the journey triggered"
+      },
+      "finding": {
+        "outcome": "clean",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "clean",
+          "confidence": 0.61,
+          "probabilities": {
+            "defect": 0.14,
+            "clean": 0.74,
+            "unknown": 0.12
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "8ba56ddaed7b4b0096ef254cf075c1a0",
+        "category": "loading",
+        "advisory": true,
+        "requires_review": false
+      },
+      "acknowledgement_observed": null,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "a7313e69feea45f48067711389dde257",
+      "position": 32,
+      "check": "effect",
+      "group": "fault",
+      "index": 7,
+      "defect": "unrendered-confirmation",
+      "controls": {
+        "delay": 0.053
+      },
+      "app_digests": {
+        "booking.html": "86bfd997ded2cdcc5f653a26fec869b1751aaee39325df84a904ed0080bb8a2d",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 12218,
+      "search_ms": 53.162,
+      "execution_error": null,
+      "journey_ms": 11685,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-c22d811f6e40440e82f363a9037579a8",
+      "window": {
+        "id": "3c7f986c17474415a205790497d3d723",
+        "kind": "effect",
+        "complete": true,
+        "action_acknowledged": true,
+        "deadline_elapsed": true,
+        "action": "Confirm the sandbox booking",
+        "expected_effect": "A booking confirmation, including its confirmation identifier, becomes visible.",
+        "before_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 100.00\nConfirm sandbox booking",
+        "after_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 100.00\nConfirm sandbox booking",
+        "observed_after_ms": 1751,
+        "settle_ms": 1200
+      },
+      "finding": {
+        "outcome": "defect",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "defect",
+          "confidence": 0.95,
+          "probabilities": {
+            "defect": 0.97,
+            "clean": 0.0,
+            "unknown": 0.03
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "3c7f986c17474415a205790497d3d723",
+        "category": "effect",
+        "advisory": true,
+        "requires_review": true
+      },
+      "acknowledgement_observed": null,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "96c0669a96e440219986ca289f8b197e",
+      "position": 33,
+      "check": "loading",
+      "group": "fault",
+      "index": 2,
+      "defect": "silent-search",
+      "controls": {
+        "delay": 1.261
+      },
+      "app_digests": {
+        "booking.html": "415b223549a6d9016bc2da2388290f9ace793cf6cfc320f59777bf8ec3e96ee2",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 13091,
+      "search_ms": 1261.282,
+      "execution_error": null,
+      "journey_ms": 13044,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-2d69c0bc68364bb09c34ebd9b5bcc733",
+      "window": {
+        "id": "db2c3ad00e9c49e096f3a274b812de07",
+        "kind": "loading",
+        "complete": true,
+        "operation": "Searching for available flights",
+        "visible_feedback": [],
+        "response_ms": 1261,
+        "threshold_ms": 1000,
+        "interval_source": "server-side duration of the search request the journey triggered"
+      },
+      "finding": {
+        "outcome": "defect",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "defect",
+          "confidence": 0.91,
+          "probabilities": {
+            "clean": 0.02,
+            "defect": 0.94,
+            "unknown": 0.04
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "db2c3ad00e9c49e096f3a274b812de07",
+        "category": "loading",
+        "advisory": true,
+        "requires_review": true
+      },
+      "acknowledgement_observed": null,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "1cc322c52a8543fead9e9077b1a6da7b",
+      "position": 34,
+      "check": "loading",
+      "group": "clean",
+      "index": 4,
+      "defect": null,
+      "controls": {
+        "delay": 1.488,
+        "feedback": "Checking availability"
+      },
+      "app_digests": {
+        "booking.html": "2090e27498fbb3830122856536d6c0f25c2814719fbc47f869f80387a84ee297",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 13572,
+      "search_ms": 1488.606,
+      "execution_error": null,
+      "journey_ms": 13189,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-eff50bc02b6644ddbd908ddf349163a5",
+      "window": {
+        "id": "922e0e8fe69c47de8c117d4f6b16a91d",
+        "kind": "loading",
+        "complete": true,
+        "operation": "Searching for available flights",
+        "visible_feedback": [
+          "Checking availability"
+        ],
+        "response_ms": 1489,
+        "threshold_ms": 1000,
+        "interval_source": "server-side duration of the search request the journey triggered"
+      },
+      "finding": {
+        "outcome": "clean",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "clean",
+          "confidence": 0.95,
+          "probabilities": {
+            "defect": 0.01,
+            "clean": 0.97,
+            "unknown": 0.02
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "922e0e8fe69c47de8c117d4f6b16a91d",
+        "category": "loading",
+        "advisory": true,
+        "requires_review": false
+      },
+      "acknowledgement_observed": null,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "3ea18296d4264da7a6389f5f11123906",
+      "position": 35,
+      "check": "effect",
+      "group": "clean",
+      "index": 8,
+      "defect": null,
+      "controls": {
+        "delay": 0.274
+      },
+      "app_digests": {
+        "booking.html": "8baf5817f8fe3860cd9f6bb0075b4a596ba1e5abbf56c358116bc6107bd6c6dc",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 12713,
+      "search_ms": 274.536,
+      "execution_error": null,
+      "journey_ms": 12189,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-4c6d5c7b17844611bafa6ccf8ff2bf06",
+      "window": {
+        "id": "aa5464de3d25474f8d1f4a6f9e2b668b",
+        "kind": "effect",
+        "complete": true,
+        "action_acknowledged": true,
+        "deadline_elapsed": true,
+        "action": "Confirm the sandbox booking",
+        "expected_effect": "A booking confirmation, including its confirmation identifier, becomes visible.",
+        "before_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 100.00\nConfirm sandbox booking",
+        "after_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nBooking confirmed\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nConfirmation TEST-1\nCharged: USD 100.00",
+        "observed_after_ms": 1766,
+        "settle_ms": 1200
+      },
+      "finding": {
+        "outcome": "clean",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "clean",
+          "confidence": 0.96,
+          "probabilities": {
+            "unknown": 0.02,
+            "clean": 0.97,
+            "defect": 0.01
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "aa5464de3d25474f8d1f4a6f9e2b668b",
+        "category": "effect",
+        "advisory": true,
+        "requires_review": false
+      },
+      "acknowledgement_observed": null,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": true
+    },
+    {
+      "id": "f979bdd4dbdb4163a3fc1543cea08e5b",
+      "position": 36,
+      "check": "loading",
+      "group": "clean",
+      "index": 8,
+      "defect": null,
+      "controls": {
+        "delay": 0.227
+      },
+      "app_digests": {
+        "booking.html": "8baf5817f8fe3860cd9f6bb0075b4a596ba1e5abbf56c358116bc6107bd6c6dc",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 12110,
+      "search_ms": 227.457,
+      "execution_error": null,
+      "journey_ms": 12074,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-2ab23a0533554f258ef100498a018e77",
+      "window": {
+        "id": "b8ad357a80fd45ed837f49ada5790547",
+        "kind": "loading",
+        "complete": true,
+        "operation": "Searching for available flights",
+        "visible_feedback": [
+          "Searching flights"
+        ],
+        "response_ms": 227,
+        "threshold_ms": 1000,
+        "interval_source": "server-side duration of the search request the journey triggered"
+      },
+      "finding": {
+        "outcome": "clean",
+        "source": "code",
+        "reason": "Response is below this fixture's declared loading-feedback threshold",
+        "evidence_id": "b8ad357a80fd45ed837f49ada5790547",
+        "category": "loading",
+        "advisory": true,
+        "requires_review": false
+      },
+      "acknowledgement_observed": null,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "dcb72ae7862d4f9b8fc06af1180e18c9",
+      "position": 37,
+      "check": "loading",
+      "group": "clean",
+      "index": 5,
+      "defect": null,
+      "controls": {
+        "delay": 1.327,
+        "feedback": "Working"
+      },
+      "app_digests": {
+        "booking.html": "53b505f91a4ebb79c6002d31fcb0bffe0db5273d29a16723c76f55b5aa2a249b",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 13899,
+      "search_ms": 1327.525,
+      "execution_error": null,
+      "journey_ms": 13392,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-b0854bcf93624d36acbc52b689862ea3",
+      "window": {
+        "id": "ec1b6a1ff4234e8ea7d61cf32045b720",
+        "kind": "loading",
+        "complete": true,
+        "operation": "Searching for available flights",
+        "visible_feedback": [
+          "Working"
+        ],
+        "response_ms": 1328,
+        "threshold_ms": 1000,
+        "interval_source": "server-side duration of the search request the journey triggered"
+      },
+      "finding": {
+        "outcome": "clean",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "clean",
+          "confidence": 0.93,
+          "probabilities": {
+            "clean": 0.95,
+            "defect": 0.02,
+            "unknown": 0.03
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "ec1b6a1ff4234e8ea7d61cf32045b720",
+        "category": "loading",
+        "advisory": true,
+        "requires_review": false
+      },
+      "acknowledgement_observed": null,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "d03a6df06d924f1aa69ad3c96634e18f",
+      "position": 38,
+      "check": "fare",
+      "group": "clean",
+      "index": 2,
+      "defect": null,
+      "controls": {
+        "cents": 11100,
+        "disclosure": "USD 111 now applies (was USD 100) after a schedule change. Accept to continue.",
+        "delay": 0.094
+      },
+      "app_digests": {
+        "booking.html": "8baf5817f8fe3860cd9f6bb0075b4a596ba1e5abbf56c358116bc6107bd6c6dc",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 11100,
+        "disclosure": "USD 111 now applies (was USD 100) after a schedule change. Accept to continue."
+      },
+      "wall_ms": 11913,
+      "search_ms": 94.6,
+      "execution_error": null,
+      "journey_ms": 11879,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-4de7afbe6d8c4258a19b70a5a2e50732",
+      "window": {
+        "id": "e76f57fa899c44e592a262b676502673",
+        "kind": "fare",
+        "complete": true,
+        "same_basis": true,
+        "before_cents": 10000,
+        "after_cents": 11100,
+        "checkout_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 111.00\nUSD 111 now applies (was USD 100) after a schedule change. Accept to continue.\nAccept fare increase and confirm booking"
+      },
+      "finding": {
+        "outcome": "clean",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "clean",
+          "confidence": 1.0,
+          "probabilities": {
+            "defect": 0.0,
+            "clean": 1.0,
+            "unknown": 0.0
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "e76f57fa899c44e592a262b676502673",
+        "category": "fare",
+        "advisory": true,
+        "requires_review": false
+      },
+      "acknowledgement_observed": true,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 11100,
+          "currency": "USD",
+          "acknowledged_cents": 11100
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "4b65d4f64a6149f880da089282cde78e",
+      "position": 39,
+      "check": "loading",
+      "group": "clean",
+      "index": 6,
+      "defect": null,
+      "controls": {
+        "delay": 1.571,
+        "feedback": "One moment"
+      },
+      "app_digests": {
+        "booking.html": "f9c646eb4eaac3cea4e0e50680d4fe9dd3fe9afcb36e18f1bfa5882956269c12",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 14071,
+      "search_ms": 1571.397,
+      "execution_error": null,
+      "journey_ms": 13561,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-e93a927763c24e1fb958f41b2cfd12b5",
+      "window": {
+        "id": "eec7d96a737f4488a5933048789108eb",
+        "kind": "loading",
+        "complete": true,
+        "operation": "Searching for available flights",
+        "visible_feedback": [
+          "One moment"
+        ],
+        "response_ms": 1571,
+        "threshold_ms": 1000,
+        "interval_source": "server-side duration of the search request the journey triggered"
+      },
+      "finding": {
+        "outcome": "clean",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "clean",
+          "confidence": 0.71,
+          "probabilities": {
+            "unknown": 0.08,
+            "clean": 0.8,
+            "defect": 0.12
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "eec7d96a737f4488a5933048789108eb",
+        "category": "loading",
+        "advisory": true,
+        "requires_review": false
+      },
+      "acknowledgement_observed": null,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "698d3967aadc40558c7883152401b134",
+      "position": 40,
+      "check": "effect",
+      "group": "clean",
+      "index": 5,
+      "defect": null,
+      "controls": {
+        "delay": 0.144
+      },
+      "app_digests": {
+        "booking.html": "8baf5817f8fe3860cd9f6bb0075b4a596ba1e5abbf56c358116bc6107bd6c6dc",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 12007,
+      "search_ms": 144.299,
+      "execution_error": null,
+      "journey_ms": 11482,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-e673b9752e5a41daa382b229cfdb89d8",
+      "window": {
+        "id": "3e6a249816ff4a31ba6d19c1dcd15bd9",
+        "kind": "effect",
+        "complete": true,
+        "action_acknowledged": true,
+        "deadline_elapsed": true,
+        "action": "Confirm the sandbox booking",
+        "expected_effect": "A booking confirmation, including its confirmation identifier, becomes visible.",
+        "before_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 100.00\nConfirm sandbox booking",
+        "after_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nBooking confirmed\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nConfirmation TEST-1\nCharged: USD 100.00",
+        "observed_after_ms": 1797,
+        "settle_ms": 1200
+      },
+      "finding": {
+        "outcome": "clean",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "clean",
+          "confidence": 0.96,
+          "probabilities": {
+            "defect": 0.01,
+            "unknown": 0.02,
+            "clean": 0.97
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "3e6a249816ff4a31ba6d19c1dcd15bd9",
+        "category": "effect",
+        "advisory": true,
+        "requires_review": false
+      },
+      "acknowledgement_observed": null,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": true
+    },
+    {
+      "id": "71a09d2483d74354b1fa30b747954a2e",
+      "position": 41,
+      "check": "loading",
+      "group": "clean",
+      "index": 7,
+      "defect": null,
+      "controls": {
+        "delay": 0.071
+      },
+      "app_digests": {
+        "booking.html": "8baf5817f8fe3860cd9f6bb0075b4a596ba1e5abbf56c358116bc6107bd6c6dc",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 11341,
+      "search_ms": 71.235,
+      "execution_error": null,
+      "journey_ms": 11295,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-7c904ad2c6d64d7d9eadc22161bec2e2",
+      "window": {
+        "id": "aced32ab157a4efd960be66c216d94df",
+        "kind": "loading",
+        "complete": true,
+        "operation": "Searching for available flights",
+        "visible_feedback": [
+          "Searching flights"
+        ],
+        "response_ms": 71,
+        "threshold_ms": 1000,
+        "interval_source": "server-side duration of the search request the journey triggered"
+      },
+      "finding": {
+        "outcome": "clean",
+        "source": "code",
+        "reason": "Response is below this fixture's declared loading-feedback threshold",
+        "evidence_id": "aced32ab157a4efd960be66c216d94df",
+        "category": "loading",
+        "advisory": true,
+        "requires_review": false
+      },
+      "acknowledgement_observed": null,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "cb7af9060b904c73b8a9cf35ad209f69",
+      "position": 42,
+      "check": "effect",
+      "group": "clean",
+      "index": 7,
+      "defect": null,
+      "controls": {
+        "delay": 0.145
+      },
+      "app_digests": {
+        "booking.html": "8baf5817f8fe3860cd9f6bb0075b4a596ba1e5abbf56c358116bc6107bd6c6dc",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 61827,
+      "search_ms": null,
+      "execution_error": null,
+      "journey_ms": 61779,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "ERROR",
+      "usable": false,
+      "evidence_complete": false,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-b5ed4ccb854b4a1c8cb389833f298c32",
+      "window": {
+        "id": "18d97913c9d74f5abf619f70229caa4d",
+        "kind": "effect",
+        "complete": false,
+        "action_acknowledged": false,
+        "deadline_elapsed": false,
+        "action": "Confirm the sandbox booking",
+        "expected_effect": "A booking confirmation, including its confirmation identifier, becomes visible.",
+        "before_text": "",
+        "after_text": "",
+        "observed_after_ms": 0,
+        "settle_ms": 1200
+      },
+      "finding": null,
+      "acknowledgement_observed": null,
+      "independent_verifier": {
+        "passed": false,
+        "failures": [
+          "Expected exactly one booking"
+        ],
+        "booking_count": 0
+      },
+      "bookings": [],
+      "confirmation_visible": false
+    },
+    {
+      "id": "8fcd502d56c444c3b2ad1122e5824f15",
+      "position": 43,
+      "check": "fare",
+      "group": "fault",
+      "index": 8,
+      "defect": "fare-surcharge-5500",
+      "controls": {
+        "delay": 0.29
+      },
+      "app_digests": {
+        "booking.html": "8baf5817f8fe3860cd9f6bb0075b4a596ba1e5abbf56c358116bc6107bd6c6dc",
+        "pricing.py": "ceebe566c2de05234c1613d2b6a3cf379e2c40ff499ddd942599fa1bd1d39804"
+      },
+      "served_quote": {
+        "cents": 15500,
+        "disclosure": ""
+      },
+      "wall_ms": 12623,
+      "search_ms": 290.429,
+      "execution_error": null,
+      "journey_ms": 12155,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-a52812f2c7fe4773bac95c3cf4c750e9",
+      "window": {
+        "id": "08b2ce1366c143b5b4269d5e544b9c8c",
+        "kind": "fare",
+        "complete": true,
+        "same_basis": true,
+        "before_cents": 10000,
+        "after_cents": 15500,
+        "checkout_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 155.00\nConfirm sandbox booking"
+      },
+      "finding": {
+        "outcome": "defect",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "defect",
+          "confidence": 0.98,
+          "probabilities": {
+            "defect": 0.99,
+            "unknown": 0.0,
+            "clean": 0.01
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "08b2ce1366c143b5b4269d5e544b9c8c",
+        "category": "fare",
+        "advisory": true,
+        "requires_review": true
+      },
+      "acknowledgement_observed": false,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 15500,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "d00e498a85de46e2b92f8ee49c1bebaf",
+      "position": 44,
+      "check": "loading",
+      "group": "clean",
+      "index": 3,
+      "defect": null,
+      "controls": {
+        "delay": 1.45,
+        "feedback": "Loading"
+      },
+      "app_digests": {
+        "booking.html": "18817d7b18f33d8dee91bdb974672f341bfb95058c1b6ce1aef559ad7307f6de",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 13496,
+      "search_ms": 1450.371,
+      "execution_error": null,
+      "journey_ms": 13445,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-2bfc719d8ef847348b930b0ca5fc95e6",
+      "window": {
+        "id": "0591e56ac05f4b2b8359a2f3a1c6fbd8",
+        "kind": "loading",
+        "complete": true,
+        "operation": "Searching for available flights",
+        "visible_feedback": [
+          "Loading"
+        ],
+        "response_ms": 1450,
+        "threshold_ms": 1000,
+        "interval_source": "server-side duration of the search request the journey triggered"
+      },
+      "finding": {
+        "outcome": "clean",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "clean",
+          "confidence": 0.47,
+          "probabilities": {
+            "defect": 0.16,
+            "unknown": 0.2,
+            "clean": 0.64
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "0591e56ac05f4b2b8359a2f3a1c6fbd8",
+        "category": "loading",
+        "advisory": true,
+        "requires_review": false
+      },
+      "acknowledgement_observed": null,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "6c11a45fd5394b7bbba4d3aa7418ed92",
+      "position": 45,
+      "check": "effect",
+      "group": "clean",
+      "index": 4,
+      "defect": null,
+      "controls": {
+        "delay": 0.062
+      },
+      "app_digests": {
+        "booking.html": "8baf5817f8fe3860cd9f6bb0075b4a596ba1e5abbf56c358116bc6107bd6c6dc",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 12466,
+      "search_ms": 62.085,
+      "execution_error": null,
+      "journey_ms": 12173,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-641a40665c3746278e6cf7e05de8a30e",
+      "window": {
+        "id": "36c27dcb61ca43bbaefa9f0a8b1f596c",
+        "kind": "effect",
+        "complete": true,
+        "action_acknowledged": true,
+        "deadline_elapsed": true,
+        "action": "Confirm the sandbox booking",
+        "expected_effect": "A booking confirmation, including its confirmation identifier, becomes visible.",
+        "before_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 100.00\nConfirm sandbox booking",
+        "after_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nBooking confirmed\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nConfirmation TEST-1\nCharged: USD 100.00",
+        "observed_after_ms": 2021,
+        "settle_ms": 1200
+      },
+      "finding": {
+        "outcome": "clean",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "clean",
+          "confidence": 0.97,
+          "probabilities": {
+            "defect": 0.01,
+            "clean": 0.97,
+            "unknown": 0.02
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "36c27dcb61ca43bbaefa9f0a8b1f596c",
+        "category": "effect",
+        "advisory": true,
+        "requires_review": false
+      },
+      "acknowledgement_observed": null,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": true
+    },
+    {
+      "id": "88b0d9ae41a74074852601b6bacd3d84",
+      "position": 46,
+      "check": "fare",
+      "group": "fault",
+      "index": 1,
+      "defect": "fare-surcharge-2000",
+      "controls": {
+        "delay": 0.203
+      },
+      "app_digests": {
+        "booking.html": "8baf5817f8fe3860cd9f6bb0075b4a596ba1e5abbf56c358116bc6107bd6c6dc",
+        "pricing.py": "9d46e08a505ff31ba0b45b3ded04c9f45d1c4614d45095ceb9a6fbbad3f85272"
+      },
+      "served_quote": {
+        "cents": 12000,
+        "disclosure": ""
+      },
+      "wall_ms": 12532,
+      "search_ms": 203.477,
+      "execution_error": null,
+      "journey_ms": 12031,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-8766eb35a485418d923e342436ebbd12",
+      "window": {
+        "id": "ac56b6789b2741769967bc5f53fbf2ed",
+        "kind": "fare",
+        "complete": true,
+        "same_basis": true,
+        "before_cents": 10000,
+        "after_cents": 12000,
+        "checkout_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 120.00\nConfirm sandbox booking"
+      },
+      "finding": {
+        "outcome": "defect",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "defect",
+          "confidence": 0.98,
+          "probabilities": {
+            "clean": 0.01,
+            "defect": 0.99,
+            "unknown": 0.0
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "ac56b6789b2741769967bc5f53fbf2ed",
+        "category": "fare",
+        "advisory": true,
+        "requires_review": true
+      },
+      "acknowledgement_observed": false,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 12000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "d34974ce6bc74bec853da9eb806d492e",
+      "position": 47,
+      "check": "loading",
+      "group": "clean",
+      "index": 0,
+      "defect": null,
+      "controls": {
+        "delay": 1.295,
+        "feedback": "Working"
+      },
+      "app_digests": {
+        "booking.html": "53b505f91a4ebb79c6002d31fcb0bffe0db5273d29a16723c76f55b5aa2a249b",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 13568,
+      "search_ms": 1295.063,
+      "execution_error": null,
+      "journey_ms": 13232,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-500c6f234e0f4a8c8830a9980f250fd4",
+      "window": {
+        "id": "b78ef2864f3b4213a5ee3b6490281700",
+        "kind": "loading",
+        "complete": true,
+        "operation": "Searching for available flights",
+        "visible_feedback": [
+          "Working"
+        ],
+        "response_ms": 1295,
+        "threshold_ms": 1000,
+        "interval_source": "server-side duration of the search request the journey triggered"
+      },
+      "finding": {
+        "outcome": "clean",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "clean",
+          "confidence": 0.92,
+          "probabilities": {
+            "clean": 0.95,
+            "unknown": 0.03,
+            "defect": 0.02
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "b78ef2864f3b4213a5ee3b6490281700",
+        "category": "loading",
+        "advisory": true,
+        "requires_review": false
+      },
+      "acknowledgement_observed": null,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "e8b1c87d8c3c428eb8a03b2394196329",
+      "position": 48,
+      "check": "effect",
+      "group": "fault",
+      "index": 9,
+      "defect": "unrendered-confirmation",
+      "controls": {
+        "delay": 0.059
+      },
+      "app_digests": {
+        "booking.html": "86bfd997ded2cdcc5f653a26fec869b1751aaee39325df84a904ed0080bb8a2d",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 12301,
+      "search_ms": 59.423,
+      "execution_error": null,
+      "journey_ms": 11791,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-5cee03c9a97f43deb411635842700d9b",
+      "window": {
+        "id": "c8d66939642e4cd7aeb989e47a5c78aa",
+        "kind": "effect",
+        "complete": true,
+        "action_acknowledged": true,
+        "deadline_elapsed": true,
+        "action": "Confirm the sandbox booking",
+        "expected_effect": "A booking confirmation, including its confirmation identifier, becomes visible.",
+        "before_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 100.00\nConfirm sandbox booking",
+        "after_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 100.00\nConfirm sandbox booking",
+        "observed_after_ms": 1814,
+        "settle_ms": 1200
+      },
+      "finding": {
+        "outcome": "defect",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "defect",
+          "confidence": 0.95,
+          "probabilities": {
+            "defect": 0.97,
+            "unknown": 0.03,
+            "clean": 0.0
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "c8d66939642e4cd7aeb989e47a5c78aa",
+        "category": "effect",
+        "advisory": true,
+        "requires_review": true
+      },
+      "acknowledgement_observed": null,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "5e8579b334db4addadaaeec6d0988f58",
+      "position": 49,
+      "check": "effect",
+      "group": "clean",
+      "index": 9,
+      "defect": null,
+      "controls": {
+        "delay": 0.323
+      },
+      "app_digests": {
+        "booking.html": "8baf5817f8fe3860cd9f6bb0075b4a596ba1e5abbf56c358116bc6107bd6c6dc",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 12841,
+      "search_ms": 323.105,
+      "execution_error": null,
+      "journey_ms": 12330,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-7fa86a2a8286432c8fa7a214676a7a03",
+      "window": {
+        "id": "eabf5de1fa9a4bd38d348177ab75e506",
+        "kind": "effect",
+        "complete": true,
+        "action_acknowledged": true,
+        "deadline_elapsed": true,
+        "action": "Confirm the sandbox booking",
+        "expected_effect": "A booking confirmation, including its confirmation identifier, becomes visible.",
+        "before_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 100.00\nConfirm sandbox booking",
+        "after_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nBooking confirmed\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nConfirmation TEST-1\nCharged: USD 100.00",
+        "observed_after_ms": 1764,
+        "settle_ms": 1200
+      },
+      "finding": {
+        "outcome": "clean",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "clean",
+          "confidence": 0.97,
+          "probabilities": {
+            "defect": 0.01,
+            "unknown": 0.01,
+            "clean": 0.98
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "eabf5de1fa9a4bd38d348177ab75e506",
+        "category": "effect",
+        "advisory": true,
+        "requires_review": false
+      },
+      "acknowledgement_observed": null,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": true
+    },
+    {
+      "id": "135baf7cf5ab4effb81bda90f6718150",
+      "position": 50,
+      "check": "effect",
+      "group": "fault",
+      "index": 8,
+      "defect": "unrendered-confirmation",
+      "controls": {
+        "delay": 0.152
+      },
+      "app_digests": {
+        "booking.html": "86bfd997ded2cdcc5f653a26fec869b1751aaee39325df84a904ed0080bb8a2d",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 12262,
+      "search_ms": 152.292,
+      "execution_error": null,
+      "journey_ms": 11764,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-7c114be606504177995ac0d9d30e8ec4",
+      "window": {
+        "id": "baec331ea1e84b8da9e6739019951c28",
+        "kind": "effect",
+        "complete": true,
+        "action_acknowledged": true,
+        "deadline_elapsed": true,
+        "action": "Confirm the sandbox booking",
+        "expected_effect": "A booking confirmation, including its confirmation identifier, becomes visible.",
+        "before_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 100.00\nConfirm sandbox booking",
+        "after_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 100.00\nConfirm sandbox booking",
+        "observed_after_ms": 1819,
+        "settle_ms": 1200
+      },
+      "finding": {
+        "outcome": "defect",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "defect",
+          "confidence": 0.94,
+          "probabilities": {
+            "defect": 0.97,
+            "clean": 0.0,
+            "unknown": 0.03
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "baec331ea1e84b8da9e6739019951c28",
+        "category": "effect",
+        "advisory": true,
+        "requires_review": true
+      },
+      "acknowledgement_observed": null,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "eb8ad01624ee4560b01c6810207fbcd0",
+      "position": 51,
+      "check": "effect",
+      "group": "clean",
+      "index": 1,
+      "defect": null,
+      "controls": {
+        "delay": 0.229
+      },
+      "app_digests": {
+        "booking.html": "8baf5817f8fe3860cd9f6bb0075b4a596ba1e5abbf56c358116bc6107bd6c6dc",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 12763,
+      "search_ms": 229.177,
+      "execution_error": null,
+      "journey_ms": 12292,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-455836686a0d463487f02dea341719b2",
+      "window": {
+        "id": "d759dfb6fc8440ce92d593f5ae4f8d25",
+        "kind": "effect",
+        "complete": true,
+        "action_acknowledged": true,
+        "deadline_elapsed": true,
+        "action": "Confirm the sandbox booking",
+        "expected_effect": "A booking confirmation, including its confirmation identifier, becomes visible.",
+        "before_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 100.00\nConfirm sandbox booking",
+        "after_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nBooking confirmed\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nConfirmation TEST-1\nCharged: USD 100.00",
+        "observed_after_ms": 1805,
+        "settle_ms": 1200
+      },
+      "finding": {
+        "outcome": "clean",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "clean",
+          "confidence": 0.96,
+          "probabilities": {
+            "unknown": 0.02,
+            "defect": 0.01,
+            "clean": 0.97
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "d759dfb6fc8440ce92d593f5ae4f8d25",
+        "category": "effect",
+        "advisory": true,
+        "requires_review": false
+      },
+      "acknowledgement_observed": null,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": true
+    },
+    {
+      "id": "fb6158f58b87448ab48dfa74307728f2",
+      "position": 52,
+      "check": "loading",
+      "group": "fault",
+      "index": 6,
+      "defect": "silent-search",
+      "controls": {
+        "delay": 1.311
+      },
+      "app_digests": {
+        "booking.html": "415b223549a6d9016bc2da2388290f9ace793cf6cfc320f59777bf8ec3e96ee2",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 13594,
+      "search_ms": 1311.073,
+      "execution_error": null,
+      "journey_ms": 13074,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-211de91dc70d4561b26effbe078029e3",
+      "window": {
+        "id": "11edbd1bb41b4085b6662bf1399d3f1c",
+        "kind": "loading",
+        "complete": true,
+        "operation": "Searching for available flights",
+        "visible_feedback": [],
+        "response_ms": 1311,
+        "threshold_ms": 1000,
+        "interval_source": "server-side duration of the search request the journey triggered"
+      },
+      "finding": {
+        "outcome": "defect",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "defect",
+          "confidence": 0.91,
+          "probabilities": {
+            "defect": 0.9299999999999999,
+            "clean": 0.02,
+            "unknown": 0.05
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "11edbd1bb41b4085b6662bf1399d3f1c",
+        "category": "loading",
+        "advisory": true,
+        "requires_review": true
+      },
+      "acknowledgement_observed": null,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "b6ad3389431e4b50b48dec687cf76451",
+      "position": 53,
+      "check": "loading",
+      "group": "clean",
+      "index": 2,
+      "defect": null,
+      "controls": {
+        "delay": 1.446,
+        "feedback": "Please wait"
+      },
+      "app_digests": {
+        "booking.html": "da66b43ec3e4c1b62e6cd706cbd5a1719db469c2638f978628be07356d7c8a0c",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 13897,
+      "search_ms": 1446.397,
+      "execution_error": null,
+      "journey_ms": 13373,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-5ad3bb0139284327863e38cd67234160",
+      "window": {
+        "id": "da9d59070c3f45838a7106528a9680dd",
+        "kind": "loading",
+        "complete": true,
+        "operation": "Searching for available flights",
+        "visible_feedback": [
+          "Please wait"
+        ],
+        "response_ms": 1446,
+        "threshold_ms": 1000,
+        "interval_source": "server-side duration of the search request the journey triggered"
+      },
+      "finding": {
+        "outcome": "clean",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "clean",
+          "confidence": 0.65,
+          "probabilities": {
+            "clean": 0.77,
+            "defect": 0.1,
+            "unknown": 0.13
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "da9d59070c3f45838a7106528a9680dd",
+        "category": "loading",
+        "advisory": true,
+        "requires_review": false
+      },
+      "acknowledgement_observed": null,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "da4aacf78be54eabbaac020092f2c180",
+      "position": 54,
+      "check": "effect",
+      "group": "fault",
+      "index": 0,
+      "defect": "unrendered-confirmation",
+      "controls": {
+        "delay": 0.095
+      },
+      "app_digests": {
+        "booking.html": "86bfd997ded2cdcc5f653a26fec869b1751aaee39325df84a904ed0080bb8a2d",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 12312,
+      "search_ms": 95.099,
+      "execution_error": null,
+      "journey_ms": 11836,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-c4227af08b8449989bfd4d1f58b4c196",
+      "window": {
+        "id": "23c61e1e1f58494384ebee37946d80d7",
+        "kind": "effect",
+        "complete": true,
+        "action_acknowledged": true,
+        "deadline_elapsed": true,
+        "action": "Confirm the sandbox booking",
+        "expected_effect": "A booking confirmation, including its confirmation identifier, becomes visible.",
+        "before_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 100.00\nConfirm sandbox booking",
+        "after_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 100.00\nConfirm sandbox booking",
+        "observed_after_ms": 1839,
+        "settle_ms": 1200
+      },
+      "finding": {
+        "outcome": "defect",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "defect",
+          "confidence": 0.96,
+          "probabilities": {
+            "clean": 0.0,
+            "unknown": 0.03,
+            "defect": 0.97
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "23c61e1e1f58494384ebee37946d80d7",
+        "category": "effect",
+        "advisory": true,
+        "requires_review": true
+      },
+      "acknowledgement_observed": null,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "88408c6912b74742ace6a695783537a0",
+      "position": 55,
+      "check": "fare",
+      "group": "clean",
+      "index": 5,
+      "defect": null,
+      "controls": {
+        "cents": 12000,
+        "disclosure": "Fare changed: USD 100 to USD 120. Accept to book.",
+        "delay": 0.262
+      },
+      "app_digests": {
+        "booking.html": "8baf5817f8fe3860cd9f6bb0075b4a596ba1e5abbf56c358116bc6107bd6c6dc",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 12000,
+        "disclosure": "Fare changed: USD 100 to USD 120. Accept to book."
+      },
+      "wall_ms": 12283,
+      "search_ms": 262.366,
+      "execution_error": null,
+      "journey_ms": 12237,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-26b06d4aaf694be892c5cb78756b84ef",
+      "window": {
+        "id": "866f5c41a82a4a6ca252683e5b8a650f",
+        "kind": "fare",
+        "complete": true,
+        "same_basis": true,
+        "before_cents": 10000,
+        "after_cents": 12000,
+        "checkout_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 120.00\nFare changed: USD 100 to USD 120. Accept to book.\nAccept fare increase and confirm booking"
+      },
+      "finding": {
+        "outcome": "clean",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "clean",
+          "confidence": 0.99,
+          "probabilities": {
+            "clean": 0.99,
+            "defect": 0.01,
+            "unknown": 0.0
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "866f5c41a82a4a6ca252683e5b8a650f",
+        "category": "fare",
+        "advisory": true,
+        "requires_review": false
+      },
+      "acknowledgement_observed": true,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 12000,
+          "currency": "USD",
+          "acknowledged_cents": 12000
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "b383fc8831174ed280cb238897302582",
+      "position": 56,
+      "check": "fare",
+      "group": "clean",
+      "index": 3,
+      "defect": null,
+      "controls": {
+        "cents": 11400,
+        "disclosure": "Heads up - the held quote lapsed. New total USD 114, up from USD 100. Accept it to book.",
+        "delay": 0.365
+      },
+      "app_digests": {
+        "booking.html": "8baf5817f8fe3860cd9f6bb0075b4a596ba1e5abbf56c358116bc6107bd6c6dc",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 11400,
+        "disclosure": "Heads up - the held quote lapsed. New total USD 114, up from USD 100. Accept it to book."
+      },
+      "wall_ms": 12485,
+      "search_ms": 365.401,
+      "execution_error": null,
+      "journey_ms": 12026,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-15eb7414254e4b2b9defcbaeaa757fc0",
+      "window": {
+        "id": "ad329ec4fb2b4cf9b37e0da3d2262e5a",
+        "kind": "fare",
+        "complete": true,
+        "same_basis": true,
+        "before_cents": 10000,
+        "after_cents": 11400,
+        "checkout_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 114.00\nHeads up - the held quote lapsed. New total USD 114, up from USD 100. Accept it to book.\nAccept fare increase and confirm booking"
+      },
+      "finding": {
+        "outcome": "clean",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "clean",
+          "confidence": 0.99,
+          "probabilities": {
+            "unknown": 0.0,
+            "clean": 1.0,
+            "defect": 0.0
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "ad329ec4fb2b4cf9b37e0da3d2262e5a",
+        "category": "fare",
+        "advisory": true,
+        "requires_review": false
+      },
+      "acknowledgement_observed": true,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 11400,
+          "currency": "USD",
+          "acknowledged_cents": 11400
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "dd9c46ec51994609b9d0c97b78ca820c",
+      "position": 57,
+      "check": "effect",
+      "group": "clean",
+      "index": 6,
+      "defect": null,
+      "controls": {
+        "delay": 0.392
+      },
+      "app_digests": {
+        "booking.html": "8baf5817f8fe3860cd9f6bb0075b4a596ba1e5abbf56c358116bc6107bd6c6dc",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 12734,
+      "search_ms": 392.107,
+      "execution_error": null,
+      "journey_ms": 12229,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-a225401970c4412093c54cc8df77044e",
+      "window": {
+        "id": "4e14d9318bb34546b47e3c74c03a276e",
+        "kind": "effect",
+        "complete": true,
+        "action_acknowledged": true,
+        "deadline_elapsed": true,
+        "action": "Confirm the sandbox booking",
+        "expected_effect": "A booking confirmation, including its confirmation identifier, becomes visible.",
+        "before_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nReview booking\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nSelected fare: USD 100.00\nCheckout total: USD 100.00\nConfirm sandbox booking",
+        "after_text": "Sandbox travel\nLocal synthetic bookings only. No payment or real travel.\nBooking confirmed\nZurich to London, 2026-09-20, one adult. Flight F001. Economy, Test Passenger\nConfirmation TEST-1\nCharged: USD 100.00",
+        "observed_after_ms": 1768,
+        "settle_ms": 1200
+      },
+      "finding": {
+        "outcome": "clean",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "clean",
+          "confidence": 0.97,
+          "probabilities": {
+            "defect": 0.01,
+            "unknown": 0.02,
+            "clean": 0.97
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "4e14d9318bb34546b47e3c74c03a276e",
+        "category": "effect",
+        "advisory": true,
+        "requires_review": false
+      },
+      "acknowledgement_observed": null,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": true
+    },
+    {
+      "id": "054ed7068ce641358f0755778496a7b6",
+      "position": 58,
+      "check": "loading",
+      "group": "fault",
+      "index": 0,
+      "defect": "silent-search",
+      "controls": {
+        "delay": 1.396
+      },
+      "app_digests": {
+        "booking.html": "415b223549a6d9016bc2da2388290f9ace793cf6cfc320f59777bf8ec3e96ee2",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 13321,
+      "search_ms": 1396.181,
+      "execution_error": null,
+      "journey_ms": 13290,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-87b2538593dc4f9aa2feff4440436197",
+      "window": {
+        "id": "2b2bc91c95d94488bb82bdc1f74c55d8",
+        "kind": "loading",
+        "complete": true,
+        "operation": "Searching for available flights",
+        "visible_feedback": [],
+        "response_ms": 1396,
+        "threshold_ms": 1000,
+        "interval_source": "server-side duration of the search request the journey triggered"
+      },
+      "finding": {
+        "outcome": "defect",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "defect",
+          "confidence": 0.91,
+          "probabilities": {
+            "clean": 0.02,
+            "defect": 0.94,
+            "unknown": 0.04
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "2b2bc91c95d94488bb82bdc1f74c55d8",
+        "category": "loading",
+        "advisory": true,
+        "requires_review": true
+      },
+      "acknowledgement_observed": null,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    },
+    {
+      "id": "f97bc3b9a87d4401a210300207c40a22",
+      "position": 59,
+      "check": "loading",
+      "group": "fault",
+      "index": 4,
+      "defect": "silent-search",
+      "controls": {
+        "delay": 1.364
+      },
+      "app_digests": {
+        "booking.html": "415b223549a6d9016bc2da2388290f9ace793cf6cfc320f59777bf8ec3e96ee2",
+        "pricing.py": "28a23405d98877a6e0ff24eedeb602c6c71dde81a754d0c8b469460b63e37815"
+      },
+      "served_quote": {
+        "cents": 10000,
+        "disclosure": ""
+      },
+      "wall_ms": 13586,
+      "search_ms": 1364.32,
+      "execution_error": null,
+      "journey_ms": 13111,
+      "within_budget": true,
+      "browser_stalls": 0,
+      "status": "COMPLETED",
+      "usable": true,
+      "evidence_complete": true,
+      "run_directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\autonomous-3ee580465d21497ab6a52d08b71a70ba",
+      "window": {
+        "id": "d85d8d00baad4674b077d84c358e0fd0",
+        "kind": "loading",
+        "complete": true,
+        "operation": "Searching for available flights",
+        "visible_feedback": [],
+        "response_ms": 1364,
+        "threshold_ms": 1000,
+        "interval_source": "server-side duration of the search request the journey triggered"
+      },
+      "finding": {
+        "outcome": "defect",
+        "source": "jev",
+        "answer": {
+          "type": "choice",
+          "choice": "defect",
+          "confidence": 0.9,
+          "probabilities": {
+            "defect": 0.93,
+            "unknown": 0.05,
+            "clean": 0.02
+          }
+        },
+        "model": "jev-1.13.0",
+        "evidence_id": "d85d8d00baad4674b077d84c358e0fd0",
+        "category": "loading",
+        "advisory": true,
+        "requires_review": true
+      },
+      "acknowledgement_observed": null,
+      "independent_verifier": {
+        "passed": true,
+        "failures": [],
+        "booking_count": 1
+      },
+      "bookings": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "fare_id": "F001",
+          "cabin": "Economy",
+          "passenger": "Test Passenger",
+          "selected_cents": 10000,
+          "id": "TEST-1",
+          "cents": 10000,
+          "currency": "USD"
+        }
+      ],
+      "confirmation_visible": false
+    }
+  ]
+}

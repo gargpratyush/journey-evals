@@ -1,0 +1,42 @@
+{
+  "checkpoint": "cp7",
+  "status": "GREEN",
+  "schema_version": 1,
+  "timestamp": "2026-09-18T18:49:00.0463254Z",
+  "source_sha256": "93886abec6ae04a5f406f971934bbc6ee794a8db58a9c22b101ff0c54560126a",
+  "summary": "Framework admission is granted for a small local experimental core proven on two synthetic applications.",
+  "admission_basis": {
+    "value_proposition": "Latency and journey throughput",
+    "original_cost_gate": "AMBER: 7.27x cheaper against the declared 10x gate",
+    "owner_decision": "Proceed under the restated value proposition; do not claim the original cost hypothesis passed."
+  },
+  "checklist": {
+    "access_isolation_cp0_cp2": "GREEN",
+    "semantic_value_cp3": "GREEN",
+    "repair_cycle_cp4": "GREEN",
+    "cp5_quality": "GREEN",
+    "cp5_live_repeatability_after_actor_fixes": "GREEN",
+    "cp5_collector_overhead": "GREEN",
+    "cp5_economics": "AMBER_WITH_EXPLICIT_OWNER_DECISION",
+    "second_app_cp6": "GREEN",
+    "evidence_ledger": "GREEN"
+  },
+  "extracted_framework": {
+    "file": "jev_ultrafast\\framework.py",
+    "public_contracts": ["Observation", "Evaluation", "RunResult", "JourneySpec"],
+    "shared_mechanisms": [
+      "Action-attempt-anchored loading evidence windows",
+      "Deadline-bound interaction-effect evidence windows",
+      "Typed journey, observation, evaluation and run-result contracts"
+    ],
+    "used_by": ["jev_ultrafast\\live.py", "jev_ultrafast\\subscription.py"],
+    "app_owned": [
+      "Natural-language goal and trusted test data",
+      "Domain verifier and exact acceptance rules",
+      "Application source and fault construction",
+      "Fare/plan fact extraction"
+    ]
+  },
+  "claim_boundary": "This admits design and implementation of a small local framework. It does not establish arbitrary-site coverage, production CI blocking, vision evaluation, or the original 10x cost claim.",
+  "next_permitted_action": "Continue the local framework implementation and add broader evaluator families only with new evidence."
+}

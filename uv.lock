@@ -163,7 +163,7 @@ wheels = [
 ]
 
 [[package]]
-name = "jev-ultrafast"
+name = "journey-evals"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [

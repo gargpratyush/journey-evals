@@ -10,7 +10,7 @@ from pathlib import Path
 from browser_harness.admin import ensure_daemon, require_existing_daemon
 from browser_harness.helpers import cdp
 
-from .feasibility import SLOW_MACHINE_TIMEOUT, VIEWPORT
+from .limits import SLOW_MACHINE_TIMEOUT, VIEWPORT
 
 # Atomically read visible content and controls, preserving actual DOM node identity.
 READ_STATE = Path(__file__).with_name("snapshot.js").read_text()
@@ -21,9 +21,17 @@ class StalePage(ValueError):
 
 
 class Browser:
-    def __init__(self, url, *, before_navigate=None, foreground=False):
+    def __init__(self, url, *, before_navigate=None, foreground=False, viewport=None):
         owned = os.environ.get("JEV_OWNED_SESSION") == "1"
+        # A background target in our own headless browser eventually stops producing frames, and
+        # Page.captureScreenshot then blocks until it times out. The owned browser is dedicated to
+        # this run, so its single tab is always the active one.
+        foreground = foreground or owned
         self.capture_timeout = 15 if foreground or owned else 5
+        # A journey may declare its own viewport; the feasibility default stays byte-identical.
+        width, height = tuple(viewport) if viewport else VIEWPORT
+        self.viewport = (width, height)
+        self.center = (550, 650) if self.viewport == tuple(VIEWPORT) else (width // 2, height // 2)
         if owned:
             require_existing_daemon()
         else:
@@ -33,7 +41,7 @@ class Browser:
             self.session = cdp("Target.attachToTarget", targetId=self.target, flatten=True)["sessionId"]
             # These are the first frame-dependent calls against a brand-new renderer, so they carry the
             # startup bound rather than the operational one.
-            self.call("Emulation.setDeviceMetricsOverride", width=VIEWPORT[0], height=VIEWPORT[1],
+            self.call("Emulation.setDeviceMetricsOverride", width=width, height=height,
                       deviceScaleFactor=1, mobile=False, _response_timeout=SLOW_MACHINE_TIMEOUT)
             # Keep rAF/menus rendering without activating a normal user's Chrome tab.
             self.call("Emulation.setFocusEmulationEnabled", enabled=True,
@@ -131,7 +139,8 @@ class Browser:
             raise StalePage("Page changed since this decision. Observe again.")
         if action["kind"] == "wait":
             time.sleep(0.1)
-        result = browser_operation({"operation": "act", "session": self.session, "action": action, "text": text})
+        result = browser_operation({"operation": "act", "session": self.session, "action": action,
+                                    "text": text, "center": self.center})
         self.after_input = action if action["kind"] != "wait" else None
         return result
 
@@ -165,7 +174,8 @@ def browser_operation(request):
         action = request["action"]
         kind = action["kind"]
         if kind == "scroll":
-            call("Input.dispatchMouseEvent", type="mouseWheel", x=550, y=650, deltaX=0, deltaY=action["delta"])
+            x, y = request.get("center", (550, 650))
+            call("Input.dispatchMouseEvent", type="mouseWheel", x=x, y=y, deltaX=0, deltaY=action["delta"])
         elif kind != "wait":
             if type(action["node"]) is not int:
                 raise ValueError("Invalid observed node")

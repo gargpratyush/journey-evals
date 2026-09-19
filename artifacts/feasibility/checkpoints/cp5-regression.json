@@ -1,7 +1,21 @@
 {
   "checkpoint": "cp5-regression",
-  "status": "AMBER",
+  "status": "GREEN",
+  "measured_status": "AMBER",
   "purpose": "Non-regression evidence for a deliberate core change to the actor policy, and the direct test of whether that change removes the CP5-B false-pass finding.",
+  "admission_decision": {
+    "decision": "owner-waiver",
+    "timestamp": "2026-09-18T17:58:37.429000+00:00",
+    "scope": "Waive the single spurious loading-control finding for CP6 admission only; preserve the original 40-case measurement and require_checkpoint unchanged.",
+    "justification": "The finding was traced to evidence collection rather than evaluator behavior: the page emits synchronous feedback before action_executed is journalled, so the loading window opened one event too late. Anchoring the window on action_attempt was validated offline against all 34 retained loading runs with 0 problems.",
+    "offline_validation": {
+      "retained_loading_runs": 34,
+      "problems": 0,
+      "affected_case_recorded_not_rejudged": true
+    },
+    "unchanged_evidence": "The 40-case flight regression remains recorded as run: 40/40 journeys completed, 19/19 faults detected, one spurious finding, zero false passes, and slow clean loading controls improved from 0/7 to 5/5.",
+    "next_permitted_action": "Run CP6 second-app transfer and include this waiver plus first-app non-regression evidence in the CP6 receipt."
+  },
   "core_change": {
     "files": [
       "jev_ultrafast/questions.py",

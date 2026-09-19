@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Northwind Air — sandbox booking</title>
+<style>
+  /* ===========================================================================================
+     MERIDIAN — the design system for the synthetic airline fixture.
+
+     The reference is an airline retailing terminal: a departure board, a fare grid, wayfinding
+     signage. Dense, engineered, hard-edged. It is deliberately not a landing page and it is
+     deliberately nothing like the evaluation console, which is an instrument.
+
+       1. COLOUR      Cool neutral canvas (#e9ebf0). One saturated accent, cobalt #0033cc, used
+                      as flat blocks and rules, never as a gradient. Near-black masthead. A deep
+                      teal-green for success and a single crimson for a price delta. No orange,
+                      no cream, no wash gradients.
+       2. TYPE        Grotesk for language, tabular mono for every number. Times, fares and
+                      references are the product, so they are set in mono and given the largest
+                      sizes; prose is small and quiet. Micro-labels are 10px, uppercase, widely
+                      tracked, and carry the hierarchy that a heading would otherwise carry.
+       3. SPACE       4px base: 4 8 12 16 20 28 40. No decorative whitespace.
+       4. RADIUS      Zero on every panel and band. 2px on controls only. Hard edges are the
+                      signature; nothing floats.
+       5. COMPONENTS  Flat fills, 1px hairline borders, no shadows anywhere. A primary action is
+                      a solid cobalt rectangle; a secondary is a hairline box.
+       6. GRID        Full-bleed horizontal bands, each with a centred 1120px measure. Content is
+                      asymmetric: a wide working column beside a narrow ticket rail.
+       7. ICONS       Inline SVG only, 1.5px strokes, currentColor, geometric. A route motif
+                      (dot, rule, chevron) is the one repeated ornament. No imagery.
+
+     TWO RULES CONSTRAIN EVERYTHING BELOW, and they outrank the design.
+
+     (a) Nothing may announce that an operation is running. No spinners, no busy cursors, no
+         skeletons, no progress bars. A seeded scenario blanks the page's only progress message
+         and the evaluator has to be able to observe that absence.
+
+     (b) No rule may clip, transform, overlay or animate the geometry of a control. Findings are
+         measured from real boxes: an ancestor with overflow other than visible is read as
+         clipping, and anything covering a control's centre point is read as occlusion. The only
+         clipping rule in this file is .actions.constrained, which a scenario turns on
+         deliberately. There is no other overflow, no position:sticky, no transform, and no
+         transition on anything but colour.
+     =========================================================================================== */
+  :root {
+    color-scheme: light;
+    --canvas:#e9ebf0;
+    --panel:#ffffff;
+    --inset:#f3f4f8;
+    --ink:#0b0e14;
+    --ink-2:#565d6b;
+    --ink-3:#878e9c;
+    --hair:#d2d6de;
+    --accent:#0033cc;
+    --accent-ink:#002aa8;
+    --accent-wash:#e7ecfc;
+    --go:#00614a;
+    --flag:#b3123c;
+    --sans:Inter,"Segoe UI Variable Text","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    --mono:"Cascadia Mono","Roboto Mono",Consolas,"SF Mono",ui-monospace,monospace;
+    --r:2px;
+  }
+  * { box-sizing:border-box; }
+  body {
+    margin:0;
+    font:400 13px/1.5 var(--sans);
+    color:var(--ink);
+    background:var(--canvas);
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap { max-width:1120px; margin:0 auto; padding:0 28px; }
+
+  /* -- 1. Masthead: a full-bleed near-black band, 42px, no hero ---------------------------- */
+  .mast { background:var(--ink); color:#fff; }
+  .mast .wrap { display:flex; align-items:center; gap:20px; height:42px; }
+  .mark { width:19px; height:19px; flex:none; display:block; }
+  .wordmark {
+    font-size:13px; font-weight:600; letter-spacing:.14em; text-transform:uppercase;
+  }
+  .mast nav { display:flex; gap:18px; margin-left:14px; color:#9aa2b1; font-size:11px;
+    letter-spacing:.09em; text-transform:uppercase; }
+  .mast nav span:first-child { color:#fff; }
+  .tag {
+    margin-left:auto; font-family:var(--mono); font-size:10px; letter-spacing:.12em;
+    text-transform:uppercase; color:#9aa2b1; border-left:1px solid #2a2f3a; padding-left:16px;
+  }
+
+  /* -- 2. Trip band: the search surface, full-bleed cobalt --------------------------------- */
+  .strip { background:var(--accent); color:#fff; }
+  .strip .wrap { display:flex; align-items:stretch; gap:0; padding-top:0; padding-bottom:0; }
+  .seg {
+    padding:13px 22px 14px 0; margin-right:22px; border-right:1px solid rgba(255,255,255,.22);
+    display:flex; flex-direction:column; justify-content:center; gap:3px;
+  }
+  .seg:first-child { padding-left:0; }
+  .seg .k { font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:#b9c8fb; }
+  .seg .v { font-size:15px; font-weight:500; letter-spacing:-.01em; }
+  .seg .v em { font-style:normal; font-family:var(--mono); font-size:13px; color:#cdd8fc;
+    margin-left:6px; letter-spacing:.02em; }
+  .seg--act {
+    margin-left:auto; margin-right:0; border-right:0; padding-right:0;
+    flex-direction:row; align-items:center; justify-content:flex-end; gap:14px;
+    min-width:330px;
+  }
+  /* The status region stays inline so that an empty one has no box at all, exactly as before.
+     The segment reserves its own width instead, so the search control never moves when the
+     page starts or stops talking. A control that jumps is a geometry change the transient
+     tracker would have to explain. */
+  .strip .status { color:#cdd8fc; }
+
+  /* -- 3. Working area --------------------------------------------------------------------- */
+  main { padding:0 0 40px; }
+  .page { padding-top:28px; }
+  section[hidden] { display:none !important; }
+  [hidden] { display:none !important; }
+
+  /* An asymmetric split: a wide working column and a narrow ticket rail. */
+  .split { display:grid; grid-template-columns:minmax(0,1fr) 272px; gap:28px; align-items:start; }
+
+  .panel { background:var(--panel); border:1px solid var(--hair); padding:22px 24px 24px; }
+  .panel--flush { padding:0; }
+
+  /* The eyebrow carries the hierarchy, so headings stay small and dense. */
+  .eyebrow {
+    display:flex; align-items:center; gap:9px; font-size:10px; letter-spacing:.16em;
+    text-transform:uppercase; color:var(--ink-3); margin:0 0 5px;
+  }
+  .eyebrow::before { content:""; width:14px; height:3px; background:var(--accent); flex:none; }
+  h1 { font-size:21px; line-height:1.2; letter-spacing:-.025em; font-weight:600; margin:0 0 3px; }
+  h2 { font-size:21px; line-height:1.2; letter-spacing:-.025em; font-weight:600; margin:0 0 3px; }
+  p { margin:0 0 9px; }
+  .lede { color:var(--ink-2); margin:0 0 18px; }
+  .muted { color:var(--ink-2); }
+  .micro { font-size:11px; color:var(--ink-3); }
+
+  /* -- 4. Controls ------------------------------------------------------------------------- */
+  button {
+    font:500 13px/1 var(--sans); letter-spacing:.01em;
+    padding:11px 18px; border-radius:var(--r); border:1px solid var(--accent);
+    background:var(--accent); color:#fff; cursor:pointer;
+    transition:background-color .12s linear, border-color .12s linear, color .12s linear;
+  }
+  button:hover { background:var(--accent-ink); border-color:var(--accent-ink); }
+  button:focus-visible { outline:2px solid var(--ink); outline-offset:2px; }
+  .strip button { background:#fff; border-color:#fff; color:var(--accent-ink); font-weight:600; }
+  .strip button:hover { background:#dfe6fb; border-color:#dfe6fb; }
+  button.ghost { background:transparent; color:var(--ink); border-color:var(--hair); }
+  button.ghost:hover { background:var(--inset); border-color:#b9bfca; }
+  /* Inert without implying that anything is in progress. */
+  button[disabled] { opacity:.42; cursor:not-allowed; }
+
+  label { display:block; font-size:10px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--ink-3); margin-bottom:7px; }
+  input[type=text] {
+    font:400 15px/1.3 var(--sans); padding:11px 12px; border:1px solid #b6bcc7;
+    border-radius:var(--r); width:100%; max-width:360px; background:#fff; color:var(--ink);
+  }
+  input[type=text]:focus { outline:2px solid var(--accent); outline-offset:0; border-color:var(--accent); }
+
+  /* -- 5. Results: an itinerary list, not cards -------------------------------------------- */
+  .toolbar {
+    display:flex; align-items:baseline; gap:14px; padding:11px 24px;
+    border-bottom:1px solid var(--hair); font-size:11px; color:var(--ink-3);
+    letter-spacing:.06em; text-transform:uppercase;
+  }
+  .toolbar b { color:var(--ink); font-weight:600; }
+  .toolbar .right { margin-left:auto; }
+  #results { list-style:none; margin:0; padding:0; }
+  #results .row {
+    display:grid; grid-template-columns:auto minmax(0,1fr) auto auto; align-items:center;
+    gap:18px; padding:18px 22px; border-bottom:1px solid var(--hair);
+  }
+  #results .row:last-child { border-bottom:0; }
+  #results .row:hover { background:var(--inset); }
+  .times { font-family:var(--mono); font-size:19px; letter-spacing:-.02em;
+    font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .leg { display:flex; flex-direction:column; gap:3px; min-width:0; }
+  .leg .path { font-size:13px; color:var(--ink-2); white-space:nowrap; }
+  .leg .meta { font-size:11px; color:var(--ink-3); letter-spacing:.05em; text-transform:uppercase; }
+  .dot { width:5px; height:5px; background:var(--accent); flex:none; }
+  .line { height:1px; flex:1; min-width:16px; background:#c9ced7; }
+  .chev { width:0; height:0; border-left:5px solid var(--accent);
+    border-top:3.5px solid transparent; border-bottom:3.5px solid transparent; flex:none; }
+  .fare { text-align:right; }
+  .fare .amount { font-family:var(--mono); font-size:20px; font-weight:600;
+    font-variant-numeric:tabular-nums; letter-spacing:-.02em; display:block; }
+  .fare .per { font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3); }
+  .facts {
+    display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:1px; margin-top:22px;
+    background:var(--hair); border:1px solid var(--hair);
+  }
+  .facts > div { background:var(--panel); padding:14px 16px; display:flex; flex-direction:column; gap:4px; }
+  .facts .k { font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3); }
+  .facts .v { font-size:13px; }
+  .band { background:var(--ink); color:#fff; margin-top:56px; }
+  .band-in { padding:30px 28px 34px; }
+  .band-k {
+    margin:0 0 16px; font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:#8d93a5;
+  }
+  .routes { list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:1px; background:#242938; }
+  .routes li { background:var(--ink); padding:16px 18px; display:flex; align-items:baseline; gap:10px; }
+  .rc { font-family:var(--mono); font-size:15px; color:#6f8dff; letter-spacing:.04em; }
+  .rn { font-size:13px; white-space:nowrap; }
+  .rd { margin-left:auto; font-family:var(--mono); font-size:11px; color:#8d93a5; white-space:nowrap; }
+  .footnote {
+    margin:0; padding:12px 22px; border-top:1px solid var(--hair); background:var(--inset);
+    font-size:11px; color:var(--ink-3); letter-spacing:.02em;
+  }
+
+  /* -- 6. Ticket rail ---------------------------------------------------------------------- */
+  .rail { background:var(--panel); border:1px solid var(--hair); }
+  .rail .head {
+    background:var(--ink); color:#fff; padding:10px 18px; font-size:10px;
+    letter-spacing:.16em; text-transform:uppercase;
+  }
+  .rail .body { padding:16px 18px 18px; }
+  .rail dl { margin:0; display:grid; grid-template-columns:auto 1fr; gap:9px 14px; }
+  .rail dt { font-size:10px; letter-spacing:.13em; text-transform:uppercase; color:var(--ink-3);
+    align-self:center; }
+  .rail dd { margin:0; font-size:13px; text-align:right; font-variant-numeric:tabular-nums; }
+  .rail .route { display:flex; align-items:center; gap:12px; padding-bottom:14px;
+    margin-bottom:14px; border-bottom:1px solid var(--hair); }
+  .rail .route .path { flex:1; display:flex; align-items:center; gap:0; min-width:0; }
+  .rail .code { font-family:var(--mono); font-size:19px; font-weight:600; letter-spacing:.02em; }
+
+  /* -- 7. Fare table: exactly two labelled amounts ----------------------------------------- */
+  .fares { margin:18px 0 0; border-top:1px solid var(--hair); }
+  .fares .line-item {
+    display:flex; align-items:baseline; gap:16px; padding:11px 0;
+    border-bottom:1px solid var(--hair);
+  }
+  .fares .line-item .k { font-size:12px; color:var(--ink-2); }
+  .fares .line-item .a { margin-left:auto; font-family:var(--mono); font-size:14px;
+    font-variant-numeric:tabular-nums; }
+  .fares .line-item--total { border-bottom:0; padding-bottom:0; }
+  .fares .line-item--total .k { font-size:13px; color:var(--ink); font-weight:600; }
+  .fares .line-item--total .a { font-size:22px; font-weight:600; letter-spacing:-.02em; }
+
+  /* A price change is a signal, not a decoration: a hard crimson rule, no cream, no rounding. */
+  .notice {
+    border-left:3px solid var(--flag); background:#fff; color:var(--ink);
+    padding:10px 0 10px 14px; margin:16px 0 0; font-size:12.5px; line-height:1.5;
+  }
+  .notice::before {
+    content:"Price change"; display:block; font-size:10px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--flag); margin-bottom:3px; font-weight:600;
+  }
+
+  /* The one deliberate clipping rule in this file. A scenario turns it on; when it is on, the
+     confirm control is cut off by an ancestor's overflow and only geometry can see it. */
+  .actions { padding-top:20px; display:flex; flex-direction:column; gap:10px; align-items:flex-start; }
+  .actions.constrained { max-height:12px; overflow:hidden; padding-top:0; }
+
+  .status { font-size:12px; color:var(--ink-2); }
+  #confirm-status { display:block; padding-top:10px; }
+
+  /* -- 8. Confirmation --------------------------------------------------------------------- */
+  .stamp { display:flex; align-items:center; gap:10px; color:var(--go); margin-bottom:14px; }
+  .stamp svg { width:18px; height:18px; }
+  .stamp span { font-size:10px; letter-spacing:.16em; text-transform:uppercase; font-weight:600; }
+  #section-confirmation h2 { margin-bottom:10px; }
+  #confirmation-reference {
+    font-family:var(--mono); font-size:26px; font-weight:600; letter-spacing:-.01em;
+    font-variant-numeric:tabular-nums; margin:0 0 6px; padding:16px 0 0;
+    border-top:1px solid var(--hair);
+  }
+
+  /* -- 9. Narrow window: the ornamental rail is dropped so the working column keeps its
+        height budget. Nothing else reflows. ------------------------------------------------ */
+  @media (max-width:880px) {
+    .wrap { padding:0 18px; }
+    .split { grid-template-columns:minmax(0,1fr); gap:18px; }
+    .rail { display:none; }
+    .mast nav { display:none; }
+    .strip .wrap { flex-wrap:wrap; padding-top:12px; padding-bottom:14px; }
+    .seg { padding:0 16px 0 0; margin-right:16px; }
+    .seg--act { margin-left:0; width:100%; padding-top:14px; min-width:0;
+      justify-content:flex-start; }
+    .page { padding-top:18px; }
+    .panel { padding:18px; }
+    #results .row { grid-template-columns:auto minmax(0,1fr); gap:10px 18px; padding:16px 18px; }
+    .fare { grid-column:1 / -1; text-align:left; display:flex; align-items:baseline; gap:8px; }
+    #results .row > button { grid-column:1 / -1; justify-self:start; }
+    .toolbar { padding:10px 18px; }
+    .facts { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .routes { grid-template-columns:repeat(2,minmax(0,1fr)); gap:1px 1px; }
+    .band { margin-top:26px; }
+    .wordmark { white-space:nowrap; }
+    .mast .tag { display:none; }
+    .rd { display:none; }
+    .times { font-size:17px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="mast">
+  <div class="wrap">
+    <svg class="mark" viewBox="0 0 20 20" aria-hidden="true">
+      <path d="M3 3.5 9.5 10 3 16.5M10.5 3.5 17 10l-6.5 6.5" fill="none" stroke="#fff"
+            stroke-width="1.9" stroke-linecap="square"/>
+    </svg>
+    <span class="wordmark">Northwind Air</span>
+    <nav aria-hidden="true"><span>Book</span><span>Manage</span><span>Check-in</span><span>Status</span></nav>
+    <span class="tag">Sandbox · no real travel</span>
+  </div>
+</header>
+
+<main>
+
+  <section id="section-search" hidden>
+    <div class="strip">
+      <div class="wrap">
+        <div class="seg">
+          <span class="k">From</span>
+          <span class="v">Zurich <em>ZRH</em></span>
+        </div>
+        <div class="seg">
+          <span class="k">To</span>
+          <span class="v">London <em>LHR</em></span>
+        </div>
+        <div class="seg">
+          <span class="k">Depart</span>
+          <span class="v">20 Sep 2026</span>
+        </div>
+        <div class="seg">
+          <span class="k">Travellers</span>
+          <span class="v">1 adult, Economy</span>
+        </div>
+        <div class="seg seg--act">
+          <span class="status" id="search-status" role="status" aria-live="polite"></span>
+          <button id="search">Search flights</button>
+        </div>
+      </div>
+    </div>
+    <div class="wrap" style="padding-top:28px">
+      <p class="eyebrow">One way</p>
+      <h1>Zurich to London</h1>
+      <p class="lede">Fares shown are synthetic and nothing here reserves real travel.</p>
+      <div class="facts">
+        <div><span class="k">Cabin baggage</span><span class="v">1 bag, 8 kg included</span></div>
+        <div><span class="k">Change policy</span><span class="v">Permitted before departure</span></div>
+        <div><span class="k">Fare family</span><span class="v">Economy Light</span></div>
+        <div><span class="k">Operated by</span><span class="v">Northwind Air</span></div>
+      </div>
+    </div>
+    <div class="band">
+      <div class="wrap band-in">
+        <p class="band-k">Also served from Zurich</p>
+        <ul class="routes">
+          <li><span class="rc">AMS</span><span class="rn">Amsterdam</span><span class="rd">1 h 40 m</span></li>
+          <li><span class="rc">CPH</span><span class="rn">Copenhagen</span><span class="rd">2 h 05 m</span></li>
+          <li><span class="rc">LIS</span><span class="rn">Lisbon</span><span class="rd">2 h 55 m</span></li>
+          <li><span class="rc">VIE</span><span class="rn">Vienna</span><span class="rd">1 h 20 m</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap page">
+
+    <section id="section-results" hidden>
+      <p class="eyebrow">Step 2 of 4</p>
+      <h2>Available flights</h2>
+      <p class="lede">Zurich to London · 20 September 2026 · 1 adult</p>
+      <div class="split">
+        <div class="panel panel--flush">
+          <div class="toolbar">
+            <span><b>1</b> result</span>
+            <span class="right">Sorted by price</span>
+          </div>
+          <ul id="results"></ul>
+          <p class="footnote">Hand baggage included · Changes for a fee · Non-refundable · Fares are
+            synthetic and hold no seat</p>
+        </div>
+        <aside class="rail">
+          <div class="head">Your trip</div>
+          <div class="body">
+            <div class="route">
+              <span class="code">ZRH</span>
+              <span class="path"><span class="dot"></span><span class="line"></span><span class="chev"></span></span>
+              <span class="code">LHR</span>
+            </div>
+            <dl>
+              <dt>Date</dt><dd>20 Sep 2026</dd>
+              <dt>Cabin</dt><dd>Economy</dd>
+              <dt>Travellers</dt><dd>1 adult</dd>
+              <dt>Type</dt><dd>One way</dd>
+            </dl>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="section-details" hidden>
+      <p class="eyebrow">Step 3 of 4</p>
+      <h2>Passenger details</h2>
+      <p class="lede">The name must match the travel document used at the gate.</p>
+      <div class="split">
+        <div class="panel">
+          <label for="passenger">Passenger full name</label>
+          <input type="text" id="passenger" autocomplete="off" spellcheck="false">
+          <p class="micro" style="margin:8px 0 0">Given names followed by family name.</p>
+          <div class="actions" style="padding-top:22px">
+            <button id="to-review">Continue to review</button>
+            <button id="back-to-results" class="ghost" aria-label="Back to results">Back</button>
+          </div>
+        </div>
+        <aside class="rail">
+          <div class="head">Your trip</div>
+          <div class="body">
+            <div class="route">
+              <span class="code">ZRH</span>
+              <span class="path"><span class="dot"></span><span class="line"></span><span class="chev"></span></span>
+              <span class="code">LHR</span>
+            </div>
+            <dl>
+              <dt>Date</dt><dd>20 Sep 2026</dd>
+              <dt>Cabin</dt><dd>Economy</dd>
+              <dt>Travellers</dt><dd>1 adult</dd>
+            </dl>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="section-review" hidden>
+      <p class="eyebrow">Step 4 of 4</p>
+      <h2>Review and confirm</h2>
+      <p class="lede">Check the itinerary and the total before confirming.</p>
+      <div class="split">
+        <div class="panel">
+          <p id="review-itinerary"></p>
+          <p id="review-passenger" class="muted"></p>
+          <div class="fares">
+            <div class="line-item">
+              <span class="k">Selected fare</span>
+              <span class="a" id="selected-fare"></span>
+            </div>
+            <div class="line-item line-item--total">
+              <span class="k">Checkout total</span>
+              <span class="a" id="checkout-total"></span>
+            </div>
+          </div>
+          <p id="disclosure" class="notice" hidden></p>
+          <div class="actions" id="review-actions">
+            <button id="confirm">Confirm booking</button>
+            <button id="back-to-details" class="ghost" aria-label="Back to passenger details">Back</button>
+          </div>
+          <span class="status" id="confirm-status" role="status" aria-live="polite"></span>
+        </div>
+        <aside class="rail">
+          <div class="head">Itinerary</div>
+          <div class="body">
+            <div class="route">
+              <span class="code">ZRH</span>
+              <span class="path"><span class="dot"></span><span class="line"></span><span class="chev"></span></span>
+              <span class="code">LHR</span>
+            </div>
+            <dl>
+              <dt>Flight</dt><dd>NW 0001</dd>
+              <dt>Depart</dt><dd>08:15</dd>
+              <dt>Arrive</dt><dd>09:45</dd>
+              <dt>Cabin</dt><dd>Economy</dd>
+            </dl>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="section-confirmation" hidden>
+      <div class="panel" style="max-width:560px">
+        <div class="stamp">
+          <svg viewBox="0 0 20 20" aria-hidden="true">
+            <path d="M3 10.5 8 15.5 17 5" fill="none" stroke="currentColor" stroke-width="1.8"/>
+          </svg>
+          <span>Ticketed</span>
+        </div>
+        <h2>Booking confirmed</h2>
+        <p class="lede" style="margin-bottom:0">Zurich to London · 20 September 2026 · Economy</p>
+        <p id="confirmation-reference"></p>
+        <p class="micro" style="margin:0">A confirmation email would be sent in a production system.</p>
+      </div>
+    </section>
+
+  </div>
+</main>
+<script src="/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,203 @@
+{
+  "schema_version": 1,
+  "id": "workspace-subscription",
+  "mode": "verify",
+  "url": "http://127.0.0.1:8112/",
+  "allowed_origins": [
+    "http://127.0.0.1:8112"
+  ],
+  "task": "Start a sandbox subscription on the Team plan for a workspace called Northwind QA with the admin email qa@example.invalid. Check availability, review the subscription and start it. Stop once the confirmation is visible.",
+  "viewport": {
+    "width": 1120,
+    "height": 900
+  },
+  "facts": {
+    "plan": "Team",
+    "advertised_price": "USD 40.00 per month",
+    "workspace": "Northwind QA",
+    "email": "qa@example.invalid"
+  },
+  "probes": [
+    {
+      "id": "reach-review",
+      "instruction": "Continue until the review step shows the checkout total.",
+      "required_checks": [
+        "availability-shows-review",
+        "checkout-total-explained",
+        "availability-progress-feedback",
+        "subscribe-action-usable"
+      ]
+    },
+    {
+      "id": "reach-confirmation",
+      "instruction": "Finish by starting the subscription.",
+      "required_checks": [
+        "confirmation-appears"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "id": "availability-shows-review",
+      "family": "interaction_correctness",
+      "scope": "transition",
+      "applies_when": {
+        "predicate": "action_executed",
+        "value": "Check workspace availability"
+      },
+      "requirement": "Checking workspace availability shows the review step with a checkout total.",
+      "deadline_ms": 4000,
+      "severity": "high",
+      "required_evidence": [
+        "observation"
+      ],
+      "expect": {
+        "effect": "The review section is visible and states a checkout total for the chosen plan.",
+        "ready_when": {
+          "predicate": "text_contains",
+          "value": "Checkout total"
+        }
+      }
+    },
+    {
+      "id": "availability-progress-feedback",
+      "family": "experience_feedback",
+      "scope": "transition",
+      "applies_when": {
+        "predicate": "action_executed",
+        "value": "Check workspace availability"
+      },
+      "requirement": "While the workspace availability check is running the page says that it is working.",
+      "deadline_ms": 4000,
+      "severity": "medium",
+      "required_evidence": [
+        "telemetry_window"
+      ],
+      "expect": {
+        "operation": "the workspace availability check",
+        "threshold_ms": 1000,
+        "ready_when": {
+          "predicate": "text_contains",
+          "value": "Checkout total"
+        }
+      }
+    },
+    {
+      "id": "checkout-total-explained",
+      "family": "unexpected_state",
+      "scope": "transition",
+      "applies_when": {
+        "predicate": "all_of",
+        "clauses": [
+          {
+            "predicate": "text_contains",
+            "value": "Checkout total"
+          },
+          {
+            "predicate": "text_contains",
+            "value": "Selected plan"
+          }
+        ]
+      },
+      "requirement": "If the checkout total is higher than the plan price the customer chose, the page explains that specific change before asking them to subscribe.",
+      "deadline_ms": 1000,
+      "severity": "high",
+      "required_evidence": [
+        "observation"
+      ],
+      "expect": {
+        "money": {
+          "before_label": "Selected plan:",
+          "after_label": "Checkout total:",
+          "currency": "USD",
+          "basis": [
+            "per month"
+          ]
+        },
+        "require_acknowledgement": true
+      }
+    },
+    {
+      "id": "subscribe-action-usable",
+      "family": "layout_integrity",
+      "scope": "transition",
+      "applies_when": {
+        "predicate": "text_contains",
+        "value": "Review subscription"
+      },
+      "requirement": "The customer can see and use the control that starts the subscription.",
+      "deadline_ms": 1000,
+      "severity": "high",
+      "required_evidence": [
+        "observation"
+      ],
+      "expect": {
+        "controls": [
+          "Start sandbox subscription",
+          "Accept price change and start subscription"
+        ]
+      }
+    },
+    {
+      "id": "confirmation-appears",
+      "family": "interaction_correctness",
+      "scope": "transition",
+      "applies_when": {
+        "predicate": "text_contains",
+        "value": "4. Confirmation"
+      },
+      "requirement": "Starting the subscription shows a confirmation naming the active subscription.",
+      "deadline_ms": 2500,
+      "severity": "high",
+      "required_evidence": [
+        "observation"
+      ],
+      "expect": {
+        "effect": "A confirmation naming an active subscription identifier is visible.",
+        "ready_when": {
+          "predicate": "text_contains",
+          "value": "Subscription active"
+        }
+      }
+    },
+    {
+      "id": "journey-advancing",
+      "family": "task_progress",
+      "scope": "transition",
+      "applies_when": {
+        "predicate": "always"
+      },
+      "requirement": "Each action the customer takes moves the signup forward.",
+      "deadline_ms": 1000,
+      "severity": "medium",
+      "required": false,
+      "expect": {
+        "stall_after_unchanged_actions": 2
+      }
+    }
+  ],
+  "acceptance": {
+    "text_contains": [
+      "Subscription",
+      "active"
+    ],
+    "backend": {
+      "path": "/__test__/subscriptions",
+      "expect_records": [
+        {
+          "plan_id": "P-TEAM",
+          "plan": "Team",
+          "workspace": "Northwind QA",
+          "currency": "USD"
+        }
+      ]
+    }
+  },
+  "budgets": {
+    "wall_ms": 300000,
+    "model_requests": 80,
+    "steps": 24,
+    "usd": "0.10"
+  },
+  "expected_console_errors": []
+}

@@ -143,7 +143,7 @@ def test_target_head_receives_control_state_and_full_next_step_rules(monkeypatch
 def test_quoted_task_text_still_uses_the_llm(monkeypatch):
     monkeypatch.setenv("TEXT_MODEL_API_KEY", "test")
     post = Mock(return_value={"choices": [{"message": {"content": '{"text":"Zurich"}'}}]})
-    monkeypatch.setattr(model, "post_json", post)
+    monkeypatch.setattr(model, "post_text_json", post)
     context = model.field_context('Fly from "Zurich" to London', page()["actions"][0], page(), [])
     assert model.field_text(context)[0] == "Zurich"
     assert post.call_count == 1
@@ -255,6 +255,12 @@ def test_the_policy_licenses_waiting_while_an_operation_is_running():
     assert "still running" in NEXT_ACTION and "is not a reason to" in NEXT_ACTION
 
 
+def test_the_policy_scrolls_for_incomplete_goals_before_done():
+    from jev_ultrafast.questions import NEXT_ACTION
+
+    assert "SCROLL_DOWN before choosing DONE or BLOCKED" in NEXT_ACTION
+
+
 def test_stale_observation_preserves_executed_action(runner):
     runner.state["decision"] = decision("e3")
     runner.state["browser"].observe.side_effect = StalePage("changed")
@@ -344,7 +350,7 @@ def test_flight_verification_rejects_wrong_trip(changed):
 )
 def test_text_helper_rejects_invalid_values(monkeypatch, content):
     monkeypatch.setenv("TEXT_MODEL_API_KEY", "test")
-    monkeypatch.setattr(model, "post_json", Mock(return_value={"choices": [{"message": {"content": content}}]}))
+    monkeypatch.setattr(model, "post_text_json", Mock(return_value={"choices": [{"message": {"content": content}}]}))
     with pytest.raises(ValueError, match="nothing typed"):
         model.field_text({"goal": "Find a flight"})
 
@@ -427,3 +433,66 @@ def test_existing_vendor_tuning_is_unchanged(monkeypatch):
     assert model.text_tuning("openrouter") == {"max_tokens": 1024, "reasoning": {"effort": "low"}}
     monkeypatch.setenv("TEXT_MODEL_REASONING", "none")
     assert model.text_tuning("openrouter") == {"max_tokens": 1024, "reasoning": {"enabled": False}}
+
+
+class _Response:
+    def __init__(self, status_code, payload=None):
+        self.status_code = status_code
+        self.is_error = status_code >= 400
+        self._payload = payload or {}
+
+    def json(self):
+        return self._payload
+
+
+def test_a_dropped_connection_is_retried_because_no_action_was_executed(monkeypatch):
+    """A transport failure happens before anything is clicked or typed, so the request is safe
+    to resend. The rule it must not break is that a browser mutation is never retried."""
+    import httpx
+
+    monkeypatch.setattr(model.time, "sleep", lambda _s: None)
+    attempts = []
+
+    class Client:
+        def post(self, url, json, headers):
+            attempts.append(json)
+            if len(attempts) < 3:
+                raise httpx.ConnectError("connection reset")
+            return _Response(200, {"ok": True})
+
+    assert model._post_json(Client(), "http://127.0.0.1/v1", "k", {"body": 1}) == {"ok": True}
+    assert len(attempts) == 3
+    assert attempts[0] == attempts[-1], "the retry must resend the same request, not a new one"
+
+
+def test_a_connection_that_never_recovers_reports_the_transport_cause(monkeypatch):
+    import httpx
+
+    monkeypatch.setattr(model.time, "sleep", lambda _s: None)
+    calls = []
+
+    class Client:
+        def post(self, url, json, headers):
+            calls.append(1)
+            raise httpx.ReadTimeout("timed out")
+
+    with pytest.raises(RuntimeError) as failure:
+        model._post_json(Client(), "http://127.0.0.1/v1", "k", {})
+    assert len(calls) == 3
+    assert "ReadTimeout" in str(failure.value)
+    assert "no action executed" in str(failure.value)
+
+
+def test_a_provider_refusal_is_not_retried(monkeypatch):
+    """A 400 is the provider's considered answer. Resending it only burns budget."""
+    monkeypatch.setattr(model.time, "sleep", lambda _s: None)
+    calls = []
+
+    class Client:
+        def post(self, url, json, headers):
+            calls.append(1)
+            return _Response(400)
+
+    with pytest.raises(RuntimeError, match="HTTP 400"):
+        model._post_json(Client(), "http://127.0.0.1/v1", "k", {})
+    assert calls == [1]

@@ -30,3 +30,9 @@ artifacts/visuals/
 
 dist/
 .tools/
+
+# The npm shim's private Python environment and packed tarballs
+npm/.venv/
+npm/*.tgz
+npm/LICENSE
+npm/vendor/*.whl

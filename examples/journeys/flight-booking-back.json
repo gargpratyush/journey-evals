@@ -1,0 +1,201 @@
+{
+  "schema_version": 1,
+  "id": "flight-booking-back",
+  "mode": "verify",
+  "url": "http://127.0.0.1:8111/",
+  "allowed_origins": [
+    "http://127.0.0.1:8111"
+  ],
+  "task": "Book the one-way Zurich to London flight departing 20 September 2026 for one adult in Economy for the passenger Test Passenger. After reaching the review step, go back to the passenger details to check them, then continue and confirm the booking. Stop once the confirmation is visible.",
+  "viewport": {
+    "width": 1120,
+    "height": 780
+  },
+  "facts": {
+    "itinerary": "Zurich to London, 20 September 2026, 1 adult, Economy",
+    "advertised_fare": "USD 100.00",
+    "passenger": "Test Passenger"
+  },
+  "probes": [
+    {
+      "id": "reach-details",
+      "instruction": "Search for the flight, choose the Economy fare, and enter the passenger name.",
+      "required_checks": [
+        "search-shows-results",
+        "details-accept-passenger"
+      ]
+    },
+    {
+      "id": "return-to-details",
+      "instruction": "From the review step, use Back to return to the passenger details.",
+      "required_checks": [
+        "details-survive-going-back",
+        "returned-view-is-details"
+      ]
+    },
+    {
+      "id": "reach-confirmation",
+      "instruction": "Continue forward again and confirm the booking.",
+      "required_checks": [
+        "confirmation-appears"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "id": "search-shows-results",
+      "family": "interaction_correctness",
+      "scope": "transition",
+      "applies_when": {
+        "predicate": "action_executed",
+        "value": "Search flights"
+      },
+      "requirement": "Searching for the declared itinerary shows at least one bookable flight.",
+      "deadline_ms": 4000,
+      "severity": "high",
+      "required_evidence": [
+        "observation"
+      ],
+      "expect": {
+        "effect": "A list of available flights with a selectable Economy fare is visible.",
+        "ready_when": {
+          "predicate": "text_contains",
+          "value": "Available flights"
+        }
+      }
+    },
+    {
+      "id": "details-accept-passenger",
+      "family": "interaction_correctness",
+      "scope": "transition",
+      "applies_when": {
+        "predicate": "action_executed",
+        "value": "Passenger full name"
+      },
+      "requirement": "The passenger name the traveller types is retained in the passenger field.",
+      "deadline_ms": 1500,
+      "severity": "high",
+      "required_evidence": [
+        "observation"
+      ],
+      "expect": {
+        "effect": "The passenger full name field holds the name that was typed.",
+        "ready_when": {
+          "predicate": "not",
+          "clause": {
+            "predicate": "control_value_is",
+            "value": "Passenger full name",
+            "expected": ""
+          }
+        }
+      }
+    },
+    {
+      "id": "details-survive-going-back",
+      "family": "interaction_correctness",
+      "scope": "transition",
+      "applies_when": {
+        "predicate": "action_executed",
+        "value": "Back to passenger details"
+      },
+      "requirement": "Going back from the review step to the passenger details keeps the details the traveller already entered. Losing them silently makes the traveller re-enter data they already gave.",
+      "deadline_ms": 1500,
+      "severity": "high",
+      "required_evidence": [
+        "observation"
+      ],
+      "expect": {
+        "effect": "The passenger full name field still holds Test Passenger after going back.",
+        "ready_when": {
+          "predicate": "control_value_is",
+          "expected": "Test Passenger",
+          "value": "Passenger full name"
+        }
+      }
+    },
+    {
+      "id": "returned-view-is-details",
+      "family": "layout_integrity",
+      "scope": "transition",
+      "applies_when": {
+        "predicate": "text_contains",
+        "value": "Passenger details"
+      },
+      "requirement": "The passenger details step offers a usable control to continue forward again.",
+      "deadline_ms": 1000,
+      "severity": "medium",
+      "required_evidence": [
+        "observation"
+      ],
+      "expect": {
+        "controls": [
+          "Continue to review"
+        ]
+      }
+    },
+    {
+      "id": "confirmation-appears",
+      "family": "interaction_correctness",
+      "scope": "transition",
+      "applies_when": {
+        "predicate": "action_executed",
+        "value": "Confirm booking"
+      },
+      "requirement": "Confirming the booking shows a confirmation with a booking reference.",
+      "deadline_ms": 2500,
+      "severity": "high",
+      "required_evidence": [
+        "observation"
+      ],
+      "expect": {
+        "effect": "A booking confirmation naming a booking reference is visible.",
+        "ready_when": {
+          "predicate": "text_contains",
+          "value": "Booking confirmed"
+        }
+      }
+    },
+    {
+      "id": "journey-advancing",
+      "family": "task_progress",
+      "scope": "transition",
+      "applies_when": {
+        "predicate": "always"
+      },
+      "requirement": "The traveller keeps making headway. This journey deliberately includes a step back to re-check the passenger details, so returning to an earlier step is part of the declared task and is not a stall; repeatedly acting with no change is.",
+      "deadline_ms": 1000,
+      "severity": "medium",
+      "required": false,
+      "expect": {
+        "stall_after_unchanged_actions": 3
+      }
+    }
+  ],
+  "acceptance": {
+    "url_path_is": "/confirmation",
+    "text_contains": [
+      "Booking confirmed",
+      "Reference:"
+    ],
+    "backend": {
+      "path": "/__test__/bookings",
+      "expect_records": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "cabin": "Economy",
+          "currency": "USD",
+          "passenger": "Test Passenger"
+        }
+      ]
+    }
+  },
+  "budgets": {
+    "wall_ms": 300000,
+    "model_requests": 100,
+    "steps": 30,
+    "usd": "0.10"
+  },
+  "expected_console_errors": []
+}

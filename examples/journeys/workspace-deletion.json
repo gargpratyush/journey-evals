@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "id": "workspace-deletion",
+  "mode": "verify",
+  "url": "http://127.0.0.1:8113/workspaces",
+  "allowed_origins": [
+    "http://127.0.0.1:8113"
+  ],
+  "task": "You administer the Meridian sandbox. Delete the Atlas workspace, reading what the page says about deleting it before you do. Then put Atlas back using the recovery the page offers. Stop once Atlas is active again.",
+  "viewports": [
+    "standard"
+  ],
+  "facts": {
+    "workspace": "Atlas",
+    "why": "Atlas was created by mistake and has to go, but the data must be recoverable."
+  },
+  "probes": [
+    {
+      "id": "reach-delete",
+      "instruction": "Open the delete step for Atlas and read it before confirming.",
+      "required_checks": [
+        "deletion-blast-radius-stated",
+        "delete-control-usable"
+      ]
+    },
+    {
+      "id": "reach-restored",
+      "instruction": "Delete Atlas, then restore it from Recently deleted.",
+      "required_checks": [
+        "restore-promise-kept"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "id": "deletion-blast-radius-stated",
+      "family": "unexpected_state",
+      "scope": "transition",
+      "applies_when": {
+        "predicate": "all_of",
+        "clauses": [
+          {
+            "predicate": "text_contains",
+            "value": "Delete workspace"
+          },
+          {
+            "predicate": "control_present",
+            "value": "Delete workspace"
+          }
+        ]
+      },
+      "requirement": "Before the administrator can delete Atlas, the page states what deleting it destroys and who it affects, and whether it can be recovered afterwards.",
+      "deadline_ms": 1500,
+      "severity": "high",
+      "required_evidence": [
+        "observation"
+      ],
+      "expect": {
+        "require_acknowledgement": true
+      }
+    },
+    {
+      "id": "delete-control-usable",
+      "family": "layout_integrity",
+      "scope": "transition",
+      "applies_when": {
+        "predicate": "text_contains",
+        "value": "I understand what deleting this workspace does."
+      },
+      "requirement": "The administrator can see and use the control that deletes the workspace.",
+      "deadline_ms": 1000,
+      "severity": "high",
+      "required_evidence": [
+        "observation"
+      ],
+      "expect": {
+        "controls": [
+          "Delete workspace"
+        ]
+      }
+    },
+    {
+      "id": "restore-promise-kept",
+      "family": "interaction_correctness",
+      "scope": "transition",
+      "applies_when": {
+        "predicate": "action_executed",
+        "value": "Restore Atlas"
+      },
+      "requirement": "Restoring Atlas from Recently deleted actually brings it back, as the deletion step said it would.",
+      "deadline_ms": 2500,
+      "severity": "high",
+      "required_evidence": [
+        "observation"
+      ],
+      "expect": {
+        "effect": "Atlas is listed among the active workspaces again, with its projects, documents and members.",
+        "ready_when": {
+          "predicate": "text_contains",
+          "value": "Atlas restored"
+        }
+      }
+    },
+    {
+      "id": "journey-advancing",
+      "family": "task_progress",
+      "scope": "transition",
+      "applies_when": {
+        "predicate": "always"
+      },
+      "requirement": "Each action the administrator takes moves the deletion and the recovery forward.",
+      "deadline_ms": 1000,
+      "severity": "medium",
+      "required": false,
+      "expect": {
+        "stall_after_unchanged_actions": 3
+      }
+    }
+  ],
+  "acceptance": {
+    "url_path_is": "/workspaces",
+    "text_contains": [
+      "Atlas restored"
+    ],
+    "backend": {
+      "path": "/__test__/workspaces",
+      "reset_path": "/__test__/reset",
+      "expect_records": [
+        {
+          "id": "atlas",
+          "name": "Atlas",
+          "status": "active",
+          "projects": 3,
+          "documents": 412,
+          "members": 12
+        },
+        {
+          "id": "beacon",
+          "name": "Beacon",
+          "status": "active",
+          "projects": 1,
+          "documents": 38,
+          "members": 4
+        }
+      ]
+    }
+  },
+  "budgets": {
+    "wall_ms": 300000,
+    "model_requests": 70,
+    "steps": 22,
+    "usd": "0.10"
+  },
+  "expected_console_errors": []
+}

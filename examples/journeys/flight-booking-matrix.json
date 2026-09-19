@@ -1,0 +1,230 @@
+{
+  "schema_version": 1,
+  "id": "flight-booking-matrix",
+  "mode": "verify",
+  "url": "http://127.0.0.1:8111/",
+  "allowed_origins": [
+    "http://127.0.0.1:8111"
+  ],
+  "task": "Book the one-way Zurich to London flight departing 20 September 2026 for one adult in Economy for the passenger Test Passenger. Review the booking and confirm it. Stop once the confirmation is visible.",
+  "viewport": [
+    "standard",
+    "mobile"
+  ],
+  "facts": {
+    "itinerary": "Zurich to London, 20 September 2026, 1 adult, Economy",
+    "advertised_fare": "USD 100.00",
+    "passenger": "Test Passenger"
+  },
+  "probes": [
+    {
+      "id": "reach-results",
+      "instruction": "Start by searching for the flight.",
+      "required_checks": [
+        "search-shows-results",
+        "search-progress-feedback"
+      ]
+    },
+    {
+      "id": "reach-review",
+      "instruction": "Continue until the review step shows the checkout total.",
+      "required_checks": [
+        "checkout-total-explained",
+        "confirm-action-usable"
+      ]
+    },
+    {
+      "id": "reach-confirmation",
+      "instruction": "Finish by confirming the booking.",
+      "required_checks": [
+        "confirmation-appears"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "id": "search-shows-results",
+      "family": "interaction_correctness",
+      "scope": "transition",
+      "applies_when": {
+        "predicate": "action_executed",
+        "value": "Search flights"
+      },
+      "requirement": "Searching for the declared itinerary shows at least one bookable flight.",
+      "deadline_ms": 4000,
+      "severity": "high",
+      "required_evidence": [
+        "observation"
+      ],
+      "expect": {
+        "effect": "A list of available flights with a selectable Economy fare is visible.",
+        "ready_when": {
+          "predicate": "text_contains",
+          "value": "Available flights"
+        }
+      }
+    },
+    {
+      "id": "search-progress-feedback",
+      "family": "experience_feedback",
+      "scope": "transition",
+      "applies_when": {
+        "predicate": "action_executed",
+        "value": "Search flights"
+      },
+      "requirement": "While the flight search is running the page tells the traveller that it is working.",
+      "deadline_ms": 4000,
+      "severity": "medium",
+      "required_evidence": [
+        "telemetry_window"
+      ],
+      "expect": {
+        "operation": "the flight search",
+        "threshold_ms": 1000,
+        "ready_when": {
+          "predicate": "text_contains",
+          "value": "Available flights"
+        }
+      }
+    },
+    {
+      "id": "search-stays-responsive",
+      "family": "input_responsiveness",
+      "scope": "transition",
+      "applies_when": {
+        "predicate": "action_executed",
+        "value": "Search flights"
+      },
+      "requirement": "Searching for flights does not freeze the page while it renders the results.",
+      "deadline_ms": 4000,
+      "severity": "medium",
+      "required_evidence": [
+        "telemetry_window"
+      ],
+      "expect": {
+        "operation": "rendering the flight results",
+        "blocking_budget_ms": 120
+      }
+    },
+    {
+      "id": "checkout-total-explained",
+      "family": "unexpected_state",
+      "scope": "transition",
+      "applies_when": {
+        "predicate": "all_of",
+        "clauses": [
+          {
+            "predicate": "text_contains",
+            "value": "Checkout total"
+          },
+          {
+            "predicate": "text_contains",
+            "value": "Selected fare"
+          }
+        ]
+      },
+      "requirement": "If the checkout total is higher than the fare the traveller selected, the page explains that specific change before asking them to confirm.",
+      "deadline_ms": 1000,
+      "severity": "high",
+      "required_evidence": [
+        "observation"
+      ],
+      "expect": {
+        "money": {
+          "before_label": "Selected fare",
+          "after_label": "Checkout total",
+          "currency": "USD",
+          "basis": [
+            "Zurich to London",
+            "1 adult"
+          ]
+        },
+        "require_acknowledgement": true
+      }
+    },
+    {
+      "id": "confirm-action-usable",
+      "family": "layout_integrity",
+      "scope": "transition",
+      "applies_when": {
+        "predicate": "text_contains",
+        "value": "Review and confirm"
+      },
+      "requirement": "The traveller can see and use the control that confirms the booking.",
+      "deadline_ms": 1000,
+      "severity": "high",
+      "required_evidence": [
+        "observation"
+      ],
+      "expect": {
+        "controls": [
+          "Confirm booking"
+        ]
+      }
+    },
+    {
+      "id": "confirmation-appears",
+      "family": "interaction_correctness",
+      "scope": "transition",
+      "applies_when": {
+        "predicate": "action_executed",
+        "value": "Confirm booking"
+      },
+      "requirement": "Confirming the booking shows a confirmation with a booking reference.",
+      "deadline_ms": 2500,
+      "severity": "high",
+      "required_evidence": [
+        "observation"
+      ],
+      "expect": {
+        "effect": "A booking confirmation naming a booking reference is visible.",
+        "ready_when": {
+          "predicate": "text_contains",
+          "value": "Booking confirmed"
+        }
+      }
+    },
+    {
+      "id": "journey-advancing",
+      "family": "task_progress",
+      "scope": "transition",
+      "applies_when": {
+        "predicate": "always"
+      },
+      "requirement": "Each action the traveller takes moves the booking forward.",
+      "deadline_ms": 1000,
+      "severity": "medium",
+      "required": false,
+      "expect": {
+        "stall_after_unchanged_actions": 2
+      }
+    }
+  ],
+  "acceptance": {
+    "url_path_is": "/confirmation",
+    "text_contains": [
+      "Booking confirmed",
+      "Reference:"
+    ],
+    "backend": {
+      "path": "/__test__/bookings",
+      "expect_records": [
+        {
+          "origin": "Zurich",
+          "destination": "London",
+          "date": "2026-09-20",
+          "cabin": "Economy",
+          "currency": "USD"
+        }
+      ],
+      "reset_path": "/__test__/reset"
+    }
+  },
+  "budgets": {
+    "wall_ms": 300000,
+    "model_requests": 80,
+    "steps": 24,
+    "usd": "0.10"
+  },
+  "expected_console_errors": []
+}

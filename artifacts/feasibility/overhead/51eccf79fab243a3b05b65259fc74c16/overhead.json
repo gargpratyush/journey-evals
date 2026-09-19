@@ -1,0 +1,737 @@
+{
+  "status": "GREEN",
+  "source_sha256": "eb504361ec8a8399fd6278d5055b60cce47d3ca6c37882258a67b59064d35a17",
+  "seed": 20260918,
+  "summary": {
+    "pairs_planned": 10,
+    "pairs_usable": 10,
+    "steps_per_run": 16,
+    "native_total_median_ms": {
+      "instrumented": 620,
+      "bare": 639
+    },
+    "native_median_step_ms": {
+      "instrumented": 41.03,
+      "bare": 39.91
+    },
+    "median_slowdown": -0.0299,
+    "median_step_delta_ms": 1.12,
+    "collector_events_median": 35.0,
+    "within_tolerance": true,
+    "tolerance": "investigate above 10% median slowdown or 20 ms per scripted step, whichever is larger"
+  },
+  "inference": "none; this arm never enables a model client",
+  "scope": "Arm D only: collector overhead on this fixture, not a browser-wide guarantee.",
+  "pairs": [
+    {
+      "pair": 0,
+      "order": [
+        "overhead-on",
+        "overhead-off"
+      ],
+      "overhead-on": {
+        "mode": "overhead-on",
+        "status": "COMPLETED",
+        "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\overhead-on-1c7756686d5947ef901dbf05bf51f411",
+        "wall_ms": 6816,
+        "steps": {
+          "instrumented": true,
+          "steps": 16,
+          "native_step_ms": [
+            9.746,
+            18.428,
+            7.15,
+            49.905,
+            20.717,
+            50.524,
+            62.034,
+            3.919,
+            74.855,
+            60.555,
+            6.285,
+            31.057,
+            39.942,
+            63.161,
+            61.596,
+            54.074
+          ],
+          "native_total_ms": 613.948,
+          "native_median_step_ms": 44.924,
+          "collector_events": 35
+        },
+        "error": null
+      },
+      "overhead-off": {
+        "mode": "overhead-off",
+        "status": "COMPLETED",
+        "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\overhead-off-0b2b543617a6483c971876956ce357d2",
+        "wall_ms": 6117,
+        "steps": {
+          "instrumented": false,
+          "steps": 16,
+          "native_step_ms": [
+            8.528,
+            16.71,
+            18.798,
+            24.459,
+            40.253,
+            55.007,
+            69.547,
+            3.573,
+            80.486,
+            35.884,
+            40.481,
+            26.151,
+            79.944,
+            68.329,
+            51.312,
+            48.905
+          ],
+          "native_total_ms": 668.367,
+          "native_median_step_ms": 40.367,
+          "collector_events": 0
+        },
+        "error": null
+      }
+    },
+    {
+      "pair": 1,
+      "order": [
+        "overhead-off",
+        "overhead-on"
+      ],
+      "overhead-off": {
+        "mode": "overhead-off",
+        "status": "COMPLETED",
+        "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\overhead-off-06d19929e5c54d7da9b5e3b761f0097c",
+        "wall_ms": 6309,
+        "steps": {
+          "instrumented": false,
+          "steps": 16,
+          "native_step_ms": [
+            6.809,
+            15.057,
+            16.816,
+            53.733,
+            29.265,
+            54.681,
+            53.015,
+            15.037,
+            54.661,
+            30.331,
+            32.708,
+            33.871,
+            44.135,
+            68.47,
+            66.896,
+            66.594
+          ],
+          "native_total_ms": 642.079,
+          "native_median_step_ms": 39.003,
+          "collector_events": 0
+        },
+        "error": null
+      },
+      "overhead-on": {
+        "mode": "overhead-on",
+        "status": "COMPLETED",
+        "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\overhead-on-295b2fbd151d4fbdbeb1ebca2b4339c4",
+        "wall_ms": 6376,
+        "steps": {
+          "instrumented": true,
+          "steps": 16,
+          "native_step_ms": [
+            10.331,
+            26.073,
+            16.818,
+            58.357,
+            6.742,
+            50.713,
+            34.081,
+            16.219,
+            13.184,
+            46.618,
+            16.204,
+            50.698,
+            50.873,
+            54.294,
+            62.754,
+            52.249
+          ],
+          "native_total_ms": 566.208,
+          "native_median_step_ms": 40.35,
+          "collector_events": 35
+        },
+        "error": null
+      }
+    },
+    {
+      "pair": 2,
+      "order": [
+        "overhead-off",
+        "overhead-on"
+      ],
+      "overhead-off": {
+        "mode": "overhead-off",
+        "status": "COMPLETED",
+        "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\overhead-off-77d5731eccd445b59d0d555eb581765e",
+        "wall_ms": 6299,
+        "steps": {
+          "instrumented": false,
+          "steps": 16,
+          "native_step_ms": [
+            7.483,
+            3.471,
+            28.435,
+            50.044,
+            24.785,
+            51.527,
+            31.233,
+            3.509,
+            33.044,
+            50.703,
+            5.755,
+            49.889,
+            48.747,
+            47.382,
+            63.01,
+            51.288
+          ],
+          "native_total_ms": 550.305,
+          "native_median_step_ms": 40.213,
+          "collector_events": 0
+        },
+        "error": null
+      },
+      "overhead-on": {
+        "mode": "overhead-on",
+        "status": "COMPLETED",
+        "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\overhead-on-1c299b025b7b4449bd366aef755adc57",
+        "wall_ms": 6381,
+        "steps": {
+          "instrumented": true,
+          "steps": 16,
+          "native_step_ms": [
+            20.233,
+            25.449,
+            34.48,
+            38.928,
+            6.711,
+            35.204,
+            52.627,
+            18.918,
+            58.337,
+            49.642,
+            6.269,
+            33.336,
+            25.835,
+            50.605,
+            61.24,
+            50.474
+          ],
+          "native_total_ms": 568.288,
+          "native_median_step_ms": 34.842,
+          "collector_events": 34
+        },
+        "error": null
+      }
+    },
+    {
+      "pair": 3,
+      "order": [
+        "overhead-on",
+        "overhead-off"
+      ],
+      "overhead-on": {
+        "mode": "overhead-on",
+        "status": "COMPLETED",
+        "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\overhead-on-2cd8e53d3b3a4811b3e9b796aa360092",
+        "wall_ms": 6677,
+        "steps": {
+          "instrumented": true,
+          "steps": 16,
+          "native_step_ms": [
+            23.044,
+            28.203,
+            16.583,
+            35.427,
+            5.556,
+            41.462,
+            61.108,
+            14.566,
+            67.352,
+            48.385,
+            30.346,
+            38.729,
+            68.613,
+            65.789,
+            45.164,
+            66.072
+          ],
+          "native_total_ms": 656.399,
+          "native_median_step_ms": 40.096,
+          "collector_events": 34
+        },
+        "error": null
+      },
+      "overhead-off": {
+        "mode": "overhead-off",
+        "status": "COMPLETED",
+        "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\overhead-off-14fdc5f4d92549918a739010cf6a1310",
+        "wall_ms": 6405,
+        "steps": {
+          "instrumented": false,
+          "steps": 16,
+          "native_step_ms": [
+            27.05,
+            28.576,
+            16.384,
+            45.983,
+            5.452,
+            26.79,
+            54.528,
+            14.751,
+            63.922,
+            49.47,
+            31.274,
+            39.619,
+            33.619,
+            62.954,
+            66.241,
+            64.52
+          ],
+          "native_total_ms": 631.133,
+          "native_median_step_ms": 36.619,
+          "collector_events": 0
+        },
+        "error": null
+      }
+    },
+    {
+      "pair": 4,
+      "order": [
+        "overhead-on",
+        "overhead-off"
+      ],
+      "overhead-on": {
+        "mode": "overhead-on",
+        "status": "COMPLETED",
+        "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\overhead-on-654b9e4a6feb4cb68f53888a72a7597d",
+        "wall_ms": 6457,
+        "steps": {
+          "instrumented": true,
+          "steps": 16,
+          "native_step_ms": [
+            21.048,
+            25.33,
+            16.312,
+            50.807,
+            5.969,
+            50.125,
+            38.339,
+            3.047,
+            58.85,
+            48.94,
+            31.717,
+            50.497,
+            28.111,
+            49.257,
+            61.632,
+            48.192
+          ],
+          "native_total_ms": 588.173,
+          "native_median_step_ms": 43.266,
+          "collector_events": 35
+        },
+        "error": null
+      },
+      "overhead-off": {
+        "mode": "overhead-off",
+        "status": "COMPLETED",
+        "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\overhead-off-003598215d164890b6bb5aefd2eaf6f0",
+        "wall_ms": 6066,
+        "steps": {
+          "instrumented": false,
+          "steps": 16,
+          "native_step_ms": [
+            23.446,
+            28.038,
+            15.338,
+            47.679,
+            30.258,
+            47.908,
+            46.22,
+            27.613,
+            48.995,
+            50.697,
+            30.906,
+            36.687,
+            9.059,
+            56.529,
+            62.389,
+            68.769
+          ],
+          "native_total_ms": 630.531,
+          "native_median_step_ms": 41.453,
+          "collector_events": 0
+        },
+        "error": null
+      }
+    },
+    {
+      "pair": 5,
+      "order": [
+        "overhead-on",
+        "overhead-off"
+      ],
+      "overhead-on": {
+        "mode": "overhead-on",
+        "status": "COMPLETED",
+        "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\overhead-on-2a08002d4a884366ac409dc1fc8f6589",
+        "wall_ms": 6646,
+        "steps": {
+          "instrumented": true,
+          "steps": 16,
+          "native_step_ms": [
+            19.606,
+            25.651,
+            30.571,
+            62.574,
+            30.006,
+            35.523,
+            35.402,
+            15.694,
+            63.736,
+            60.254,
+            15.423,
+            36.845,
+            9.666,
+            69.903,
+            51.997,
+            62.435
+          ],
+          "native_total_ms": 625.286,
+          "native_median_step_ms": 35.463,
+          "collector_events": 35
+        },
+        "error": null
+      },
+      "overhead-off": {
+        "mode": "overhead-off",
+        "status": "COMPLETED",
+        "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\overhead-off-a6c271360dbd483489135ef7c2a9ec3c",
+        "wall_ms": 6137,
+        "steps": {
+          "instrumented": false,
+          "steps": 16,
+          "native_step_ms": [
+            26.814,
+            28.935,
+            29.445,
+            51.553,
+            29.504,
+            50.402,
+            55.335,
+            3.561,
+            61.896,
+            48.461,
+            30.596,
+            62.735,
+            73.942,
+            54.349,
+            65.864,
+            49.101
+          ],
+          "native_total_ms": 722.493,
+          "native_median_step_ms": 49.752,
+          "collector_events": 0
+        },
+        "error": null
+      }
+    },
+    {
+      "pair": 6,
+      "order": [
+        "overhead-off",
+        "overhead-on"
+      ],
+      "overhead-off": {
+        "mode": "overhead-off",
+        "status": "COMPLETED",
+        "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\overhead-off-24776929be5b4c4f939c25a5d08d4341",
+        "wall_ms": 6283,
+        "steps": {
+          "instrumented": false,
+          "steps": 16,
+          "native_step_ms": [
+            8.926,
+            14.993,
+            15.191,
+            39.256,
+            36.9,
+            61.027,
+            67.396,
+            27.937,
+            54.582,
+            35.133,
+            43.02,
+            39.579,
+            54.754,
+            86.547,
+            57.269,
+            34.102
+          ],
+          "native_total_ms": 676.612,
+          "native_median_step_ms": 39.418,
+          "collector_events": 0
+        },
+        "error": null
+      },
+      "overhead-on": {
+        "mode": "overhead-on",
+        "status": "COMPLETED",
+        "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\overhead-on-1afd43bf9fbd4dd6a6bd917cf2e04f10",
+        "wall_ms": 6301,
+        "steps": {
+          "instrumented": true,
+          "steps": 16,
+          "native_step_ms": [
+            7.055,
+            4.241,
+            21.227,
+            37.361,
+            20.706,
+            23.716,
+            48.44,
+            17.896,
+            45.821,
+            50.123,
+            15.888,
+            40.618,
+            30.882,
+            54.028,
+            48.551,
+            65.105
+          ],
+          "native_total_ms": 531.658,
+          "native_median_step_ms": 34.121,
+          "collector_events": 33
+        },
+        "error": null
+      }
+    },
+    {
+      "pair": 7,
+      "order": [
+        "overhead-on",
+        "overhead-off"
+      ],
+      "overhead-on": {
+        "mode": "overhead-on",
+        "status": "COMPLETED",
+        "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\overhead-on-f6c0fe91ce73431c87a149c423c51a7f",
+        "wall_ms": 6819,
+        "steps": {
+          "instrumented": true,
+          "steps": 16,
+          "native_step_ms": [
+            8.009,
+            3.765,
+            31.626,
+            38.671,
+            5.226,
+            50.282,
+            74.587,
+            3.273,
+            78.274,
+            50.068,
+            29.912,
+            35.524,
+            50.718,
+            66.819,
+            63.382,
+            69.692
+          ],
+          "native_total_ms": 659.828,
+          "native_median_step_ms": 44.37,
+          "collector_events": 35
+        },
+        "error": null
+      },
+      "overhead-off": {
+        "mode": "overhead-off",
+        "status": "COMPLETED",
+        "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\overhead-off-f61e3166460b4808a2f82640dc93ad66",
+        "wall_ms": 6243,
+        "steps": {
+          "instrumented": false,
+          "steps": 16,
+          "native_step_ms": [
+            25.988,
+            28.392,
+            29.201,
+            28.075,
+            24.578,
+            25.682,
+            57.614,
+            5.009,
+            73.844,
+            34.811,
+            31.309,
+            36.08,
+            9.591,
+            68.584,
+            67.834,
+            65.893
+          ],
+          "native_total_ms": 612.485,
+          "native_median_step_ms": 30.255,
+          "collector_events": 0
+        },
+        "error": null
+      }
+    },
+    {
+      "pair": 8,
+      "order": [
+        "overhead-off",
+        "overhead-on"
+      ],
+      "overhead-off": {
+        "mode": "overhead-off",
+        "status": "COMPLETED",
+        "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\overhead-off-f5bfce5bbce44e5e90328f9a681371ba",
+        "wall_ms": 6397,
+        "steps": {
+          "instrumented": false,
+          "steps": 16,
+          "native_step_ms": [
+            7.85,
+            17.228,
+            17.729,
+            31.776,
+            31.396,
+            49.717,
+            27.817,
+            28.095,
+            78.524,
+            47.43,
+            30.105,
+            54.146,
+            68.022,
+            64.621,
+            68.321,
+            64.314
+          ],
+          "native_total_ms": 687.091,
+          "native_median_step_ms": 39.603,
+          "collector_events": 0
+        },
+        "error": null
+      },
+      "overhead-on": {
+        "mode": "overhead-on",
+        "status": "COMPLETED",
+        "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\overhead-on-de38fb89cf1f4d51a8a2ba2a6e10f038",
+        "wall_ms": 6392,
+        "steps": {
+          "instrumented": true,
+          "steps": 16,
+          "native_step_ms": [
+            20.935,
+            18.042,
+            30.565,
+            58.778,
+            30.177,
+            50.63,
+            27.294,
+            19.565,
+            51.066,
+            34.073,
+            33.32,
+            53.315,
+            58.275,
+            55.584,
+            77.142,
+            51.283
+          ],
+          "native_total_ms": 670.044,
+          "native_median_step_ms": 42.352,
+          "collector_events": 35
+        },
+        "error": null
+      }
+    },
+    {
+      "pair": 9,
+      "order": [
+        "overhead-on",
+        "overhead-off"
+      ],
+      "overhead-on": {
+        "mode": "overhead-on",
+        "status": "COMPLETED",
+        "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\overhead-on-8f14895a25ce4d75b2466451395538d2",
+        "wall_ms": 6625,
+        "steps": {
+          "instrumented": true,
+          "steps": 16,
+          "native_step_ms": [
+            7.596,
+            4.531,
+            34.265,
+            38.166,
+            21.416,
+            47.767,
+            84.59,
+            17.174,
+            52.818,
+            31.666,
+            21.448,
+            51.429,
+            45.244,
+            54.943,
+            75.163,
+            54.901
+          ],
+          "native_total_ms": 643.117,
+          "native_median_step_ms": 41.705,
+          "collector_events": 34
+        },
+        "error": null
+      },
+      "overhead-off": {
+        "mode": "overhead-off",
+        "status": "COMPLETED",
+        "directory": "C:\\source\\projects\\jev-test\\artifacts\\feasibility\\runs\\overhead-off-4f5aa26abf0a49fbae091814315aaa68",
+        "wall_ms": 6180,
+        "steps": {
+          "instrumented": false,
+          "steps": 16,
+          "native_step_ms": [
+            7.359,
+            14.742,
+            29.751,
+            41.425,
+            30.498,
+            52.664,
+            53.751,
+            3.652,
+            67.199,
+            45.095,
+            32.264,
+            40.547,
+            25.523,
+            58.22,
+            81.093,
+            51.512
+          ],
+          "native_total_ms": 635.295,
+          "native_median_step_ms": 40.986,
+          "collector_events": 0
+        },
+        "error": null
+      }
+    }
+  ]
+}

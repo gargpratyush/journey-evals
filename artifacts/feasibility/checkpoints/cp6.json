@@ -1,0 +1,99 @@
+{
+  "checkpoint": "cp6",
+  "status": "GREEN",
+  "schema_version": 1,
+  "timestamp": "2026-09-18T18:49:00.0463254Z",
+  "source_sha256": "057d01ef6f174be1f39ba2ee674871f33967e36800a5f312962b68e870917a61",
+  "summary": "Second-application transfer passed on a fresh 20-case subscription/signup cohort with real text entry and first-app non-regression evidence.",
+  "admission_cohort": {
+    "seed": 20260922,
+    "planned": 20,
+    "faults_detected": "9/10",
+    "false_findings": "0/10",
+    "clean_journeys_independently_completed": "10/10",
+    "definitive_controls": "10/10",
+    "false_passes": 0,
+    "text_entry_exercised": "19/20",
+    "execution_failures": 1,
+    "artifact": "artifacts\\feasibility\\second-app\\summary\\second-app.json"
+  },
+  "first_app_non_regression": {
+    "status": "GREEN",
+    "seed": 20260920,
+    "planned": 60,
+    "completed": 57,
+    "execution_failures": 3,
+    "faults_detected": "29/30",
+    "definitive_controls": "28/30",
+    "spurious_findings": 0,
+    "false_passes": 0,
+    "artifact": "artifacts\\feasibility\\live\\summary\\live-cp6-scroll-regression.json"
+  },
+  "core_changes": [
+    {
+      "files": ["jev_ultrafast\\questions.py", "jev_ultrafast\\agent.py"],
+      "change": "The actor may keep waiting while an operation is visibly running; MAX_UNCHANGED_WAITS = 12 is enforced in code."
+    },
+    {
+      "files": ["jev_ultrafast\\browser_checks.py"],
+      "change": "Workers accept a per-journey goal and report text_entry from actual helper calls."
+    },
+    {
+      "files": ["jev_ultrafast\\live.py"],
+      "change": "Loading evidence anchors on action_attempt so synchronous feedback is retained."
+    },
+    {
+      "files": ["jev_ultrafast\\model.py"],
+      "change": "The text helper uses a separate HTTP client so Jev-only budget hooks cannot reject or account Azure helper requests."
+    },
+    {
+      "files": ["jev_ultrafast\\questions.py"],
+      "change": "An incomplete goal scrolls for below-viewport controls before DONE or BLOCKED."
+    }
+  ],
+  "second_app_binding": {
+    "application": "Sandbox workspace subscription",
+    "app_files": ["jev_ultrafast\\app2\\signup.html", "jev_ultrafast\\app2\\pricing.py"],
+    "adapter": "jev_ultrafast\\subscription.py",
+    "helper_model": "gpt-5.6-luna",
+    "setup_time": "Not instrumented separately; reported journey medians include actor execution but not implementation time.",
+    "app_specific_fix": "After subscription, the persistent confirmation section is brought into view so the user-visible effect and evidence agree."
+  },
+  "retained_non_admission_runs": [
+    {
+      "planned": 20,
+      "result": "20 execution failures",
+      "cause": "The Jev budget hook rejected Azure helper requests on the shared HTTP client.",
+      "artifact": "artifacts\\feasibility\\second-app\\summary\\second-app-failed-shared-client.json"
+    },
+    {
+      "planned": 20,
+      "result": "7/10 defects, 2/10 spurious, 0/10 completed controls, four false passes",
+      "cause": "The actor did not scroll to the persistent review section.",
+      "artifact": "artifacts\\feasibility\\second-app\\summary\\second-app-amber-before-scroll.json"
+    },
+    {
+      "planned": 20,
+      "result": "10/10 defects, 3/10 spurious, 10/10 completed controls",
+      "cause": "The confirmation body remained below the viewport in clean effect controls.",
+      "artifact": "artifacts\\feasibility\\second-app\\summary\\second-app-amber-confirmation-below-viewport.json"
+    }
+  ],
+  "cp5_prerequisite": {
+    "decision": "owner-waiver",
+    "measured_status": "AMBER",
+    "artifact": "artifacts\\feasibility\\checkpoints\\cp5-regression.json",
+    "note": "The original spurious case remains recorded and was not re-judged."
+  },
+  "jev_cost": {
+    "admission_cohort_usd": "0.018071130",
+    "campaign_spent_usd_after_cp6": "0.185972640",
+    "campaign_cap_usd": "0.40"
+  },
+  "limitations": [
+    "One of 20 admission journeys ended in a retained execution failure.",
+    "The second app is synthetic and loopback-only.",
+    "The original CP5 10x economic gate remains unmet; the owner restated the value proposition around latency and throughput."
+  ],
+  "next_permitted_action": "Assess CP7 framework admission and extract only mechanisms demonstrated by both applications."
+}

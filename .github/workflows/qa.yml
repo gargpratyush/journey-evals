@@ -1,0 +1,153 @@
+# Two trust levels, deliberately separated.
+#
+# `contracts` runs for every push and pull request, including forks. It has no secrets, makes no
+# model calls, and never reaches the network: it proves the contracts, evaluators, report shape,
+# and browser guards still hold. A fork PR can run it safely because there is nothing to steal.
+#
+# `live` runs the real model-backed journey. It is gated on the `live-qa` environment so a
+# maintainer approves each run before any credential is issued. It is deliberately *not* wired to
+# `pull_request_target` and does not consume artifacts from an untrusted job: doing either would
+# execute fork-authored code with repository credentials in scope.
+name: qa
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      live:
+        description: "Also run the live model-backed journey"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: qa-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  contracts:
+    name: offline contracts and browser guards
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e . ruff pytest
+
+      - name: Lint
+        run: ruff check .
+
+      - name: Parse browser sources
+        run: |
+          node --check journey_evals/telemetry.js
+          node --check journey_evals/snapshot.js
+          node --check journey_evals/static/app.js
+          node --check journey_evals/static/console.js
+          node --check examples/flight.js
+
+      - name: Offline tests
+        run: pytest -q --junitxml=artifacts/ci/pytest.xml
+
+      # The guards drive a real browser against loopback fixtures and make no model calls, so they
+      # are safe on untrusted code and still catch the evidence-collection regressions that unit
+      # tests cannot see.
+      - name: Browser guards
+        run: |
+          python -m journey_evals.feasibility preflight || true
+          python scripts/check_guards.py
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: contracts-${{ github.run_id }}
+          path: artifacts/ci
+          retention-days: 14
+          if-no-files-found: ignore
+
+  live:
+    name: live journey (advisory)
+    needs: contracts
+    # Never runs automatically on a pull request. Fork code must not reach these credentials.
+    if: >-
+      github.event_name == 'workflow_dispatch' && inputs.live &&
+      github.event.repository.fork == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    environment: live-qa
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .
+
+      - name: Readiness
+        run: python -m journey_evals.feasibility preflight
+
+      # Advisory mode. Semantic evaluators are not calibrated on a corpus large enough to gate a
+      # merge, so a finding is published rather than enforced. A runner error is still a failure:
+      # "the tool could not run" and "the application is fine" are not the same statement.
+      - name: Flight journey
+        id: journey
+        env:
+          JEV_API_KEY: ${{ secrets.JEV_API_KEY }}
+          TYPESAFE_API_KEY: ${{ secrets.TYPESAFE_API_KEY }}
+          TYPESAFE_MODEL: ${{ vars.TYPESAFE_MODEL }}
+          TEXT_MODEL: ${{ vars.TEXT_MODEL }}
+          TEXT_MODEL_BASE_URL: ${{ vars.TEXT_MODEL_BASE_URL }}
+          TEXT_MODEL_API_KEY: ${{ secrets.TEXT_MODEL_API_KEY }}
+        run: |
+          set +e
+          python -m journey_evals.cli run \
+            --journey examples/journeys/flight-booking.json \
+            --out artifacts/ci/live
+          echo "code=$?" >> "$GITHUB_OUTPUT"
+          set -e
+
+      - name: Publish result
+        if: always()
+        run: |
+          code="${{ steps.journey.outputs.code }}"
+          python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json, pathlib
+          for report in sorted(pathlib.Path("artifacts/ci/live").glob("*/report.json")):
+              data = json.loads(report.read_text())
+              print(f"### {data.get('journey_id')} - {data['result']}")
+              print(f"- goal: `{data['goal_status']}`, execution: `{data.get('execution_status')}`")
+              for finding in data["findings"]:
+                  print(f"- **{finding['severity']}** {finding['title']} ({finding['confirmation']})")
+          PY
+          # 3 is a runner/execution error: the tool failed, which is never advisory.
+          if [ "$code" = "3" ]; then exit 1; fi
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: live-${{ github.run_id }}
+          path: artifacts/ci/live
+          retention-days: 14
+          if-no-files-found: ignore

@@ -1,0 +1,670 @@
+/* =================================================================================================
+   CONSOLE — the design system for the live evaluation console.
+
+   The console watches the demo applications, so it is deliberately built to be unmistakably not
+   one of them. Meridian (the airline fixture) is cobalt on cool grey; Ledger (the workspace
+   fixture) is emerald on a tinted neutral. This surface is a near-black control room: monochrome,
+   with white as the only interactive colour, and colour otherwise reserved for what a run
+   actually recorded.
+
+   1. COLOUR
+      One neutral ramp from #0a0a0a to white; every border, surface and text tone is a step on it.
+      The interactive accent is WHITE — a primary control is white on black, everything else is a
+      hairline on a translucent surface. Semantic colour is a separate, narrow vocabulary (pass,
+      fail, warn) used at small sizes only: a dot, a label, a spine. There is no brand hue, no
+      gradient wash and no glow around content.
+
+   2. TYPE
+      One grotesk for everything readable, tightened at display sizes (-0.02em) and never tracked
+      out except for small uppercase labels, which are the instrument's legends. One monospace,
+      used structurally: identifiers, sizes, URLs, timings and anything the machine wrote.
+
+   3. SPACE
+      4px base: 4 8 12 16 20 24 32. Panels breathe more than the previous ruled layout did, but
+      this is still a panel read while something moves, not a landing page.
+
+   4. RADIUS
+      A real scale: 6px controls, 8px small tiles, 12px rows, 16px panels, 999px pills. Nothing is
+      square any more, and nothing is a blob either.
+
+   5. COMPONENTS
+      Bordered translucent panels on a grid-ruled ground. Pills carry state; a dot carries
+      severity. Buttons: white primary, hairline secondary. Rows are cards only where a row is an
+      object you reason about (a check, a finding) and stay ruled where they are a stream (the
+      timeline).
+
+   6. GRID
+      Fixed header, three panes, fixed footer. The page under test takes exactly half the window;
+      the timeline and the verdicts share the rest.
+
+   7. ICONOGRAPHY
+      Inline SVG only, hairline weight, one size. There is deliberately no imitation browser
+      chrome around the screenshot: fake traffic lights would make the page under test read as
+      part of this console rather than as the thing being evaluated.
+
+   One rule outranks the design: nothing here may imply a verdict the journal did not record. A
+   pending check is styled as pending, not as an optimistic pass, and the final panel takes its
+   colour from the recorded result.
+   ============================================================================================= */
+
+:root {
+  color-scheme: dark;
+  --bg: #0a0a0a;
+  --bg-2: #0d0d0d;
+  --surface: rgba(23, 23, 23, .45);
+  --surface-2: rgba(23, 23, 23, .8);
+  --surface-3: #171717;
+  --line: #1a1a1a;
+  --line-2: #262626;
+  --line-3: #383838;
+  --ink: #ffffff;
+  --ink-2: #a3a3a3;
+  --ink-3: #737373;
+  --ink-4: #525252;
+  --accent: #ffffff;
+  --pass: #34d399;
+  --fail: #f87171;
+  --warn: #fbbf24;
+  --info: #a3a3a3;
+  --unknown: #8f8f8f;
+  --sans: "Inter", "Segoe UI Variable", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --mono: ui-monospace, "Cascadia Mono", "SF Mono", Consolas, monospace;
+  --r-sm: 6px;
+  --r-md: 8px;
+  --r-lg: 12px;
+  --r-xl: 16px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink-2);
+  font: 13.5px/1.55 var(--sans);
+  -webkit-font-smoothing: antialiased;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* The ground is ruled rather than empty: a 32px grid, and one soft light from above. Content sits
+   on panels over it, so the structure is visible without decorating anything. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(900px 340px at 50% -80px, rgba(255, 255, 255, .055), transparent 70%),
+    linear-gradient(to right, rgba(255, 255, 255, .022) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, .022) 1px, transparent 1px);
+  background-size: 100% 100%, 32px 32px, 32px 32px;
+}
+body > * { position: relative; z-index: 1; }
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--line-2); border-radius: 999px; border: 3px solid var(--bg); }
+::-webkit-scrollbar-thumb:hover { background: var(--line-3); }
+
+/* -- 1. Header --------------------------------------------------------------------------------- */
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 20px;
+  height: 56px;
+  flex: none;
+  background: rgba(10, 10, 10, .8);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line);
+}
+
+.ident { display: flex; align-items: center; gap: 12px; min-width: 0; }
+
+.mark {
+  width: 26px;
+  height: 26px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  color: var(--ink);
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+}
+.mark svg { width: 15px; height: 15px; }
+
+h1 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -.03em;
+  color: var(--ink);
+  white-space: nowrap;
+}
+h1 span { color: var(--ink-3); margin-left: .2em; }
+
+.hair { width: 1px; height: 20px; background: var(--line-2); flex: none; }
+
+.sub {
+  color: var(--ink-3);
+  font-size: 12.5px;
+  max-width: 620px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.controls { display: flex; align-items: center; gap: 10px; flex: none; }
+
+/* State is a pill with a lamp in it. */
+.signal {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px 5px 10px;
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  background: var(--surface);
+}
+.dot { width: 6px; height: 6px; border-radius: 999px; background: var(--ink-4); flex: none; }
+.dot.running { background: var(--ink); box-shadow: 0 0 0 3px rgba(255, 255, 255, .12); animation: pulse 1.6s ease-in-out infinite; }
+.dot.finished { background: var(--pass); }
+.dot.failed { background: var(--fail); }
+@keyframes pulse { 50% { opacity: .35; } }
+@keyframes blink { 50% { opacity: .25; } }
+
+.status {
+  color: var(--ink-2);
+  font-family: var(--mono);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  white-space: nowrap;
+}
+
+button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--ink);
+  color: #0a0a0a;
+  border: 1px solid var(--ink);
+  border-radius: var(--r-sm);
+  padding: 0 14px;
+  height: 32px;
+  font: 500 13px/1 var(--sans);
+  letter-spacing: -.01em;
+  cursor: pointer;
+  transition: background .15s, border-color .15s, color .15s;
+}
+button:hover:not(:disabled) { background: #e5e5e5; border-color: #e5e5e5; }
+button.ghost { background: var(--surface-2); color: var(--ink); border-color: var(--line-2); }
+button.ghost:hover:not(:disabled) { background: #262626; border-color: var(--line-3); }
+button:disabled { opacity: .35; cursor: default; }
+button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+/* -- 2. Body grid: the page under test takes exactly half ------------------------------------- */
+main {
+  display: grid;
+  grid-template-columns: 50% minmax(0, 1fr);
+  gap: 12px;
+  padding: 12px;
+  flex: 1;
+  min-height: 0;
+}
+.stream {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: 12px;
+  min-width: 0;
+  min-height: 0;
+}
+
+.pane {
+  background: var(--surface);
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-xl);
+  padding: 0 18px 20px;
+  overflow-y: auto;
+  min-height: 0;
+  min-width: 0;
+}
+
+/* Pane headings are legends: small, tracked out, and they stay put while the pane scrolls. */
+.pane h2 {
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .16em;
+  color: var(--ink-3);
+  margin: 0 -18px 12px;
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  background: #121212;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.pane h2.spaced { margin-top: 28px; }
+
+.count {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0;
+  color: var(--ink);
+  background: var(--surface-3);
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  padding: 1px 8px;
+}
+
+/* -- 3. The page under test -------------------------------------------------------------------
+   No imitation browser chrome. The frame is capped at the width its device class deserves and is
+   centred when it is narrower than the pane, so a phone run is never stretched to desktop width
+   and never reads as this console's own UI. */
+.viewport { display: flex; flex-direction: column; padding-top: 16px; }
+
+.viewframe {
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-lg);
+  background: var(--bg-2);
+  overflow: hidden;
+  width: 100%;
+  margin: 0 auto;
+  /* The pane is a flex column, so without this the frame would be squeezed to fit the window and
+     stop showing the shape the run actually ran at. */
+  flex: 0 0 auto;
+  box-shadow: 0 18px 40px -24px rgba(0, 0, 0, .9);
+}
+.viewframe.phone { max-width: 390px; }
+.viewframe.tablet { max-width: 620px; }
+
+/* A phone run leaves room beside the frame; a soft halo keeps the pane from reading as an accident
+   rather than as a deliberate size. */
+.viewport:has(.viewframe.phone) .viewframe,
+.viewport:has(.viewframe.tablet) .viewframe {
+  outline: 1px solid var(--line);
+  outline-offset: 16px;
+}
+.viewport:has(.viewframe.phone), .viewport:has(.viewframe.tablet) { padding-top: 30px; }
+
+.viewhead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 12px;
+  height: 36px;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--line-2);
+}
+.viewhead .lab {
+  font-size: 9.5px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .16em;
+  color: var(--ink-4);
+  flex: none;
+}
+.viewhead .size {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .02em;
+  color: var(--ink);
+  background: var(--surface-3);
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  padding: 2px 9px;
+  flex: none;
+}
+/* At phone and tablet widths the head cannot hold a label, a size and a URL on one line, so it
+   wraps and the address takes the second row at full width rather than being clipped to nothing. */
+.viewframe.phone .viewhead, .viewframe.tablet .viewhead {
+  height: auto;
+  flex-wrap: wrap;
+  padding: 8px 12px 9px;
+  row-gap: 4px;
+}
+.viewframe.phone .address, .viewframe.tablet .address {
+  flex: 1 0 100%;
+  text-align: left;
+}
+
+.address {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: right;
+}
+
+/* The screenshot box is floored at the declared aspect (--shot-aspect, set by console.js from the
+   run's own viewport), so the frame keeps a phone's shape even when a single capture is short. A
+   taller capture still shows in full: that is evidence, not overflow. */
+.shot {
+  display: grid;
+  min-height: 160px;
+  background: #060606;
+}
+.shot::before {
+  content: "";
+  grid-area: 1 / 1;
+  width: 0;
+  padding-top: var(--shot-aspect, 0%);
+}
+.shot img { grid-area: 1 / 1; width: 100%; display: block; align-self: start; }
+.shot .empty { grid-area: 1 / 1; text-align: center; align-self: center; }
+
+.empty { color: var(--ink-4); font-size: 12px; margin: 0; padding: 16px 0; }
+ol:is(#events, .celltimeline):not(:empty) + .placeholder { display: none; }
+
+dl.meta {
+  display: grid;
+  grid-template-columns: 104px minmax(0, 1fr);
+  margin: 20px 0 0;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background: var(--surface);
+}
+dl.meta dt {
+  color: var(--ink-4);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--line);
+}
+dl.meta dd {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--ink);
+  padding: 10px 14px 10px 0;
+  border-bottom: 1px solid var(--line);
+  word-break: break-word;
+}
+dl.meta dt:last-of-type, dl.meta dd:last-of-type { border-bottom: 0; }
+
+/* -- 4. Timeline: a stream, so it stays ruled and keeps a spine -------------------------------- */
+ol:is(#events, .celltimeline) { list-style: none; margin: 0; padding: 0; }
+
+ol:is(#events, .celltimeline) li {
+  display: grid;
+  grid-template-columns: 3px minmax(0, 1fr);
+  gap: 0 14px;
+  padding: 9px 0 10px;
+  border-bottom: 1px solid var(--line);
+  position: relative;
+}
+ol:is(#events, .celltimeline) li::before {
+  content: "";
+  grid-column: 1;
+  border-radius: 999px;
+  background: var(--line-2);
+}
+ol:is(#events, .celltimeline) li.action::before { background: var(--ink); }
+ol:is(#events, .celltimeline) li.decision::before { background: var(--line-3); }
+ol:is(#events, .celltimeline) li.evaluation-pass::before { background: var(--pass); }
+ol:is(#events, .celltimeline) li.evaluation-fail::before { background: var(--fail); }
+ol:is(#events, .celltimeline) li.evaluation-unknown::before { background: var(--warn); }
+ol:is(#events, .celltimeline) li.problem::before { background: var(--fail); }
+ol:is(#events, .celltimeline) li.terminal::before { background: var(--pass); }
+ol:is(#events, .celltimeline) li > * { grid-column: 2; }
+
+.row { display: flex; align-items: baseline; gap: 10px; }
+.tag {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: var(--ink-4);
+  flex: none;
+  min-width: 60px;
+}
+.what { font-weight: 500; font-size: 12.5px; color: var(--ink); min-width: 0; word-break: break-word; letter-spacing: -.01em; }
+.detail { color: var(--ink-2); font-size: 11.5px; margin-top: 3px; padding-left: 70px; word-break: break-word; }
+.mono { font-family: var(--mono); font-size: 10.5px; color: var(--ink-4); }
+
+/* -- 5. Verdicts: a check is an object you reason about, so it gets a panel of its own ---------- */
+ul:is(#checks, .cellchecks), ul:is(#findings, .cellfindings) {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+ul:is(#checks, .cellchecks) li, ul:is(#findings, .cellfindings) li {
+  padding: 11px 13px 12px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 2px solid var(--line-2);
+  border-radius: var(--r-lg);
+  transition: border-color .15s, background .15s;
+}
+ul:is(#checks, .cellchecks) li:hover, ul:is(#findings, .cellfindings) li:hover { background: var(--surface-2); }
+ul:is(#checks, .cellchecks) li.empty, ul:is(#findings, .cellfindings) li.empty {
+  border: 1px dashed var(--line-2);
+  background: none;
+  padding: 14px 13px;
+}
+
+/* The spine carries the verdict, so the column is scannable without reading it. console.js sets
+   the state class on the verdict span rather than on the row, so the row reads it back. */
+ul:is(#checks, .cellchecks) li:has(.v-passed) { border-left-color: var(--pass); }
+ul:is(#checks, .cellchecks) li:has(.v-failed) { border-left-color: var(--fail); }
+ul:is(#checks, .cellchecks) li:has(.v-unknown), ul:is(#checks, .cellchecks) li:has(.v-pending) { border-left-color: var(--warn); }
+ul:is(#findings, .cellfindings) li:has(.sev-high) { border-left-color: var(--fail); }
+ul:is(#findings, .cellfindings) li:has(.sev-medium) { border-left-color: var(--warn); }
+ul:is(#findings, .cellfindings) li:has(.sev-low) { border-left-color: var(--info); }
+
+ul:is(#checks, .cellchecks) li .row { justify-content: space-between; align-items: baseline; gap: 12px; }
+ul:is(#checks, .cellchecks) li .row .what { font-family: var(--mono); font-size: 11.5px; font-weight: 400; letter-spacing: -.01em; }
+ul:is(#checks, .cellchecks) li .detail { padding-left: 0; }
+ul:is(#findings, .cellfindings) li .detail { padding-left: 0; }
+
+.verdict {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: .1em;
+  flex: none;
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  padding: 2px 9px;
+  background: var(--surface-3);
+}
+.v-passed { color: var(--pass); border-color: color-mix(in srgb, var(--pass) 35%, var(--line-2)); }
+.v-failed { color: var(--fail); border-color: color-mix(in srgb, var(--fail) 35%, var(--line-2)); }
+.v-unknown, .v-pending { color: var(--warn); border-color: color-mix(in srgb, var(--warn) 35%, var(--line-2)); }
+
+.sev {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  flex: none;
+  border-radius: 999px;
+  padding: 2px 9px;
+  border: 1px solid var(--line-2);
+  background: var(--surface-3);
+}
+.sev-high { color: var(--fail); border-color: color-mix(in srgb, var(--fail) 35%, var(--line-2)); }
+.sev-medium { color: var(--warn); border-color: color-mix(in srgb, var(--warn) 35%, var(--line-2)); }
+.sev-low { color: var(--info); }
+
+/* -- 6. The final panel ------------------------------------------------------------------------ */
+.final {
+  margin-top: 28px;
+  padding: 18px 18px 20px;
+  background: var(--surface-2);
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-xl);
+}
+.final.hidden { display: none; }
+.hidden { display: none !important; }
+.final .result {
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: -.03em;
+  line-height: 1.05;
+  color: var(--ink);
+}
+.final .result.PASS { color: var(--pass); }
+.final .result.FAIL { color: var(--fail); }
+.final .result.WARN { color: var(--warn); }
+.final .result.INCONCLUSIVE, .final .result.ERROR { color: var(--unknown); }
+.final .detail { padding-left: 0; margin-top: 7px; }
+
+.final dl {
+  display: grid;
+  grid-template-columns: 104px minmax(0, 1fr);
+  margin: 16px 0 0;
+  font-size: 12px;
+}
+.final dt {
+  color: var(--ink-4);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  padding: 9px 12px 9px 0;
+  border-top: 1px solid var(--line);
+}
+.final dd {
+  margin: 0;
+  padding: 8px 0;
+  border-top: 1px solid var(--line);
+  color: var(--ink);
+  word-break: break-word;
+}
+
+/* -- 7. Footer --------------------------------------------------------------------------------- */
+footer {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 11px 20px;
+  border-top: 1px solid var(--line);
+  color: var(--ink-4);
+  font-size: 11px;
+  line-height: 1.5;
+  background: rgba(10, 10, 10, .8);
+  backdrop-filter: blur(12px);
+  flex: none;
+}
+.fkey {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: var(--ink-2);
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  padding: 3px 9px;
+  flex: none;
+}
+code { font-family: var(--mono); color: var(--ink-2); }
+
+/* Below this width the three panes cannot all breathe, so the page under test goes full width and
+   the commentary stacks beneath it. */
+@media (max-width: 1180px) {
+  body { overflow: auto; height: auto; min-height: 100vh; }
+  main { grid-template-columns: 1fr; }
+  .pane { overflow-y: visible; }
+  .pane h2 { position: static; background: none; }
+  .stream { grid-template-columns: 1fr; }
+}
+
+/* ---------- viewport matrix ---------- */
+/* The viewports are tabs, laid across the top of the pane the way a browser's are: one is lit, and
+ * choosing another changes which run every column on the page is describing. */
+.matrix { margin: 0 0 14px; }
+.cells {
+  list-style: none;
+  margin: 0;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--surface);
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-lg);
+}
+.cell { min-width: 0; }
+.cellhead {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  text-align: left;
+  padding: 7px 12px;
+  height: auto;
+  cursor: pointer;
+  font: inherit;
+  color: var(--ink-3);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--r-md);
+  transition: background .15s, color .15s, border-color .15s;
+}
+.cellhead > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cellhead:hover:not(.showing) { background: var(--surface-2); color: var(--ink-2); }
+/* The tab that is tracking the live run, when you are reading a different one. */
+.cellhead.following:not(.showing) { color: var(--ink-2); }
+.cellhead:focus-visible { outline: 2px solid var(--ink); outline-offset: -2px; }
+.celllabel { font-size: 12.5px; font-weight: 500; letter-spacing: -.01em; }
+.cellsize { font-family: var(--mono); font-size: 10.5px; color: var(--ink-4); }
+.celldot { width: 6px; height: 6px; border-radius: 999px; flex: none; background: var(--ink-4); }
+.celldot.d-PASS { background: var(--pass); }
+.celldot.d-FAIL, .celldot.d-ERROR { background: var(--fail); }
+.celldot.d-INCONCLUSIVE { background: var(--warn); }
+.celldot.d-RUNNING { background: var(--ink); animation: pulse 1.6s ease-in-out infinite; }
+.cellresult {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: .1em;
+  padding: 2px 8px;
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  color: var(--ink-4);
+}
+.cellresult.r-PASS { color: var(--pass); border-color: color-mix(in srgb, var(--pass) 35%, var(--line-2)); }
+.cellresult.r-FAIL { color: var(--fail); border-color: color-mix(in srgb, var(--fail) 35%, var(--line-2)); }
+.cellresult.r-INCONCLUSIVE { color: var(--warn); border-color: color-mix(in srgb, var(--warn) 35%, var(--line-2)); }
+.cellresult.r-ERROR { color: var(--fail); border-color: color-mix(in srgb, var(--fail) 35%, var(--line-2)); }
+/* The lit tab is the run every column is describing. */
+.cellhead.showing {
+  background: var(--surface-3);
+  color: var(--ink);
+  border-color: var(--line-2);
+}
+.cellhead:disabled { cursor: default; opacity: .45; }
+.matrixprogress {
+  margin: 10px 2px 0;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--ink-4);
+}
+.replay {
+  margin: 0 0 12px;
+  padding: 10px 14px;
+  border: 1px solid var(--line-2);
+  border-left: 2px solid var(--ink);
+  border-radius: var(--r-lg);
+  background: var(--surface-2);
+  font-size: 11.5px;
+  color: var(--ink-2);
+}

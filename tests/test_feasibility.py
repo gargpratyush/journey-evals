@@ -10,16 +10,16 @@ from unittest.mock import AsyncMock, Mock
 import httpx
 import pytest
 
-from jev_ultrafast import browser_checks, feasibility, isolation
-from jev_ultrafast.evidence import Collector, Journal
-from jev_ultrafast.feasibility import (
+from journey_evals import browser_checks, feasibility, isolation
+from journey_evals.evidence import Collector, Journal
+from journey_evals.feasibility import (
     ENDPOINT,
     MODEL,
     SLOW_MACHINE_TIMEOUT,
     Budget,
     load_environment,
 )
-from jev_ultrafast.fixture import EXPECTED, fare_facts, verify
+from journey_evals.fixture import EXPECTED, fare_facts, verify
 
 
 def request():
@@ -77,6 +77,22 @@ def test_budget_excludes_secrets_and_other_providers(tmp_path):
             with pytest.raises(ValueError):
                 budget.reserve(bad)
         assert budget.sent == 0
+
+
+def test_text_helper_uses_a_client_without_jev_budget_hooks(monkeypatch):
+    from jev_ultrafast import model
+
+    model.CLIENT.event_hooks = {"request": [Mock(side_effect=AssertionError("Jev hook reached text helper"))]}
+    response = Mock(status_code=200, is_error=False)
+    response.json.return_value = {"choices": [{"message": {"content": "{\"text\":\"Sandbox\"}"}}]}
+    text_post = Mock(return_value=response)
+    monkeypatch.setattr(model.TEXT_CLIENT, "post", text_post)
+    monkeypatch.setenv("TEXT_MODEL_API_KEY", "helper-key")
+    try:
+        assert model.field_text({"goal": "Enter Sandbox"})[0] == "Sandbox"
+    finally:
+        model.CLIENT.event_hooks = {"request": [], "response": []}
+    text_post.assert_called_once()
 
 
 @pytest.mark.parametrize("limit", ["NaN", "Infinity", "-1", "0", "bad"])
@@ -153,7 +169,7 @@ def test_absent_collector_cannot_pass(tmp_path, watermark):
 
 
 def test_profile_cleanup_retries_only_a_bounded_owned_path(tmp_path, monkeypatch):
-    monkeypatch.setattr(isolation, "ARTIFACTS", tmp_path)
+    monkeypatch.setattr(isolation, "work_root", lambda: tmp_path / "work")
     owner = isolation.OwnedSession(tmp_path)
     owner.directory = tmp_path / "work" / "browser-unit"
     owner.directory.mkdir(parents=True)
@@ -177,7 +193,8 @@ def test_profile_cleanup_retries_only_a_bounded_owned_path(tmp_path, monkeypatch
 
 
 def test_first_frame_dependent_calls_carry_the_startup_bound_not_the_operational_one():
-    source = Path(isolation.__file__).with_name("browser.py").read_text()
+    from jev_ultrafast import browser as browser_module
+    source = Path(browser_module.__file__).read_text()
     startup = source.split("def call(", 1)[0]
     for method in ("Emulation.setDeviceMetricsOverride", "Emulation.setFocusEmulationEnabled",
                    "Page.bringToFront"):
@@ -240,7 +257,7 @@ def test_checkpoint_exception_replaces_stale_green_and_redacts(tmp_path, monkeyp
     original = feasibility.checkpoint_receipt
     monkeypatch.setattr(feasibility, "checkpoint_receipt", lambda name, result: original(name, result, tmp_path))
     original("cp1", {"status": "GREEN"}, tmp_path)
-    monkeypatch.setattr(sys, "argv", ["jev-eval", "verify-browser"])
+    monkeypatch.setattr(sys, "argv", ["journey-evals", "verify-browser"])
     monkeypatch.setenv("JEV_API_KEY", "private-test-key")
     monkeypatch.setattr(browser_checks, "browser_checkpoint", Mock(side_effect=PermissionError("private-test-key")))
     assert feasibility.main() == 1
@@ -299,7 +316,7 @@ def test_a_killed_worker_is_reported_unclean_and_not_retried(tmp_path, monkeypat
 
 
 def repair_events(tmp_path, *, confirm=True, settled="Booking confirmed Confirmation TEST-1", gap_ms=2000):
-    from jev_ultrafast.repair import CONFIRM_ACTIONS
+    from journey_evals.repair import CONFIRM_ACTIONS
 
     directory = tmp_path / "run"
     directory.mkdir(parents=True)
@@ -316,7 +333,7 @@ def repair_events(tmp_path, *, confirm=True, settled="Booking confirmed Confirma
 
 
 def test_defect_variants_are_real_source_edits(tmp_path):
-    from jev_ultrafast import repair
+    from journey_evals import repair
 
     pristine = repair.app_digests(repair.APP)
     for defect, changed in (("fare-surcharge", "pricing.py"), ("silent-confirmation", "booking.html")):
@@ -328,8 +345,8 @@ def test_defect_variants_are_real_source_edits(tmp_path):
 
 
 def test_injected_fare_defect_is_served_by_the_application_copy(tmp_path):
-    from jev_ultrafast.fixture import BookingFixture
-    from jev_ultrafast.repair import materialize
+    from journey_evals.fixture import BookingFixture
+    from journey_evals.repair import materialize
 
     materialize(tmp_path / "app", "fare-surcharge")
     assert BookingFixture(app=tmp_path / "app").quote() == {"cents": 12000, "disclosure": ""}
@@ -338,7 +355,7 @@ def test_injected_fare_defect_is_served_by_the_application_copy(tmp_path):
 
 
 def test_effect_window_requires_the_declared_deadline_to_elapse(tmp_path):
-    from jev_ultrafast.repair import effect_window
+    from journey_evals.repair import effect_window
 
     window = effect_window(repair_events(tmp_path))
     assert window["complete"] and window["action_acknowledged"] and window["deadline_elapsed"]
@@ -350,7 +367,7 @@ def test_effect_window_requires_the_declared_deadline_to_elapse(tmp_path):
 
 
 def test_repair_acceptance_never_passes_on_a_missing_finding(tmp_path):
-    from jev_ultrafast.repair import accepted
+    from journey_evals.repair import accepted
 
     outcome = {
         "usable": True, "independent_verifier": {"passed": True},

@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from jev_ultrafast import subscription as second
+from journey_evals import subscription as second
 
 
 def variants():
@@ -141,9 +141,15 @@ def test_goal_names_only_synthetic_facts_the_journey_needs():
 
 def test_second_application_is_not_the_first_one_relabelled():
     """The transfer claim is only meaningful if the two applications are structurally different."""
-    flight = (Path(second.ROOT) / "jev_ultrafast" / "app" / "booking.html").read_text(encoding="utf-8")
+    flight = (Path(second.ROOT) / "journey_evals" / "app" / "booking.html").read_text(encoding="utf-8")
     signup = (second.APP / "signup.html").read_text(encoding="utf-8")
     assert "<select" in flight and "<select" not in signup
     assert 'type="radio"' in signup and 'type="radio"' not in flight
     assert 'type="text"' in signup and 'type="text"' not in flight
     assert "function render()" in signup and "function render()" not in flight
+
+
+def test_confirmation_is_brought_into_view_without_replacing_sections():
+    signup = (second.APP / "signup.html").read_text(encoding="utf-8")
+    assert "confirmation-section').scrollIntoView" in signup
+    assert "innerHTML" not in signup

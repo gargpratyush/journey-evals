@@ -1,0 +1,44 @@
+{
+  "name": "journey-evals",
+  "version": "0.1.0",
+  "description": "Drive a real browser through a declared user journey and report what actually happened.",
+  "keywords": [
+    "testing",
+    "e2e",
+    "browser",
+    "evaluation",
+    "agents",
+    "ai",
+    "qa"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/gargpratyush/jev-test#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gargpratyush/jev-test.git"
+  },
+  "bin": {
+    "journey-evals": "bin/journey-evals.js"
+  },
+  "main": "lib/python.js",
+  "files": [
+    "bin/",
+    "lib/",
+    "scripts/",
+    "vendor/",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "os": [
+    "darwin",
+    "linux",
+    "win32"
+  ],
+  "scripts": {
+    "postinstall": "node scripts/postinstall.js",
+    "test": "node --check bin/journey-evals.js && node --check lib/python.js && node --check scripts/postinstall.js"
+  }
+}

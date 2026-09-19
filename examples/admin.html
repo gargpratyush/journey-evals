@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meridian — workspace administration</title>
+<style>
+/* =============================================================================================
+   REGISTER — the design system for the synthetic administration fixture.
+
+   The reference is an administrative record rather than a marketing surface: a register of
+   decisions, each one numbered, ruled off, and stated with its consequences. It has to be
+   unmistakably not the airline fixture (cobalt, dense masthead, mono shouting), not the
+   provisioning fixture (emerald rail, radius 0, ledger form), and not the evaluation console.
+
+     1. COLOUR      Paper. A true white canvas with hairline rules doing all the separation, ink
+                    near-black, and exactly one accent: crimson #b3123c, reserved for actions that
+                    take something away. A single affirm green for states that were recorded.
+                    No panels-on-grey, no washes behind content, no gradient anywhere.
+     2. TYPE        One grotesk at three sizes, plus a mono used only for quantities, identifiers
+                    and dates — the things an administrator would check twice. Section headings
+                    are small, letterspaced and uppercase, in the manner of a form.
+     3. SPACE       4px base: 4 8 14 20 28 40. Rhythm comes from rules and from the numbered
+                    gutter, never from padding alone.
+     4. RADIUS      Zero on every surface. 3px on controls only, so a control reads as the only
+                    thing you can press.
+     5. COMPONENTS  No cards. A section is a numbered gutter, a heading, and rows of
+                    term/value pairs. Buttons are flat; the destructive one is crimson-filled and
+                    is the only filled element on the page.
+     6. GRID        A single 880px column, left-aligned, with a 56px numbered gutter to its left.
+                    Data sits in two-column term/value rows that collapse on narrow viewports.
+     7. ICONS       None. Status is carried by a 3px left bar and by the mono type.
+
+   THE TWO FIXTURE RULES OUTRANK ALL OF THE ABOVE.
+
+   (a) Nothing may signal that an operation is in progress. A scenario removes the page's only
+       progress message and the evaluator has to be able to observe that absence.
+   (b) Nothing may clip, transform, overlay or animate a control's box. The one clipping rule is
+       #delete-frame.clipped, which a scenario turns on deliberately. The script assigns
+       className outright, so #delete-frame must be styled by id alone.
+
+   Page text is collected per text node and joined with newlines, so every label and heading keeps
+   its text in one text node. Splitting "Delete workspace" across two elements would make it
+   unmatchable by any declared check.
+   ============================================================================================= */
+:root {
+  color-scheme: light;
+  --paper:#ffffff;
+  --ink:#14161a;
+  --ink-2:#4d525c;
+  --ink-3:#7c828d;
+  --rule:#dcdde1;
+  --rule-2:#eceef1;
+  --accent:#b3123c;
+  --accent-ink:#8d0e2f;
+  --affirm:#17614a;
+  --sans:Inter,"Segoe UI Variable Text","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0; background:var(--paper); color:var(--ink);
+  font:400 14.5px/1.6 var(--sans);
+  -webkit-font-smoothing:antialiased;
+}
+
+/* -- masthead -------------------------------------------------------------------------------- */
+.top { border-bottom:1px solid var(--ink); }
+.top .inner { max-width:996px; margin:0 auto; padding:0 20px; display:flex; align-items:center;
+  gap:28px; height:56px; }
+.word { font-size:13px; letter-spacing:.24em; text-transform:uppercase; font-weight:600; }
+.top nav { display:flex; gap:22px; margin-left:auto; }
+.top nav a { font-size:13px; color:var(--ink-2); text-decoration:none; padding:19px 0;
+  border-bottom:3px solid transparent; }
+.top nav a.on { color:var(--ink); border-bottom-color:var(--accent); }
+
+/* -- register column ------------------------------------------------------------------------- */
+main { max-width:996px; margin:0 auto; padding:0 20px 64px; }
+section[hidden] { display:none; }
+.entry { display:grid; grid-template-columns:56px minmax(0,1fr); gap:0 20px;
+  border-bottom:1px solid var(--rule); padding:28px 0; }
+.entry .num { font:500 11px/1.6 var(--mono); color:var(--ink-3); letter-spacing:.08em;
+  padding-top:4px; }
+.entry .body { max-width:820px; }
+h1 { font-size:22px; line-height:1.25; letter-spacing:-.02em; font-weight:600; margin:0 0 4px; }
+h2 { font-size:11px; letter-spacing:.18em; text-transform:uppercase; font-weight:600;
+  color:var(--ink-3); margin:0 0 14px; }
+p { margin:0 0 8px; color:var(--ink-2); }
+p.lead { color:var(--ink); }
+
+/* -- term/value rows ------------------------------------------------------------------------- */
+dl { display:grid; grid-template-columns:200px minmax(0,1fr); margin:14px 0 0;
+  border-top:1px solid var(--rule-2); }
+dt, dd { margin:0; padding:9px 0; border-bottom:1px solid var(--rule-2); }
+dt { color:var(--ink-3); font-size:13px; }
+dd { font-variant-numeric:tabular-nums; }
+dd.num, .mono { font-family:var(--mono); font-size:13.5px; }
+
+/* -- notices --------------------------------------------------------------------------------- */
+.notice { border-left:3px solid var(--accent); padding:2px 0 2px 16px; margin:18px 0 0;
+  color:var(--ink); }
+.notice.quiet { border-left-color:var(--rule); color:var(--ink-2); }
+.badge { display:inline-block; font:500 11px/1 var(--mono); letter-spacing:.06em;
+  border:1px solid var(--rule); padding:5px 8px; color:var(--ink-2); }
+.state { border-left:3px solid var(--affirm); padding:2px 0 2px 16px; color:var(--affirm);
+  font-weight:500; margin:0 0 14px; }
+.state.bad { border-left-color:var(--accent); color:var(--accent); }
+
+/* -- controls -------------------------------------------------------------------------------- */
+.actions { display:flex; gap:10px; align-items:center; margin-top:20px; flex-wrap:wrap; }
+button { font:500 14px/1 var(--sans); padding:11px 16px; border-radius:3px; cursor:pointer;
+  border:1px solid var(--ink); background:var(--paper); color:var(--ink); }
+button:hover { background:#f4f5f7; }
+button.danger { background:var(--accent); border-color:var(--accent); color:#fff; }
+button.danger:hover { background:var(--accent-ink); border-color:var(--accent-ink); }
+button:disabled { opacity:.5; cursor:default; }
+label.ack { display:flex; gap:10px; align-items:flex-start; margin-top:18px; color:var(--ink);
+  max-width:620px; }
+label.ack input { margin:3px 0 0; }
+select { font:400 14px/1 var(--sans); padding:10px 12px; border:1px solid var(--rule);
+  border-radius:3px; background:var(--paper); color:var(--ink); }
+.status { min-height:20px; margin-top:12px; color:var(--ink-2); font-size:13.5px; }
+
+/* The scenario-controlled clip. Styled by id alone: the script replaces className outright. */
+#delete-frame { }
+#delete-frame.clipped { max-height:26px; overflow:hidden; }
+
+/* -- lists ----------------------------------------------------------------------------------- */
+ul.rows { list-style:none; margin:14px 0 0; padding:0; border-top:1px solid var(--rule-2); }
+ul.rows li { display:flex; gap:20px; align-items:center; padding:14px 0;
+  border-bottom:1px solid var(--rule-2); }
+ul.rows .name { font-weight:600; min-width:120px; }
+ul.rows .meta { color:var(--ink-3); font-family:var(--mono); font-size:12.5px; flex:1; }
+table { border-collapse:collapse; width:100%; margin-top:14px; }
+th, td { text-align:left; padding:9px 0; border-bottom:1px solid var(--rule-2); font-size:13.5px; }
+th { color:var(--ink-3); font-weight:500; font-size:11px; letter-spacing:.14em;
+  text-transform:uppercase; }
+td.amount { text-align:right; font-family:var(--mono); font-variant-numeric:tabular-nums; }
+tfoot td { font-weight:600; border-bottom:0; }
+
+@media (max-width:720px) {
+  .entry { grid-template-columns:1fr; gap:0; }
+  .entry .num { padding:0 0 6px; }
+  dl { grid-template-columns:1fr; }
+  dt { padding-bottom:0; border-bottom:0; }
+  .top nav { gap:14px; }
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="inner">
+    <span class="word">Meridian</span>
+    <nav>
+      <a id="nav-billing" href="/billing">Plan and billing</a>
+      <a id="nav-workspaces" href="/workspaces">Workspaces</a>
+      <a id="nav-insights" href="/insights">Insights</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- 1. Plan and billing ------------------------------------------------------------------ -->
+  <section id="section-billing" hidden>
+    <div class="entry">
+      <div class="num">§ 1</div>
+      <div class="body">
+        <h1>Plan and billing</h1>
+        <p class="lead">Sandbox workspace. Nothing here bills a real card.</p>
+        <dl>
+          <dt>Current plan</dt><dd class="num" id="plan-current">Pro</dd>
+          <dt>Price</dt><dd class="num" id="plan-price">USD 12.00 per member per month</dd>
+          <dt>Members</dt><dd class="num" id="plan-members">7</dd>
+          <dt>Next invoice</dt><dd class="num" id="plan-renewal">1 October 2026</dd>
+        </dl>
+        <div class="actions">
+          <button id="to-review">Switch to Starter</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Review plan change ---------------------------------------------------------------- -->
+  <section id="section-review" hidden>
+    <div class="entry">
+      <div class="num">§ 2</div>
+      <div class="body">
+        <h1>Review plan change</h1>
+        <dl>
+          <dt>From</dt><dd class="num">Pro</dd>
+          <dt>To</dt><dd class="num">Starter</dd>
+          <dt>Charged today</dt><dd class="num" id="review-charge">USD 0.00</dd>
+          <dt>Takes effect</dt><dd class="num" id="review-effective">1 October 2026</dd>
+        </dl>
+        <p class="notice" id="review-notice"></p>
+        <div class="actions">
+          <button id="confirm-downgrade" class="danger">Confirm downgrade</button>
+          <button id="keep-pro">Keep Pro</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Scheduled ------------------------------------------------------------------------- -->
+  <section id="section-scheduled" hidden>
+    <div class="entry">
+      <div class="num">§ 3</div>
+      <div class="body">
+        <h1>Downgrade scheduled</h1>
+        <p class="state" id="scheduled-state">Recorded</p>
+        <dl>
+          <dt>Change reference</dt><dd class="num" id="scheduled-reference">CHG-1</dd>
+          <dt>New plan</dt><dd class="num">Starter</dd>
+          <dt>Takes effect</dt><dd class="num" id="scheduled-effective">1 October 2026</dd>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Workspaces ------------------------------------------------------------------------ -->
+  <section id="section-workspaces" hidden>
+    <div class="entry">
+      <div class="num">§ 4</div>
+      <div class="body">
+        <h1>Workspaces</h1>
+        <p class="state" id="workspace-state" hidden></p>
+        <h2>Active</h2>
+        <ul class="rows" id="active-list"></ul>
+        <div id="deleted-block" hidden>
+          <h2>Recently deleted</h2>
+          <ul class="rows" id="deleted-list"></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Delete workspace ------------------------------------------------------------------ -->
+  <section id="section-delete" hidden>
+    <div class="entry">
+      <div class="num">§ 5</div>
+      <div class="body">
+        <h1>Delete workspace</h1>
+        <dl>
+          <dt>Workspace</dt><dd class="num" id="delete-name">Atlas</dd>
+          <dt id="delete-contents-label">Contents</dt>
+          <dd class="num" id="delete-contents">3 projects · 412 documents</dd>
+          <dt id="delete-members-label">People with access</dt>
+          <dd class="num" id="delete-members">12 members</dd>
+        </dl>
+        <p class="notice" id="delete-notice"></p>
+        <label class="ack">
+          <input type="checkbox" id="delete-ack">
+          <span>I understand what deleting this workspace does.</span>
+        </label>
+        <div class="actions" id="delete-frame">
+          <button id="delete-confirm" class="danger">Delete workspace</button>
+          <button id="delete-cancel">Cancel</button>
+        </div>
+        <p class="status" id="delete-status" role="status" aria-live="polite"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Insights -------------------------------------------------------------------------- -->
+  <section id="section-insights" hidden>
+    <div class="entry">
+      <div class="num">§ 6</div>
+      <div class="body">
+        <h1>Revenue by region</h1>
+        <div class="actions">
+          <select id="window">
+            <option value="last_30_days" selected>Last 30 days</option>
+            <option value="last_7_days">Last 7 days</option>
+            <option value="last_quarter">Last quarter</option>
+          </select>
+          <button id="refresh">Refresh revenue</button>
+          <span class="badge" id="freshness-badge" hidden></span>
+        </div>
+        <p class="status" id="refresh-status" role="status" aria-live="polite"></p>
+        <p class="notice quiet" id="freshness-notice" hidden></p>
+        <div id="revenue-block" hidden>
+          <table>
+            <thead><tr><th>Region</th><th class="amount">Revenue</th></tr></thead>
+            <tbody id="revenue-rows"></tbody>
+            <tfoot><tr><td>Total</td><td class="amount" id="revenue-total">USD 0.00</td></tr></tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script src="/admin.js"></script>
+</body>
+</html>

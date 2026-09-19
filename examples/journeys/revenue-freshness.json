@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "id": "revenue-freshness",
+  "mode": "verify",
+  "url": "http://127.0.0.1:8113/insights",
+  "allowed_origins": [
+    "http://127.0.0.1:8113"
+  ],
+  "task": "You are preparing a revenue update for the leadership meeting. Open the Meridian revenue view for the last 7 days and read the figures, including anything the page tells you about them. Stop once the revenue by region is on screen.",
+  "viewports": [
+    "standard"
+  ],
+  "facts": {
+    "window": "Last 7 days",
+    "use": "The total will be quoted in a leadership meeting, so it has to be safe to quote."
+  },
+  "probes": [
+    {
+      "id": "reach-revenue",
+      "instruction": "Refresh the revenue for the last 7 days.",
+      "required_checks": [
+        "refresh-progress-feedback",
+        "revenue-appears"
+      ]
+    },
+    {
+      "id": "read-revenue",
+      "instruction": "Read the figures and whatever the page says about them.",
+      "required_checks": [
+        "data-completeness-disclosed"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "id": "data-completeness-disclosed",
+      "family": "unexpected_state",
+      "scope": "transition",
+      "applies_when": {
+        "predicate": "all_of",
+        "clauses": [
+          {
+            "predicate": "text_contains",
+            "value": "Revenue by region"
+          },
+          {
+            "predicate": "text_contains",
+            "value": "Total"
+          }
+        ]
+      },
+      "requirement": "If the figures on screen are not current and complete, the page says so next to them: how old the data is, and that a region is missing from the totals.",
+      "deadline_ms": 1500,
+      "severity": "high",
+      "required_evidence": [
+        "observation"
+      ],
+      "expect": {
+        "require_acknowledgement": false
+      }
+    },
+    {
+      "id": "refresh-progress-feedback",
+      "family": "experience_feedback",
+      "scope": "transition",
+      "applies_when": {
+        "predicate": "action_executed",
+        "value": "Refresh revenue"
+      },
+      "requirement": "While the revenue is being refreshed the page tells the administrator that it is working.",
+      "deadline_ms": 4000,
+      "severity": "medium",
+      "required_evidence": [
+        "telemetry_window"
+      ],
+      "expect": {
+        "operation": "the revenue refresh",
+        "threshold_ms": 1000,
+        "ready_when": {
+          "predicate": "text_contains",
+          "value": "Total"
+        }
+      }
+    },
+    {
+      "id": "revenue-appears",
+      "family": "interaction_correctness",
+      "scope": "transition",
+      "applies_when": {
+        "predicate": "action_executed",
+        "value": "Refresh revenue"
+      },
+      "requirement": "Refreshing shows revenue for the chosen window, broken down by region, with a total.",
+      "deadline_ms": 4000,
+      "severity": "high",
+      "required_evidence": [
+        "observation"
+      ],
+      "expect": {
+        "effect": "A table of revenue amounts by region with a total is visible.",
+        "ready_when": {
+          "predicate": "text_contains",
+          "value": "Total"
+        }
+      }
+    },
+    {
+      "id": "journey-advancing",
+      "family": "task_progress",
+      "scope": "transition",
+      "applies_when": {
+        "predicate": "always"
+      },
+      "requirement": "Each action the administrator takes moves the revenue view forward.",
+      "deadline_ms": 1000,
+      "severity": "medium",
+      "required": false,
+      "expect": {
+        "stall_after_unchanged_actions": 3
+      }
+    }
+  ],
+  "acceptance": {
+    "url_path_is": "/insights",
+    "text_contains": [
+      "Revenue by region",
+      "Total"
+    ],
+    "backend": {
+      "path": "/__test__/queries/last_7_days",
+      "reset_path": "/__test__/reset",
+      "expect_records": [
+        {
+          "window": "last_7_days"
+        }
+      ]
+    }
+  },
+  "budgets": {
+    "wall_ms": 300000,
+    "model_requests": 60,
+    "steps": 16,
+    "usd": "0.10"
+  },
+  "expected_console_errors": []
+}

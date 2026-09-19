@@ -1,8 +1,18 @@
 """Local-browser freshness/execution regressions. No model calls or external websites."""
 
+import sys
+import tempfile
+import threading
+import time
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
 from urllib.parse import quote
 
-from jev_ultrafast.browser import Browser, StalePage
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from journey_evals.isolation import OwnedSession  # noqa: E402
 
 HTML = """<!doctype html><title>Guard checks</title>
 <style>body{margin:30px}button{width:180px;height:50px}#outside{position:absolute;top:3000px}</style>
@@ -15,6 +25,15 @@ HTML = """<!doctype html><title>Guard checks</title>
 
 
 def main():
+    """Every guard runs inside one owned browser session, never a personal profile."""
+    with tempfile.TemporaryDirectory() as diagnostics:
+        with OwnedSession(diagnostics):
+            return guards()
+
+
+def guards():
+    from jev_ultrafast.browser import Browser, StalePage
+
     browser = Browser("data:text/html," + quote(HTML))
     passed = []
     try:
@@ -129,8 +148,117 @@ def main():
         passed.append("navigation invalidates the old document")
     finally:
         browser.close()
+    passed.extend(telemetry_guards())
     print("\n".join(passed))
     print(f"PASS: {len(passed)} browser guard checks; no model calls")
+
+
+EVALUATION_HTML = """<!doctype html><title>Evaluation state</title>
+<style>
+body{margin:20px}
+#frame{height:24px;overflow:hidden;position:relative}
+#cover{position:absolute;inset:0;background:#fff}
+#offscreen{position:absolute;top:4000px}
+</style>
+<p id="status" role="status"></p>
+<div id="frame"><button id="confirm">Confirm booking</button><div id="cover"></div></div>
+<button id="off" disabled>Disabled action</button>
+<button id="offscreen">Far below</button>
+<script>
+document.getElementById('status').textContent = 'Ready';
+</script>"""
+
+
+def _serve(html):
+    """A loopback origin for the guard document: telemetry needs a real page, not a data URL."""
+    body = html.encode()
+
+    class Handler(BaseHTTPRequestHandler):
+        protocol_version = "HTTP/1.1"
+
+        def log_message(self, *_args):
+            pass
+
+        def do_GET(self):
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+
+    return ThreadingHTTPServer(("127.0.0.1", 0), Handler)
+
+
+def telemetry_guards():
+    """Evidence-collection guarantees: continuity, geometry, and what survives a navigation.
+
+    These are separate from the freshness guards because they protect a different claim. Freshness
+    decides whether an action may still be executed; this decides whether the record of what
+    happened is complete enough to judge at all.
+    """
+    import tempfile
+
+    from jev_ultrafast.browser import Browser
+    from journey_evals.evidence import Collector
+    from journey_evals.report import Journal
+
+    passed = []
+    directory = tempfile.mkdtemp(prefix="guards-")
+    journal = Journal(directory)
+    collector = Collector(journal)
+    # Telemetry is installed for every future document, so it must be in place before the
+    # document under test is loaded, and the document must come from a real origin: a data URL
+    # has no origin a binding can be installed into.
+    server = _serve(EVALUATION_HTML)
+    origin = f"http://127.0.0.1:{server.server_address[1]}/"
+    threading.Thread(target=server.serve_forever, daemon=True).start()
+    browser = Browser("about:blank")
+    try:
+        collector.install(browser)
+        browser.call("Page.navigate", url=origin)
+        time.sleep(0.5)
+        first = collector.checkpoint("initial")
+        assert first["complete"], "A freshly installed collector must report complete evidence"
+        assert first["sequence"] >= 1
+        passed.append("telemetry reports a complete window on a quiet document")
+
+        second = collector.checkpoint("second")
+        assert second["sequence"] > first["sequence"], "Watermarks must advance"
+        assert second["documentId"] == first["documentId"]
+        passed.append("telemetry watermarks advance without a document change")
+
+        elements = {e["label"]: e for e in second["evaluation"]["controls"]}
+        confirm = elements.get("Confirm booking")
+        assert confirm, "A clipped control must still appear in evaluation state"
+        assert confirm["ancestorClipped"] or confirm["occluded"], confirm
+        passed.append("a clipped and covered control is measured rather than dropped")
+
+        page = browser.observe(screenshot=False)
+        labels = {a["label"] for a in page["actions"]}
+        assert "Disabled action" not in labels, "A disabled control is not an offered action"
+        assert "Disabled action" in elements, "A disabled control still belongs to the state"
+        assert elements["Disabled action"]["disabled"] is True
+        passed.append("disabled controls are absent from the action table and present in state")
+
+        assert "Far below" in elements and elements["Far below"]["offscreen"] is True
+        passed.append("offscreen controls are reported as offscreen, not as missing")
+
+        browser.call("Page.navigate", url="data:text/html," + quote("<title>Next</title><p>Gone</p>"))
+        try:
+            after = collector.checkpoint("after_navigation")
+        except (RuntimeError, ValueError):
+            passed.append("a navigation that loses telemetry is an error, never a silent pass")
+        else:
+            assert after["documentId"] != first["documentId"], \
+                "A new document must produce a new document identity"
+            passed.append("a navigation is reported as a new document rather than continuity")
+    finally:
+        try:
+            collector.close()
+        finally:
+            browser.close()
+            journal.close()
+    return passed
 
 
 if __name__ == "__main__":

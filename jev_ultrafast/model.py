@@ -10,14 +10,29 @@ import httpx
 from .questions import NEXT_ACTION, TARGET, TEXT_VALUE
 
 CLIENT = httpx.Client(http2=True, timeout=25)
+TEXT_CLIENT = httpx.Client(http2=True, timeout=25)
 
 
-def post_json(url, key, body):
+def _post_json(client, url, key, body):
+    """Send one model request, retrying the request itself and never an action.
+
+    A transport failure happens before the provider answers and before anything is typed or
+    clicked, so re-sending the same body cannot double-apply an effect. That makes a model call
+    the one thing in this system it is safe to retry, and it is deliberately the only one: a
+    browser mutation is never retried. Previously a provider that answered 503 got three tries
+    while a dropped connection got none, which ended otherwise healthy runs at the first blip.
+    """
     for attempt in range(3):
         try:
-            response = CLIENT.post(url, json=body, headers={"Authorization": f"Bearer {key}"})
-        except httpx.HTTPError:
-            raise RuntimeError("Model connection failed; no action executed.") from None
+            response = client.post(url, json=body, headers={"Authorization": f"Bearer {key}"})
+        except httpx.HTTPError as error:
+            transport = type(error).__name__
+            if attempt < 2:
+                time.sleep(0.5 * 2**attempt)
+                continue
+            raise RuntimeError(
+                f"Model connection failed after 3 attempts ({transport}); no action executed."
+            ) from None
         if response.status_code in {429, 529, 503} and attempt < 2:
             time.sleep(0.5 * 2**attempt)
             continue
@@ -27,7 +42,15 @@ def post_json(url, key, body):
     raise RuntimeError("Model unavailable")
 
 
-def validate_choice(answer, ids):
+def post_json(url, key, body):
+    return _post_json(CLIENT, url, key, body)
+
+
+def post_text_json(url, key, body):
+    return _post_json(TEXT_CLIENT, url, key, body)
+
+
+def validate_choice(answer, ids, *, context="no action executed"):
     try:
         probabilities = answer["probabilities"]
         numbers = [*probabilities.values(), answer["confidence"]]
@@ -41,7 +64,7 @@ def validate_choice(answer, ids):
     except (KeyError, TypeError, ValueError):
         valid = False
     if not valid:
-        raise ValueError("Invalid TypeSafe response; no action executed.")
+        raise ValueError(f"Invalid TypeSafe response; {context}.")
     return answer
 
 
@@ -197,7 +220,7 @@ def field_text(context):
     model = os.environ.get("TEXT_MODEL", "deepseek-chat")
     tuning = text_tuning(text_dialect(base))
     started = time.perf_counter()
-    result = post_json(
+    result = post_text_json(
         base + "/chat/completions",
         key,
         {

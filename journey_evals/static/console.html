@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Journey Evals — live console</title>
+<link rel="stylesheet" href="/console.css">
+</head>
+<body>
+
+<!-- The console is an instrument. It reports on a run; it is not a product page, and it must never
+     be mistaken for the application under test in a recording. Every id below is addressed by
+     console.js: dot, journey, status, stop, url, shot, title, controls, feedback, count,
+     events, checks, findings, final, frame, size, matrix, matrixprogress, cells, replay.
+     Adding chrome around them is free; renaming them is not. -->
+
+<header class="bar">
+  <div class="ident">
+    <span class="mark" aria-hidden="true">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3"
+           stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3.2 12.4c0-4.2 2.6-5.9 5.1-6s3.5-1 3.5-2.8"/>
+        <circle cx="3.2" cy="12.4" r="1.5" fill="currentColor" stroke="none"/>
+        <circle cx="11.8" cy="3.6" r="1.5"/>
+      </svg>
+    </span>
+    <h1>Journey<span>Evals</span></h1>
+    <span class="hair" aria-hidden="true"></span>
+    <span class="sub" id="journey">loading…</span>
+  </div>
+  <div class="controls">
+    <span class="signal"><span class="dot" id="dot"></span><span class="status" id="status">idle</span></span>
+    <button id="stop" class="ghost" disabled>Stop</button>
+  </div>
+</header>
+
+<main>
+  <section class="pane viewport">
+    <div class="matrix" id="matrix" hidden>
+      <ol class="cells" id="cells"></ol>
+      <p class="matrixprogress" id="matrixprogress"></p>
+    </div>
+    <p class="replay" id="replay" hidden></p>
+    <div class="viewframe desktop" id="frame">
+      <div class="viewhead">
+        <span class="lab">Viewport</span>
+        <span class="size" id="size">—</span>
+        <span class="address" id="url">—</span>
+      </div>
+      <div class="shot" id="shot"><p class="empty">No screenshot yet.</p></div>
+    </div>
+    <dl class="meta">
+      <dt>Title</dt><dd id="title">—</dd>
+      <dt>Controls</dt><dd id="controls">—</dd>
+      <dt>Live feedback</dt><dd id="feedback">—</dd>
+    </dl>
+  </section>
+
+  <div class="stream">
+    <section class="pane timeline">
+      <h2>Navigation and evidence <span class="count" id="count">0</span></h2>
+      <ol id="events"></ol>
+      <!-- Hidden by CSS as soon as the list has a child; console.js only appends, so a
+           placeholder inside the list would never be cleared. -->
+      <p class="empty placeholder">Nothing observed yet. The run is starting.</p>
+    </section>
+
+    <section class="pane verdicts">
+      <h2>Checks as they settle</h2>
+      <ul id="checks"><li class="empty">Nothing evaluated yet.</li></ul>
+      <h2 class="spaced">Findings</h2>
+      <ul id="findings"><li class="empty">No findings.</li></ul>
+      <div id="final" class="final hidden"></div>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <span class="fkey">Read only</span>
+  <span>A viewer over the run's append-only journal. It never evaluates anything and cannot change
+  a verdict; the final panel is read from <code>report.json</code>. A green check is not proof of a
+  successful journey — the goal is verified independently.</span>
+</footer>
+
+<script src="/console.js"></script>
+</body>
+</html>

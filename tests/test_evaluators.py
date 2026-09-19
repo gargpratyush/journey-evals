@@ -1,7 +1,7 @@
 import pytest
 
-from jev_ultrafast import evaluators
-from jev_ultrafast.screening import corpus, metrics
+from journey_evals import evaluators
+from journey_evals.screening import corpus, metrics
 
 
 def window():

@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "id": "plan-downgrade",
+  "mode": "verify",
+  "url": "http://127.0.0.1:8113/billing",
+  "allowed_origins": [
+    "http://127.0.0.1:8113"
+  ],
+  "task": "You administer the Meridian sandbox workspace, which is on the Pro plan with 7 members. Move it to the Starter plan. Read what the change does before you accept it, then confirm the downgrade. Stop once the change is scheduled.",
+  "viewports": [
+    "standard"
+  ],
+  "facts": {
+    "workspace": "Meridian sandbox",
+    "current_plan": "Pro, USD 12.00 per member per month, 7 members",
+    "target_plan": "Starter",
+    "next_invoice": "1 October 2026"
+  },
+  "probes": [
+    {
+      "id": "reach-review",
+      "instruction": "Open the plan change and read the review step before confirming.",
+      "required_checks": [
+        "downgrade-consequences-disclosed",
+        "confirm-control-usable"
+      ]
+    },
+    {
+      "id": "reach-scheduled",
+      "instruction": "Confirm the downgrade.",
+      "required_checks": [
+        "downgrade-recorded"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "id": "downgrade-consequences-disclosed",
+      "family": "unexpected_state",
+      "scope": "transition",
+      "applies_when": {
+        "predicate": "all_of",
+        "clauses": [
+          {
+            "predicate": "text_contains",
+            "value": "Review plan change"
+          },
+          {
+            "predicate": "control_present",
+            "value": "Confirm downgrade"
+          }
+        ]
+      },
+      "requirement": "Before the administrator can confirm, the page states what the downgrade takes away and when: that the workspace has more members than the new plan includes, which people lose access, on what date, and what happens to the money.",
+      "deadline_ms": 1500,
+      "severity": "high",
+      "required_evidence": [
+        "observation"
+      ],
+      "expect": {
+        "require_acknowledgement": true
+      }
+    },
+    {
+      "id": "confirm-control-usable",
+      "family": "layout_integrity",
+      "scope": "transition",
+      "applies_when": {
+        "predicate": "text_contains",
+        "value": "Review plan change"
+      },
+      "requirement": "The administrator can see and use the control that confirms the downgrade.",
+      "deadline_ms": 1000,
+      "severity": "high",
+      "required_evidence": [
+        "observation"
+      ],
+      "expect": {
+        "controls": [
+          "Confirm downgrade"
+        ]
+      }
+    },
+    {
+      "id": "downgrade-recorded",
+      "family": "interaction_correctness",
+      "scope": "transition",
+      "applies_when": {
+        "predicate": "action_executed",
+        "value": "Confirm downgrade"
+      },
+      "requirement": "Confirming the downgrade shows that it was scheduled, with a change reference and the date it takes effect.",
+      "deadline_ms": 2500,
+      "severity": "high",
+      "required_evidence": [
+        "observation"
+      ],
+      "expect": {
+        "effect": "A scheduled plan change naming a change reference and an effective date is visible.",
+        "ready_when": {
+          "predicate": "text_contains",
+          "value": "Downgrade scheduled"
+        }
+      }
+    },
+    {
+      "id": "journey-advancing",
+      "family": "task_progress",
+      "scope": "transition",
+      "applies_when": {
+        "predicate": "always"
+      },
+      "requirement": "Each action the administrator takes moves the plan change forward.",
+      "deadline_ms": 1000,
+      "severity": "medium",
+      "required": false,
+      "expect": {
+        "stall_after_unchanged_actions": 3
+      }
+    }
+  ],
+  "acceptance": {
+    "url_path_is": "/billing/scheduled",
+    "text_contains": [
+      "Downgrade scheduled",
+      "Change reference"
+    ],
+    "backend": {
+      "path": "/__test__/plan-changes",
+      "reset_path": "/__test__/reset",
+      "expect_records": [
+        {
+          "plan": "Starter",
+          "effective_date": "2026-10-01",
+          "seats_removed": 4,
+          "credit_cents": 1920,
+          "currency": "USD"
+        }
+      ]
+    }
+  },
+  "budgets": {
+    "wall_ms": 300000,
+    "model_requests": 60,
+    "steps": 18,
+    "usd": "0.10"
+  },
+  "expected_console_errors": []
+}

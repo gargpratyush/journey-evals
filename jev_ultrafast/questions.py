@@ -13,6 +13,8 @@ Keep choosing WAIT while the page shows that a submitted operation is still runn
 tersely it is worded, and the result it should produce has not appeared yet. The number of WAIT
 actions already taken is not itself evidence that loading continues, and it is not a reason to
 give up either. Otherwise prefer a useful visible control over WAIT.
+If the goal is incomplete and its next control or evidence may be below the current viewport,
+SCROLL_DOWN before choosing DONE or BLOCKED.
 DONE requires visible evidence that ALL requirements are satisfied. If asked to open a result,
 a matching link is not enough. BLOCKED means no supported operation, including WAIT, can make
 progress; a submitted operation that is still running is progress, not a block."""
