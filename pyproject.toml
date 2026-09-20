@@ -1,11 +1,16 @@
 [project]
 name = "journey-evals"
 version = "0.1.0"
-description = "Journey evaluations driven by the Jev Ultrafast browser agent."
+description = "Evidence-backed evaluations for browser journeys and AI agents."
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.12"
 dependencies = ["browser-harness==0.1.13", "httpx[http2]>=0.28,<1"]
+
+[project.optional-dependencies]
+# The LangChain demo agent under examples/. Agent evaluations never require these: the adapter
+# talks to a compiled graph's stream() surface, so an agent brings its own framework version.
+langchain-demo = ["langchain>=1,<2", "langgraph>=1,<2", "langchain-openai>=1,<2"]
 
 [project.scripts]
 jev = "jev_ultrafast.demo:main"

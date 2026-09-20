@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "id": "refund-agent-eligible",
+  "task": "Decide whether order A-1001 can be refunded, using the order and policy tools.",
+  "runtime": {
+    "framework": "langgraph",
+    "entrypoint": "examples.langchain_demo_agent:graph"
+  },
+  "input": {
+    "messages": [
+      {
+        "role": "user",
+        "content": "Can I get a refund for order A-1001?"
+      }
+    ]
+  },
+  "acceptance": {
+    "output_contains": ["VERDICT: REFUNDABLE"],
+    "tools_called": ["lookup_order", "refund_policy"],
+    "no_tool_errors": true
+  },
+  "judges": [
+    {
+      "id": "grounded-decision",
+      "family": "groundedness",
+      "requirement": "The final answer's refund decision follows from the tool results, citing the order age and the policy window rather than asserting them unsupported.",
+      "required": true,
+      "severity": "high"
+    },
+    {
+      "id": "tool-use",
+      "family": "tool_use",
+      "requirement": "The agent looked up the order before consulting the policy, and did not guess the order's category.",
+      "required": true,
+      "severity": "medium"
+    }
+  ],
+  "budgets": {
+    "wall_ms": 120000,
+    "steps": 20,
+    "model_requests": 4,
+    "usd": "0.10"
+  }
+}

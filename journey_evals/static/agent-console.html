@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent evaluation console</title>
+<link rel="stylesheet" href="/agent-console.css">
+</head>
+<body>
+<header>
+  <div>
+    <h1 id="title">Agent evaluation</h1>
+    <p id="task" class="muted"></p>
+  </div>
+  <div id="verdict" class="verdict pending">running</div>
+</header>
+
+<div class="phases">
+  <span class="phase" data-phase="conversation">1. Conversation</span>
+  <span class="arrow">&rarr;</span>
+  <span class="phase" data-phase="judging">2. Judging</span>
+  <span class="arrow">&rarr;</span>
+  <span class="phase" data-phase="done">3. Verdict</span>
+</div>
+
+<main>
+  <section class="pane">
+    <h2>Conversation <span id="turncount" class="muted"></span></h2>
+    <div id="chat"></div>
+  </section>
+  <section class="pane">
+    <h2>Judges</h2>
+    <p id="judgenote" class="muted note"></p>
+    <div id="judges"></div>
+    <div id="cost" class="cost"></div>
+  </section>
+</main>
+
+<script>window.CONSOLE_TOKEN = "__TOKEN__";</script>
+<script src="/agent-console.js"></script>
+</body>
+</html>

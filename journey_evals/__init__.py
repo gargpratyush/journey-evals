@@ -1,8 +1,8 @@
 """Jev chooses an observed action. Code owns execution."""
 
 __all__ = [
-    "Agent", "Browser", "Coverage", "Evaluation", "Finding", "JourneySpec",
-    "Observation", "RunResult", "WindowBinding", "run_journey",
+    "Agent", "AgentEvalSpec", "Browser", "Coverage", "Evaluation", "Finding", "JourneySpec",
+    "Observation", "RunResult", "WindowBinding", "run_agent_eval", "run_journey",
 ]
 
 _CONTRACTS = {"Coverage", "Finding", "JourneySpec"}
@@ -20,6 +20,9 @@ def __getattr__(name):
     if name == "run_journey":
         from .runner import run_journey
         return run_journey
+    if name in {"AgentEvalSpec", "run_agent_eval"}:
+        from . import agent_evals
+        return getattr(agent_evals, name)
     if name in _CONTRACTS:
         from . import contracts
         return getattr(contracts, name)

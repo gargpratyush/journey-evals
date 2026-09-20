@@ -191,6 +191,37 @@ def test_junit_is_well_formed_for_a_clean_run():
     assert case.find("failure") is None
 
 
+def test_an_advisory_agent_judge_does_not_fail_junit():
+    advisory = {
+        **RESULT,
+        "runtime": {"type": "agent", "framework": "langgraph"},
+        "result": "WARN",
+        "coverage": {
+            **RESULT["coverage"],
+            "checks": {"c1": "failed"},
+            "advisory_checks": ["c1"],
+            "failed_required_checks": [],
+        },
+    }
+    tree = ElementTree.fromstring(render_junit(advisory))
+    case = next(c for c in tree.iter("testcase") if c.get("name") == "c1")
+    assert case.find("failure") is None
+    assert case.find("skipped").get("message") == "advisory finding"
+
+
+def test_agent_html_renders_trace_evidence_instead_of_browser_language():
+    agent = {
+        **RESULT,
+        "runtime": {"type": "agent", "framework": "langgraph"},
+        "final_output": "eligible",
+        "tool_trace": [{"name": "lookup_policy"}],
+    }
+    rendered = render_html(agent, journey_task="Check eligibility")
+    assert "<h1>Agent evaluation:" in rendered
+    assert "lookup_policy" in rendered
+    assert "Hidden reasoning was not collected" in rendered
+
+
 # -- terminal ---------------------------------------------------------------------------------
 
 

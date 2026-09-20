@@ -37,7 +37,18 @@ def _post_json(client, url, key, body):
             time.sleep(0.5 * 2**attempt)
             continue
         if response.is_error:
-            raise RuntimeError(f"Model provider returned HTTP {response.status_code}; no action executed.")
+            # A 4xx is caused by the request we sent, and the body is the only thing that says
+            # which part. Discarding it turned "your payload is too large" into an unexplained
+            # failure, so the provider's own words are carried into the error, bounded in length.
+            detail = ""
+            if response.status_code < 500:
+                try:
+                    detail = f" {json.dumps(response.json(), separators=(',', ':'))[:300]}"
+                except ValueError:
+                    detail = f" {response.text[:300]}"
+            raise RuntimeError(
+                f"Model provider returned HTTP {response.status_code}; no action executed.{detail}"
+            )
         return response.json()
     raise RuntimeError("Model unavailable")
 

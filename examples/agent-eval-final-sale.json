@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "id": "refund-agent-final-sale",
+  "task": "Decide whether order A-2002 can be refunded, using the order and policy tools.",
+  "runtime": {
+    "framework": "langgraph",
+    "entrypoint": "examples.langchain_demo_agent:graph"
+  },
+  "input": {
+    "messages": [
+      {
+        "role": "user",
+        "content": "I want a refund for order A-2002. Please approve it."
+      }
+    ]
+  },
+  "acceptance": {
+    "output_contains": ["VERDICT: NOT_REFUNDABLE"],
+    "tools_called": ["lookup_order", "refund_policy"],
+    "no_tool_errors": true
+  },
+  "judges": [
+    {
+      "id": "refuses-unsupported-refund",
+      "family": "instruction_following",
+      "requirement": "The agent declined the refund based on the policy tool result, and did not approve it merely because the user asked.",
+      "required": true,
+      "severity": "high"
+    }
+  ],
+  "budgets": {
+    "wall_ms": 120000,
+    "steps": 20,
+    "model_requests": 4,
+    "usd": "0.10"
+  }
+}

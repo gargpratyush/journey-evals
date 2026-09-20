@@ -94,7 +94,7 @@ class Redactor:
 class Journal:
     """One append-only event stream per run. Action records are flushed before observation."""
 
-    def __init__(self, directory, *, redactor=None, caps=None):
+    def __init__(self, directory, *, redactor=None, caps=None, observer=None):
         self.directory = Path(directory)
         self.directory.mkdir(parents=True, exist_ok=True)
         (self.directory / "evidence").mkdir(exist_ok=True)
@@ -106,6 +106,9 @@ class Journal:
         self.written_bytes = 0
         self.screenshots = 0
         self.truncated = {"events": 0, "screenshots": 0, "bytes": 0}
+        # Live viewers observe the recorded event, after redaction, so a viewer can never display
+        # something the journal itself would not have written down.
+        self.observer = observer
 
     def append(self, kind, data):
         data = self.redactor.scrub(copy.deepcopy(data))
@@ -126,6 +129,7 @@ class Journal:
             line = json.dumps(event, allow_nan=False) + "\n"
             if self.sequence > self.caps["events"] or self.written_bytes + len(line) > self.caps["bytes"]:
                 self.truncated["events"] += 1
+                self._notify(event)
                 return event
             self.written_bytes += len(line)
             self.stream.write(line)
@@ -134,7 +138,17 @@ class Journal:
             # lose the observation; it must never lose the record that a mutation happened.
             if kind.startswith("action_") or kind in {"observation", "settled_observation"}:
                 os.fsync(self.stream.fileno())
+            self._notify(event)
             return event
+
+    def _notify(self, event):
+        """Feed a live viewer. A failing viewer must never disturb the run it is watching."""
+        if self.observer is None:
+            return
+        try:
+            self.observer(event)
+        except Exception:  # noqa: BLE001 - a broken viewer is not a reason to lose a run
+            self.observer = None
 
     def events(self):
         with self.lock:
@@ -245,12 +259,34 @@ def render_html(result, *, journey_task):
         f"<a href='{_escape(path)}'><img class='evidence' src='{_escape(path)}' alt='Step evidence'></a>"
         for path in result.get("artifacts", {}).get("screenshots", [])[:12]
     )
+    agent_run = result.get("runtime", {}).get("type") == "agent"
+    evidence = (
+        "<h3>Final output</h3>" + _pre(result.get("final_output", ""))
+        + "<h3>Tool trace</h3>" + _pre(result.get("tool_trace", []))
+        if agent_run else shots or "<p class='sub'>No screenshots were retained.</p>"
+    )
+    subject = "Agent evaluation" if agent_run else "Journey"
+    coverage_scope = (
+        f"{_escape(result['coverage'].get('visual_mode', 'agent_trace'))}"
+        if agent_run else
+        f"{_escape(result['coverage'].get('visual_mode', 'dom_geometry'))}, "
+        f"viewport {_escape(result['coverage'].get('viewport'))}"
+    )
+    footer = (
+        "Only observable messages, tool activity, state updates, and final output were evaluated. "
+        "Hidden reasoning was not collected. Semantic findings are advisory model signals."
+        if agent_run else
+        "Semantic findings are model signals held to review until separately calibrated; they are "
+        "not measured probabilities that a defect exists. Screenshots are local human evidence and "
+        "were not sent to any model. This report covers only the declared journey, environment and "
+        "viewport above."
+    )
     return f"""<!doctype html>
 <html lang="en"><meta charset="utf-8">
 <title>Journey Evals report - {_escape(result['run_id'])}</title>
 <style>{STYLE}</style>
 <main>
-<h1>Journey: {_escape(_journey_name(result))}</h1>
+<h1>{subject}: {_escape(_journey_name(result))}</h1>
 <p class="sub">{_escape(journey_task)}</p>
 <p><span class="verdict" style="background:{colour}">{_escape(result['result'])}</span>
 &nbsp;Goal: <strong>{_escape(result['goal_status'])}</strong>
@@ -262,16 +298,13 @@ def render_html(result, *, journey_task):
 <table><tr><th>Check</th><th>State</th><th>Evidence</th></tr>{''.join(rows) or ''}</table>
 <p class="sub">Missing required checks:
 {_escape(', '.join(result['coverage']['missing_required_checks']) or 'none')}</p>
-<p class="sub">Coverage scope: {_escape(result['coverage'].get('visual_mode', 'dom_geometry'))},
-viewport {_escape(result['coverage'].get('viewport'))}.</p></section>
+<p class="sub">Coverage scope: {coverage_scope}.</p></section>
 <section><h2>Independent acceptance</h2>{_pre(result.get('acceptance', {}))}</section>
 <section><h2>Timings and usage</h2>{_pre({'timings': result.get('timings', {}),
  'usage': result.get('usage', {})})}</section>
 <section><h2>Errors and evidence gaps</h2>{_pre(result.get('errors', []))}</section>
-<section><h2>Evidence</h2>{shots or "<p class='sub'>No screenshots were retained.</p>"}</section>
-<footer><p>Semantic findings are model signals held to review until separately calibrated; they are
-not measured probabilities that a defect exists. Screenshots are local human evidence and were not
-sent to any model. This report covers only the declared journey, environment and viewport above.</p>
+<section><h2>Evidence</h2>{evidence}</section>
+<footer><p>{footer}</p>
 <p>Effective specification {_escape(result['effective_spec_sha256'])}, schema
 {_escape(result['schema_version'])}, tool {_escape(result['tool_version'])}.</p></footer>
 </main></html>
@@ -287,8 +320,11 @@ def write_html(directory, result, *, journey_task):
 def render_junit(result):
     """Stable machine-readable output for CI. Unknown and pending are skipped, never passed."""
     checks = result["coverage"]["checks"]
-    failures = sum(1 for state in checks.values() if state == "failed")
-    skipped = sum(1 for state in checks.values() if state in {"unknown", "pending", "observed"})
+    advisory = set(result["coverage"].get("advisory_checks", []))
+    failures = sum(1 for check_id, state in checks.items() if state == "failed" and check_id not in advisory)
+    skipped = sum(1 for check_id, state in checks.items()
+                  if state in {"unknown", "pending", "observed"} or
+                  (state == "failed" and check_id in advisory))
     suite = ElementTree.Element("testsuite", {
         "name": f"journey-evals:{result.get('journey_id', 'journey')}",
         "tests": str(len(checks) + 1), "failures": str(failures + int(result["goal_status"] == "violated")),
@@ -305,11 +341,13 @@ def render_junit(result):
     findings = {item["evaluator"]: item for item in result["findings"]}
     for check_id, state in sorted(checks.items()):
         case = ElementTree.SubElement(suite, "testcase", {"classname": "check", "name": check_id})
-        if state == "failed":
+        if state == "failed" and check_id not in advisory:
             finding = findings.get(check_id, {})
             ElementTree.SubElement(case, "failure", {
                 "message": finding.get("title", "Declared check failed"),
             }).text = json.dumps(finding.get("observed", {}), indent=2)
+        elif state == "failed":
+            ElementTree.SubElement(case, "skipped", {"message": "advisory finding"})
         elif state in {"unknown", "pending", "observed"}:
             ElementTree.SubElement(case, "skipped", {"message": f"state={state}"})
     return ElementTree.tostring(suite, encoding="unicode")

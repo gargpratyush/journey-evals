@@ -340,6 +340,230 @@ an approval environment. It does not use `pull_request_target` and does not
 consume artifacts produced by untrusted code. A runner error still fails the job;
 "the tool could not run" and "the application is fine" are different statements.
 
+### AI agent evaluation prototype
+
+The same evidence and reporting pipeline can evaluate an AI agent from its observable execution
+trace. The first adapter supports synchronous LangGraph compiled graphs through their `values`
+stream. It records state updates, messages, tool calls, tool results, and the final output; it does
+not collect hidden chain-of-thought.
+
+```powershell
+# Offline bundled example. Its explicit empty judges list makes no model call.
+.\.venv\Scripts\journey-evals.exe agent validate --eval examples\agent-eval.json
+.\.venv\Scripts\journey-evals.exe agent run --eval examples\agent-eval.json `
+    --out artifacts\agent-eval
+```
+
+An agent evaluation points at a graph exported as `module:attribute`:
+
+```json
+{
+  "schema_version": 1,
+  "id": "support-agent-refund",
+  "task": "Determine whether the order is eligible for a refund.",
+  "runtime": {
+    "framework": "langgraph",
+    "entrypoint": "my_agent.graph:compiled_graph"
+  },
+  "input": {
+    "messages": [{"role": "user", "content": "Can this order be refunded?"}]
+  },
+  "acceptance": {
+    "output_contains": ["eligible"],
+    "tools_called": ["lookup_order"],
+    "no_tool_errors": true
+  }
+}
+```
+
+When `judges` is omitted, a required `task_outcome` LLM judge is added automatically. Configure it
+with `JEV_API_KEY` or `TYPESAFE_API_KEY`; set `"judges": []` for an explicitly deterministic,
+offline run. Judge findings are advisory and produce `WARN`. A judge outage produces
+`INCONCLUSIVE`, and a judge answer can never establish task success without the separate
+`acceptance` contract.
+
+LangGraph remains an application dependency rather than a package dependency: install the version
+your agent uses in the environment running `journey-evals`. The adapter intentionally relies only
+on the compiled graph's stable `stream(input, stream_mode="values")` surface.
+
+#### A real LangChain agent, end to end
+
+`examples\langchain_demo_agent.py` is a working support agent built with
+`langchain.agents.create_agent`. It answers from two tools rather than from model memory, and ends
+with `VERDICT: REFUNDABLE` or `VERDICT: NOT_REFUNDABLE`. Two evaluations drive it:
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install -e ".[langchain-demo]"
+
+# Uses TEXT_MODEL_BASE_URL / TEXT_MODEL / TEXT_MODEL_API_KEY for the agent,
+# and JEV_API_KEY for the judge. Both are read from .env.
+.\.venv\Scripts\journey-evals.exe agent run --eval examples\agent-eval-refund.json `
+    --out artifacts\demo-eligible
+.\.venv\Scripts\journey-evals.exe agent run --eval examples\agent-eval-final-sale.json `
+    --out artifacts\demo-final-sale
+```
+
+Measured on this workstation, both return `PASS` with an independently verified outcome, two live
+`jev-1.13.0` judge verdicts, and a four-event tool trace. The two verdict tokens are deliberately
+non-overlapping, so re-running the eligible evaluation against the opposite expected verdict
+returns `FAIL` with `output_contains: unmet` and exit code 1. That negative control is what shows
+the acceptance contract is actually discriminating rather than agreeable.
+
+#### Talking to an agent, and watching an evaluation
+
+To explore an agent's behaviour before writing any criteria, chat with it. Nothing is judged or
+recorded; you see each reply and the tools behind it:
+
+```powershell
+.\.venv\Scripts\journey-evals.exe agent chat --entrypoint examples.langchain_concierge_agent:graph
+.\.venv\Scripts\journey-evals.exe agent chat --eval examples\agent-eval-concierge.json --hide-tools
+```
+
+`--eval` reuses the entrypoint already declared in an evaluation, so chat and evaluation always
+talk to the same agent. Type `exit` or press Ctrl-D to leave.
+
+To watch an evaluation as it happens rather than waiting for the summary, add `--watch`:
+
+```powershell
+.\.venv\Scripts\journey-evals.exe agent run --eval examples\agent-eval-concierge.json `
+    --out artifacts\watch-demo --watch
+```
+
+```
+> start   concierge-warm  via examples.langchain_concierge_agent:graph
+  human     I'm checking in tomorrow on booking BK-7741...
+  -> call   lookup_booking({'booking_id': 'BK-7741'})
+  <- result lookup_booking: {"booking_id": "BK-7741", "status": "overbooked", ...
+  ai        I'm sorry, but the garden suite will not be available...
+= done    6 step(s); judging...
+  judge    acknowledges-the-guest: PASS (blocking)
+```
+
+The viewer is fed from the journal after redaction, so it can only ever show you what was
+actually recorded — watching a run cannot reveal a secret that the artifacts would have masked.
+Note that `journey-evals watch`, the graphical console, remains browser-only; agent evaluations
+are watched in the terminal.
+
+#### What a run costs
+
+Pass `--show-cost` (or `--showCost`) to `agent run` to see what the judging cost when the run
+finishes:
+
+```
+Cost: USD 0.000174 for 1 judge request(s) (4075 in / 75 out tokens at 4.2E-8 per token)
+      within the declared budget of USD 0.200000
+      not included: agent under test (the agent's own provider has no rate configured here)
+```
+
+The price comes from the tokens actually reported by the judge, at the same authorized rate the
+browser runner uses — not an advertised list ratio. Two honesty rules apply. The agent under test
+runs on whatever provider its owner configured, which this tool has no rate for, so those tokens
+are named as excluded rather than counted as zero; and the figure is always compared against the
+evaluation's `budgets.usd`. The same numbers are in `report.json` under `cost` and `usage`.
+
+#### Reading what happened afterwards
+
+Every run directory holds the full record:
+
+| File | What it answers |
+| --- | --- |
+| `report.json` | `history` is the conversation, `tool_trace` the tool calls, `evaluations` the verdicts with confidences |
+| `judge-exchange.json` | Exactly what was sent to Jev and exactly what came back |
+| `events.jsonl` | The append-only journal every other artifact is derived from |
+| `report.html` | The same run as a readable page |
+| `junit.xml` | CI result; blocking judge failures appear as real failures |
+
+`judge-exchange.json` is written whenever a judge ran. It contains the endpoint, the request
+(`state.cases` is the trace each judge saw, `questions` the instruction and criteria per judge)
+and the raw response. If the provider fails, the request is still recorded with the error, so a
+verdict you cannot reproduce is never left unexplained. It is redacted like every other artifact.
+
+#### Judging intent when no code oracle exists
+
+Some qualities have no deterministic test. Whether a reply to a distressed customer is warm,
+takes ownership, or leaves the customer a real choice cannot be settled by string matching, and
+an agent's wording changes on every run. For these, a judge may be declared `blocking`:
+
+```json
+{
+  "id": "acknowledges-the-guest",
+  "family": "communication_quality",
+  "enforcement": "blocking",
+  "requirement": "The reply acknowledges what losing the booked room means for this guest and takes ownership before moving to logistics."
+}
+```
+
+A blocking judge decides the run: its `FAIL` becomes an overall `FAIL` with exit code 1 and a real
+JUnit failure, not a skipped advisory. Two rules keep this honest:
+
+- **A judge may never block on `task_outcome`.** Whether the work actually happened stays the job
+  of deterministic acceptance. Declaring `enforcement: blocking` on that family is a contract
+  error.
+- **Delegation is explicit.** To say a dimension has no code oracle, the evaluation must declare
+  `"acceptance": {"basis": "model_judgment"}`, and that requires at least one blocking judge.
+
+Every report records what its verdict rests on, in `evidence_basis`: `code`,
+`code_and_model_judgment`, or `model_judgment`. The terminal summary prints the same thing, so a
+model-graded pass is never mistaken for a proof.
+
+`examples\langchain_concierge_agent.py` demonstrates it. Two personas share the same tools, the
+same synthetic booking and the same task; one is a warm concierge, the other an accurate but
+uncaring operator:
+
+```powershell
+.\.venv\Scripts\journey-evals.exe agent run --eval examples\agent-eval-concierge.json `
+    --out artifacts\concierge-warm
+.\.venv\Scripts\journey-evals.exe agent run --eval examples\agent-eval-concierge-blunt.json `
+    --out artifacts\concierge-blunt
+```
+
+Both produce identical deterministic evidence: the same two tools called, no tool errors, no
+invented remedies. Code cannot separate them. The observed runs return `PASS` (exit 0) and `FAIL`
+(exit 1), differing on the `acknowledges-the-guest` judge alone. Re-running the warm case produces
+different prose each time and the same verdict, which is the property that makes qualitative
+judging usable on a stochastic agent.
+
+### Multi-turn conversations
+
+A `conversation` is a list of user turns, sent in order with the agent's replies carried forward as
+history, so the evaluation tests what the agent remembers as well as what it says. Budgets span the
+whole conversation rather than resetting each turn.
+
+`examples\agent-eval-travel-multiturn.json` drives five turns of a Lisbon dinner plan against the
+deliberately flawed `examples\langchain_travel_agent.py`, with six blocking judges:
+
+```powershell
+.\.venv\Scripts\journey-evals.exe agent run --eval examples\agent-eval-travel-multiturn.json `
+    --out artifacts\travel-multiturn --watch --showCost
+```
+
+The observed run is a partial failure, which is the point — a useful evaluation discriminates
+rather than condemning. Four criteria pass: the agent honours the accessibility constraint stated
+in turn 1, invents no venues, answers every question, and stays courteous. Two fail: it confirms
+the booking without disclosing the cancellation fee its own tool returned, and it answers in
+markdown despite a declared plain-prose requirement. The run exits `1`.
+
+`report.json` gains a `turns` array pairing each user turn with the reply it drew, and the judges
+are shown that conversation alongside the trace.
+
+### Watch it in a browser
+
+```powershell
+.\.venv\Scripts\journey-evals.exe agent console --eval examples\agent-eval-travel-multiturn.json `
+    --out artifacts\console-demo
+```
+
+The conversation streams on the left as it happens, the declared judges sit on the right, and a
+phase strip shows where the run is. The page is served on loopback only and renders every value
+from the run as text, never as markup — an agent under evaluation must not be able to execute
+anything in the page watching it.
+
+Judging happens **once, after the last turn**, in a single request. The console shows that as a
+distinct phase rather than animating per-turn verdicts, because that is what actually happens —
+and because it has to: whether the booking confirmation disclosed the fee cannot be decided while
+that turn is still the newest thing in the trace, since a later disclosure is exactly what
+separates a pass from a fail.
+
 ## Run the scoped experiment
 
 Only Windows, the pinned Chrome for Testing binary, and the built-in synthetic

@@ -149,6 +149,38 @@ def build_parser():
                        help=argparse.SUPPRESS)  # accepted and ignored: watching always starts
     watch.add_argument("--no-open", action="store_true", help="Do not open a browser tab")
 
+    agent = sub.add_parser("agent", help="Evaluate a LangGraph agent from its observable trace")
+    agent_sub = agent.add_subparsers(dest="agent_command", required=True)
+    agent_run = agent_sub.add_parser("run", help="Run one agent evaluation and write a report")
+    agent_run.add_argument("--eval", required=True, help="Path to an agent evaluation specification")
+    agent_run.add_argument("--out", default=None, help="Directory for this run's artifacts")
+    agent_run.add_argument("--quiet", action="store_true")
+    agent_run.add_argument("--warn-as-error", action="store_true",
+                           help="Treat advisory judge findings as a failing exit code")
+    agent_run.add_argument("--watch", action="store_true",
+                           help="Print each message, tool call and judge verdict as it is recorded")
+    agent_run.add_argument("--show-cost", "--showCost", dest="show_cost", action="store_true",
+                           help="Report what the judge calls cost when the run finishes")
+    agent_validate = agent_sub.add_parser("validate", help="Validate an agent evaluation specification")
+    agent_validate.add_argument("--eval", required=True)
+    agent_console = agent_sub.add_parser(
+        "console", help="Watch an agent evaluation in a browser: the conversation, then the judging")
+    agent_console.add_argument("--eval", required=True,
+                               help="Path to an agent evaluation specification")
+    agent_console.add_argument("--out", default=None, help="Directory for this run's artifacts")
+    agent_console.add_argument("--port", type=int, default=0,
+                               help="Port for the local viewer; 0 picks a free one")
+    agent_console.add_argument("--no-open", action="store_true",
+                               help="Do not open a browser automatically")
+    agent_chat = agent_sub.add_parser(
+        "chat", help="Talk to an agent in the terminal, without evaluating it")
+    agent_chat.add_argument("--entrypoint",
+                            help="The agent as module:attribute, e.g. examples.my_agent:graph")
+    agent_chat.add_argument("--eval",
+                            help="Take the entrypoint from an evaluation specification instead")
+    agent_chat.add_argument("--hide-tools", action="store_true",
+                            help="Show only replies, not the tool calls behind them")
+
     for name in CHECKPOINTS:
         checkpoint = sub.add_parser(name, help="Feasibility campaign checkpoint (see plans/jev-feasibility)")
         checkpoint.add_argument("rest", nargs=argparse.REMAINDER)
@@ -390,9 +422,113 @@ def command_show(args):
         print(f"no report at {report}", file=sys.stderr)
         return CONFIGURATION_EXIT
     payload = json.loads(report.read_text(encoding="utf-8"))
-    print(terminal_summary(payload, journey_task=payload.get("journey", {})
-                           .get("resolved", {}).get("task", "")))
+    task = payload.get("journey", {}).get("resolved", {}).get("task", "")
+    if payload.get("runtime", {}).get("type") == "agent":
+        from .agent_evals import agent_terminal_summary
+
+        print(agent_terminal_summary(payload, task=task))
+    else:
+        print(terminal_summary(payload, journey_task=task))
     return 0
+
+
+def command_agent_validate(args):
+    from .agent_evals import load_agent_spec
+
+    try:
+        spec = load_agent_spec(args.eval)
+    except (ContractError, OSError) as error:
+        print(f"invalid agent evaluation: {error}", file=sys.stderr)
+        return CONFIGURATION_EXIT
+    print(f"{spec.id}: {spec.framework}, {len(spec.judges)} judge(s)")
+    print(f"effective_spec_sha256 {spec.sha256}")
+    if not spec.acceptance:
+        print("no independent acceptance declared: this evaluation cannot produce PASS")
+    return 0
+
+
+def command_agent_run(args):
+    from .agent_evals import (
+        agent_terminal_summary,
+        cost_summary,
+        live_printer,
+        load_agent_spec,
+        run_agent_eval,
+    )
+    from .feasibility import load_environment
+    from .paths import env_file
+
+    try:
+        spec = load_agent_spec(args.eval)
+        try:
+            # The agent under test usually needs its own provider credentials, whether or not a
+            # judge runs. A missing Jev key only matters when a judge was actually declared.
+            load_environment(env_file())
+        except ValueError:
+            if spec.judges:
+                raise
+        directory = Path(args.out) if args.out else runs_root() / f"{spec.id}-{uuid.uuid4().hex[:12]}"
+        secrets = [
+            value for name, value in os.environ.items()
+            if name.endswith(("_API_KEY", "_KEY", "_TOKEN", "_SECRET")) and value
+        ]
+        result = run_agent_eval(spec, directory, secrets=secrets,
+                                observer=live_printer() if args.watch else None)
+    except (ContractError, OSError, ValueError) as error:
+        print(f"configuration error: {error}", file=sys.stderr)
+        return CONFIGURATION_EXIT
+    if not args.quiet:
+        if args.watch:
+            print("")
+        print(agent_terminal_summary(result, task=spec.task))
+        if args.show_cost:
+            print(cost_summary(result))
+        print(f"\nartifacts: {directory}")
+    return exit_code(result["result"], warn_as_error=args.warn_as_error)
+
+
+def command_agent_console(args):
+    """Watch an agent evaluation in a browser: the conversation, then the judging."""
+    from .agent_console import AgentSession, serve
+    from .agent_evals import load_agent_spec
+    from .feasibility import load_environment
+    from .paths import env_file
+
+    try:
+        spec = load_agent_spec(args.eval)
+        try:
+            load_environment(env_file())
+        except ValueError:
+            if spec.judges:
+                raise
+        directory = Path(args.out) if args.out else runs_root() / f"{spec.id}-{uuid.uuid4().hex[:12]}"
+        session = AgentSession(spec, directory)
+    except (ContractError, OSError, ValueError) as error:
+        print(f"configuration error: {error}", file=sys.stderr)
+        return CONFIGURATION_EXIT
+    code = serve(session, port=args.port, open_browser=not args.no_open)
+    print(f"artifacts: {directory}")
+    return code
+
+
+def command_agent_chat(args):
+    """Talk to an agent directly. Nothing is judged or recorded; this is for exploring behaviour."""
+    from .agent_evals import agent_chat, load_agent_spec
+    from .feasibility import load_environment
+    from .paths import env_file
+
+    try:
+        if bool(args.entrypoint) == bool(args.eval):
+            raise ContractError("pass exactly one of --entrypoint or --eval")
+        entrypoint = args.entrypoint or load_agent_spec(args.eval).entrypoint
+        try:
+            load_environment(env_file())
+        except ValueError:
+            pass  # the agent brings its own credentials; no judge runs in a chat session
+        return agent_chat(entrypoint, show_tools=not args.hide_tools)
+    except (ContractError, OSError, ValueError) as error:
+        print(f"configuration error: {error}", file=sys.stderr)
+        return CONFIGURATION_EXIT
 
 
 def command_init(args):
@@ -589,6 +725,15 @@ def main(argv=None):
         return command_install_browser(args)
     if args.command == "watch":
         return command_watch(args)
+    if args.command == "agent":
+        if args.agent_command == "run":
+            return command_agent_run(args)
+        if args.agent_command == "validate":
+            return command_agent_validate(args)
+        if args.agent_command == "chat":
+            return command_agent_chat(args)
+        if args.agent_command == "console":
+            return command_agent_console(args)
     parser.error(f"unknown command {args.command}")
     return CONFIGURATION_EXIT
 

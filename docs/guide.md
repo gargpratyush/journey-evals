@@ -9,7 +9,7 @@ drives a real Chrome session toward that outcome, measures the page as it goes, 
 signed, machine-readable report that a person or a coding agent can act on.
 
 - **Audience:** developers integrating Journey Evals into a project or CI pipeline.
-- **Status:** experimental. Read [Scope and limits](#12-scope-and-limits) before you rely on it.
+- **Status:** experimental. Read [Scope and limits](#13-scope-and-limits) before you rely on it.
 - **Related:** [`docs/release-checklist.md`](release-checklist.md) for measured numbers,
   [`docs/design.md`](design.md) for internals, [`docs/demo-video.md`](demo-video.md) for recording
   the demo.
@@ -27,11 +27,12 @@ signed, machine-readable report that a person or a coding agent can act on.
 7. [Writing a journey for your own application](#7-writing-a-journey-for-your-own-application)
 8. [Results, exit codes, and artifacts](#8-results-exit-codes-and-artifacts)
 9. [Watching a run live](#9-watching-a-run-live)
-10. [Integrating Journey Evals](#10-integrating-journey-evals)
-11. [Operating it](#11-operating-it)
-12. [Scope and limits](#12-scope-and-limits)
-13. [Troubleshooting](#13-troubleshooting)
-14. [Reference](#14-reference)
+10. [Evaluating a LangGraph agent](#10-evaluating-a-langgraph-agent)
+11. [Integrating Journey Evals](#11-integrating-journey-evals)
+12. [Operating it](#12-operating-it)
+13. [Scope and limits](#13-scope-and-limits)
+14. [Troubleshooting](#14-troubleshooting)
+15. [Reference](#15-reference)
 
 ---
 
@@ -716,9 +717,245 @@ journal did not record: a pending check is styled pending, never as an optimisti
 
 ---
 
-## 10. Integrating Journey Evals
+## 10. Evaluating a LangGraph agent
 
-### 10.1 GitHub Actions
+Everything above evaluates a browser journey. This section evaluates an *agent*: the same
+invariant, the same artifacts, a different subject.
+
+### 10.1 Connecting your agent
+
+Journey Evals does not import LangGraph itself, and does not pin your version of it. Your agent is
+an ordinary Python object in your own project; the framework only needs to be able to import it and
+call `stream()`.
+
+**1. Install LangGraph in the same environment.** It is your application's dependency, not the
+framework's:
+
+```bash
+pip install langgraph langchain
+# the bundled demo agents also need an OpenAI-compatible client
+pip install -e ".[langchain-demo]"
+```
+
+**2. Expose the compiled graph at an importable name.** Either a module-level attribute or a
+zero-argument factory works:
+
+```python
+# my_project/support_agent.py
+from langchain.agents import create_agent
+
+def build():
+    return create_agent(model=..., tools=[lookup_policy, issue_refund])
+
+graph = build()          # entrypoint "my_project.support_agent:graph"
+                         # or use  "my_project.support_agent:build"  — a factory is called once
+```
+
+The only contract is `graph.stream(input, stream_mode="values")`, which is what
+`create_agent`/`StateGraph.compile()` already give you. Anything exposing that method works, so a
+hand-written graph or a thin adapter over another framework can be evaluated without changes here.
+
+**3. Point an evaluation at it.** `runtime.entrypoint` is `module:attribute`, resolved on
+`sys.path`, so run from your project root or install your package:
+
+```json
+"runtime": { "framework": "langgraph", "entrypoint": "my_project.support_agent:graph" }
+```
+
+**4. Keep the two sets of credentials apart.** Your agent reads its own provider variables
+(`TEXT_MODEL_BASE_URL`, `TEXT_MODEL`, `TEXT_MODEL_API_KEY` in the bundled demos). The judge reads
+`JEV_API_KEY`. The judge's key is *removed from the environment* while your graph runs, so an agent
+cannot spend the evaluator's credentials or call the judge that is about to grade it.
+
+**5. Check the wiring before spending anything:**
+
+```bash
+journey-evals agent validate --eval evals/support-agent.json   # contract only, no model call
+journey-evals agent chat --eval evals/support-agent.json       # talk to it, nothing is judged
+```
+
+### 10.2 Writing an agent evaluation
+
+```json
+{
+  "schema_version": 1,
+  "id": "support-agent",
+  "task": "Decide whether the order can be refunded and say so plainly.",
+  "runtime": { "framework": "langgraph", "entrypoint": "my_project.support_agent:graph" },
+  "input": { "messages": [{ "role": "user", "content": "Can order A-1002 be refunded?" }] },
+  "acceptance": {
+    "output_contains": ["VERDICT: REFUNDABLE"],
+    "tools_called": ["lookup_policy"],
+    "no_tool_errors": true
+  },
+  "judges": [
+    {
+      "id": "explains-the-decision",
+      "family": "communication_quality",
+      "enforcement": "blocking",
+      "severity": "medium",
+      "requirement": "The reply gives the reason for the decision, not only the verdict."
+    }
+  ],
+  "budgets": { "wall_ms": 120000, "steps": 20, "model_requests": 6, "usd": "0.20" },
+  "redact": ["A-\\d{4}"]
+}
+```
+
+| Field | What it declares |
+| --- | --- |
+| `task` | What the agent is being asked to accomplish, in plain language. |
+| `runtime.framework` | Currently `langgraph`. |
+| `runtime.entrypoint` | `module:attribute` for a compiled graph or a zero-argument factory. |
+| `input` | The object passed to `graph.stream`. |
+| `conversation` | Optional list of user turns; see 10.3. |
+| `acceptance` | Deterministic `output_equals`, `output_contains`, `tools_called`, `no_tool_errors`. |
+| `judges` | Semantic requirements. Omit for one default `task_outcome` judge; `[]` disables judging. |
+| `budgets` | `wall_ms`, `steps`, `model_requests`, `usd` — enforced across the whole run. |
+| `redact` | Patterns masked in every artifact, the live view, and the judge payload. |
+
+Write acceptance tokens that cannot satisfy each other. `REFUNDABLE` is a substring of
+`NOT REFUNDABLE`, so an evaluation checking the former would quietly accept a refusal — which is
+worse than no check, because it reports a pass. The demos use `VERDICT: REFUNDABLE` and
+`VERDICT: NOT_REFUNDABLE`.
+
+Then write the judge requirements as sentences a careful reviewer could apply to a transcript. A
+requirement that cannot be decided from the observable trace will return `UNKNOWN`, which is
+`INCONCLUSIVE` — never a quiet pass.
+
+The adapter consumes `stream(input, stream_mode="values")`, normalizes messages and tool activity,
+and writes the ordinary `report.json`, `report.html`, `junit.xml`, `events.jsonl`, and
+`agent-feedback.json` artifacts.
+
+Deterministic acceptance is still the authority for task completion. A failing advisory judge is a
+`WARN`; an unavailable required judge is `INCONCLUSIVE`; and a run without acceptance cannot
+produce `PASS`. Tool and message content is treated as untrusted evidence, not as judge
+instructions. Hidden model reasoning is never requested or retained.
+
+### 10.3 Exploring, watching, and the browser console
+
+
+`journey-evals agent chat --entrypoint module:attribute` opens a terminal conversation with an
+agent, printing each tool call and reply. It judges and records nothing; use it to learn how an
+agent behaves before writing criteria. `--eval spec.json` reuses an evaluation's entrypoint, and
+`--hide-tools` shows only the replies.
+
+`journey-evals agent run --watch` streams the trace as it is recorded rather than printing only a
+summary at the end. The viewer is driven by the journal *after* redaction, so watching a run can
+never surface a value the artifacts would have masked, and a viewer that fails is dropped rather
+than allowed to disturb the run. The graphical `journey-evals watch` console stays browser-only.
+
+`journey-evals agent console --eval spec.json` opens the same run in a browser: the conversation
+on the left as it happens, the declared judges on the right, and a phase indicator across the top.
+It is a viewer over a run, not a launcher for one — the run starts with the server. The page is
+served on loopback only, rejects requests not addressed to `127.0.0.1`, and places every value
+from the run with `textContent`, because agent replies and tool output are untrusted evidence and
+must never become markup in the page watching them.
+
+**When judging happens.** The conversation is judged once, after the last turn, in a single
+request — not turn by turn. The console shows this honestly as three phases (conversation →
+judging → verdict) rather than animating verdicts that do not exist yet. This is not merely an
+implementation convenience: a requirement like "the booking confirmation disclosed the fee" cannot
+be decided while the booking turn is still the newest thing in the trace, because a later
+disclosure is exactly what distinguishes a pass from a fail. Judging per turn would also multiply
+the cost by the number of turns.
+
+Each run records the judge call in `judge-exchange.json`: the endpoint, the request (the trace
+each judge saw, and the instruction and criteria it was given) and the raw response, including
+the probabilities behind each verdict. A failed call still records the attempted request with its
+error, so no verdict is left unexplained. The conversation itself is in `report.json` under
+`history` and `tool_trace`.
+
+All judges in a run are shown one shared copy of the trace under `state.cases.shared`, and each
+gets its own question. Sending a copy per judge bought no isolation — the cases were identical —
+and multiplied the payload by the number of judges, which is enough to push a long conversation
+past the provider's input limit and return every verdict as `UNKNOWN`. When the provider does
+reject a request, its own explanation is carried into the recorded error rather than discarded.
+
+`agent run --show-cost` prices the judge calls from their reported tokens at the same authorized
+rate the browser runner uses, compares the total against `budgets.usd`, and names the agent's own
+provider as excluded rather than valuing it at zero. The figures persist in `report.json` under
+`cost`.
+
+### 10.4 Blocking judges for qualities code cannot check
+Judges are advisory by default. Setting `"enforcement": "blocking"` lets a judge decide the run,
+which is how you evaluate dimensions with no deterministic oracle — tone, empathy, whether a
+refusal was handled gracefully. The boundary that keeps this from becoming a model certifying
+itself is narrow and enforced at load time:
+
+| Rule | Effect |
+| --- | --- |
+| `enforcement: blocking` on family `task_outcome` | contract error — outcome stays code's job |
+| `enforcement: blocking` with `required: false` | contract error |
+| `acceptance.basis: model_judgment` with no blocking judge | contract error — nothing would decide |
+| Deterministic acceptance violated | `FAIL` regardless of judge verdicts |
+| Required judge unavailable | `INCONCLUSIVE`, never a pass |
+
+Reports carry `evidence_basis` (`code`, `code_and_model_judgment`, `model_judgment`) and a matching
+line in `limits`, so a reader can always tell how much of a verdict was proved and how much was
+graded.
+
+### 10.5 A worked LangChain example
+
+`examples/langchain_demo_agent.py` builds a two-tool support agent with
+`langchain.agents.create_agent`, and `examples/agent-eval-refund.json` and
+`examples/agent-eval-final-sale.json` evaluate it against opposite expected outcomes:
+
+```bash
+pip install -e ".[langchain-demo]"
+journey-evals agent run --eval examples/agent-eval-refund.json --out artifacts/demo-eligible
+```
+
+The agent reads `TEXT_MODEL_BASE_URL`, `TEXT_MODEL`, and `TEXT_MODEL_API_KEY`; the judge reads
+`JEV_API_KEY`. They are deliberately separate, and the judge's key is removed from the environment
+while the graph runs.
+
+`examples/langchain_concierge_agent.py` goes further: two personas share the same tools, the same
+synthetic booking and the same task, one warm and one blunt. Their deterministic evidence is
+identical, so code cannot separate them; `agent-eval-concierge.json` passes and
+`agent-eval-concierge-blunt.json` fails on the `acknowledges-the-guest` judge alone.
+
+### 10.6 Multi-turn conversations
+
+A `conversation` is a list of user turns. Each is sent in order, with the agent's own replies
+carried forward as history, so the evaluation tests what the agent *remembers* as well as what it
+says. Budgets span the whole conversation rather than resetting each turn, so a long conversation
+cannot quietly buy itself more steps than the evaluation declared, and a budget stop is reported as
+`budget_exhausted` rather than as an agent failure.
+
+```json
+"conversation": [
+  "We need a dinner spot in Lisbon next Friday. My mother uses a wheelchair.",
+  "Book the best one for two people at 7pm.",
+  "What happens if we end up needing to cancel?"
+]
+```
+
+`report.json` gains a `turns` array pairing each user turn with the agent's reply, and judges are
+shown that conversation alongside the message and tool trace. Re-feeding history means the
+framework cannot trust per-turn message ids — LangChain mints fresh ones each turn — so messages
+are identified by their content. Two byte-identical messages collapse into one; per-turn fidelity
+is preserved in `turns`.
+
+`examples/agent-eval-travel-multiturn.json` drives a five-turn Lisbon dinner conversation against
+the deliberately flawed `examples/langchain_travel_agent.py`, with six blocking judges:
+
+```bash
+journey-evals agent run --eval examples/agent-eval-travel-multiturn.json \
+    --out artifacts/travel-multiturn --watch --showCost
+```
+
+It is a partial failure, which is the point — a useful evaluation discriminates rather than
+condemning. Four criteria pass (the agent honours the accessibility constraint stated in turn 1,
+invents no venues, answers each question, and stays courteous); two fail: it confirms the booking
+without disclosing the cancellation fee its own tool returned, and it replies in markdown despite a
+declared plain-prose requirement. The run exits `1`.
+
+---
+
+## 11. Integrating Journey Evals
+
+### 11.1 GitHub Actions
 
 ```yaml
 name: journeys
@@ -782,7 +1019,7 @@ The same job for a Node project, installed from npm:
 Cache the browser between runs with `actions/cache` on `~/.cache/journey-evals`; it is pinned to
 one build, so the key is stable.
 
-### 10.2 The coding-agent loop
+### 11.2 The coding-agent loop
 
 `agent-feedback.json` is built for an autonomous repair loop. It carries confirmed findings,
 advisory findings, unresolved coverage, and explicit instructions:
@@ -811,7 +1048,7 @@ journey-evals run --journey journeys/checkout.json --out artifacts/after   # unc
 Re-run the seeded-defect scenarios too. A passing re-run on its own does not prove a defect is gone
 unless the same scenario ran.
 
-### 10.3 Programmatic use
+### 11.3 Programmatic use
 
 The CLI is the supported integration surface. It isolates each run in its own worker process,
 keeps credentials out of the process tree that drives the browser, and enforces the wall-clock
@@ -880,7 +1117,7 @@ Three constraints are easy to trip over:
 
 Invalid journeys raise `ContractError` from `effective_spec`, before any browser is launched.
 
-### 10.4 The two packages
+### 11.4 The two packages
 
 An installed Journey Evals gives you two importable packages, and the split is deliberate:
 
@@ -894,7 +1131,7 @@ enforces that. The agent keeps its own `jev` demo command and its own environmen
 journey's browser behaviour can be traced back to the upstream revision that defines it rather than
 to a module this project renamed.
 
-### 10.5 React, Angular, Vue, Svelte, plain JavaScript — and anything else
+### 11.5 React, Angular, Vue, Svelte, plain JavaScript — and anything else
 
 Journey Evals never imports your application, never mounts a component, and has no plugin for any
 framework. It drives a URL in a real browser and reads the rendered page. That is why the
@@ -940,7 +1177,7 @@ Four things matter more than the framework:
 A single-page application that renders its confirmation without a navigation is the normal case,
 not an edge case — `examples/journeys/workspace-subscription.json` is exactly that.
 
-### 10.6 Prompts you can paste into a coding agent
+### 11.6 Prompts you can paste into a coding agent
 
 These are written to be pasted verbatim. They deliberately state what the agent may **not** do,
 because the cheapest way to make a journey pass is to weaken it.
@@ -1010,7 +1247,7 @@ Never do any of these, and say so out loud if you are tempted:
 
 ---
 
-## 11. Operating it
+## 12. Operating it
 
 **Cost.** Roughly **USD 0.002 per journey** on the bundled applications, at published provider
 rates, derived from reported token usage rather than an invoice. Set `budgets.usd` per journey and
@@ -1036,7 +1273,7 @@ only the green one destroys the signal you built the suite to get.
 
 ---
 
-## 12. Scope and limits
+## 13. Scope and limits
 
 Stated plainly, because they bound what a green report means:
 
@@ -1052,7 +1289,7 @@ Stated plainly, because they bound what a green report means:
 
 ---
 
-## 13. Troubleshooting
+## 14. Troubleshooting
 
 | Symptom | Cause and fix |
 | --- | --- |
@@ -1069,13 +1306,17 @@ Stated plainly, because they bound what a green report means:
 
 ---
 
-## 14. Reference
+## 15. Reference
 
 ### Commands
 
 | Command | Purpose |
 | --- | --- |
 | `journey-evals run` | Run one journey and write a report. |
+| `journey-evals agent validate` | Validate an agent evaluation without running it. |
+| `journey-evals agent run` | Run a LangGraph agent and evaluate its observable trace. |
+| `journey-evals agent chat` | Talk to an agent in the terminal. Judges and records nothing. |
+| `journey-evals agent console` | Watch an evaluation in a browser: conversation, then judging. |
 | `journey-evals validate` | Check a journey without running it. Free. |
 | `journey-evals serve` | Serve a bundled synthetic application, optionally with a seeded fault. |
 | `journey-evals show` | Print a summary of a previous run directory. |
@@ -1098,6 +1339,25 @@ Stated plainly, because they bound what a green report means:
 | `--warn-as-error` | Make advisory findings exit non-zero. |
 | `--headed` | Show the browser window. |
 | `--quiet` | Suppress the terminal summary. |
+
+### `agent` options
+
+| Command and option | Purpose |
+| --- | --- |
+| `agent run --eval PATH` | The agent evaluation specification to run. Required. |
+| `agent run --out DIR` | Artifact directory. Defaults to `artifacts/runs/<id>-<uuid>`. |
+| `agent run --watch` | Stream the trace to the terminal as it is recorded. |
+| `agent run --show-cost` | Print what the judge calls cost, against `budgets.usd`. `--showCost` also works. |
+| `agent run --warn-as-error` | Make advisory judge findings exit non-zero. |
+| `agent run --quiet` | Suppress the terminal summary. |
+| `agent validate --eval PATH` | Check the contract without running anything. No model call. |
+| `agent chat --entrypoint M:A` | Talk to an agent directly. Nothing is judged or recorded. |
+| `agent chat --eval PATH` | Use an evaluation's entrypoint instead. Exactly one of the two. |
+| `agent chat --hide-tools` | Show only replies, not tool calls. |
+| `agent console --eval PATH` | Watch the run in a browser: conversation, then judging. |
+| `agent console --out DIR` | Artifact directory for the watched run. |
+| `agent console --port N` | Port for the local viewer. `0`, the default, picks a free one. |
+| `agent console --no-open` | Do not open a browser automatically. |
 
 ### Viewports
 
@@ -1229,3 +1489,4 @@ journey meets a genuinely broken application. They are outcomes, not tool failur
 ---
 
 *Journey Evals is experimental software. It is designed so that when it is wrong, it says so.*
+

@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "id": "concierge-blunt-control",
+  "task": "Negative control: the same overbooking handled by an accurate but uncaring operator persona.",
+  "runtime": {
+    "framework": "langgraph",
+    "entrypoint": "examples.langchain_concierge_agent:blunt_graph"
+  },
+  "input": {
+    "messages": [
+      ["user", "I'm checking in tomorrow on booking BK-7741. Is everything set for the garden suite?"]
+    ]
+  },
+  "acceptance": {
+    "basis": "model_judgment",
+    "tools_called": ["lookup_booking", "room_availability"],
+    "no_tool_errors": true
+  },
+  "judges": [
+    {
+      "id": "acknowledges-the-guest",
+      "family": "communication_quality",
+      "enforcement": "blocking",
+      "severity": "high",
+      "requirement": "The reply acknowledges what losing the booked room means for this guest and takes ownership on behalf of the property before moving to logistics. A reply that is accurate but treats the guest as a ticket fails."
+    },
+    {
+      "id": "no-invented-remedies",
+      "family": "groundedness",
+      "enforcement": "blocking",
+      "severity": "high",
+      "requirement": "Every room, rate and remedy mentioned appears in the tool results. The reply must not invent refunds, upgrades, discounts, loyalty points or compensation that the tools never returned."
+    }
+  ]
+}

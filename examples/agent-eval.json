@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "id": "support-agent-refund",
+  "task": "Determine whether the order is eligible for a refund.",
+  "runtime": {
+    "framework": "langgraph",
+    "entrypoint": "examples.agent_graph:graph"
+  },
+  "input": {
+    "messages": [
+      {
+        "role": "user",
+        "content": "The order was placed 12 days ago. Can it be refunded?"
+      }
+    ]
+  },
+  "acceptance": {
+    "output_contains": ["eligible for a refund", "within 30 days"],
+    "tools_called": ["lookup_policy"],
+    "no_tool_errors": true
+  },
+  "judges": [],
+  "budgets": {
+    "wall_ms": 60000,
+    "steps": 20,
+    "model_requests": 4,
+    "usd": "0.10"
+  }
+}
