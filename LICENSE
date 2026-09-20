@@ -1,6 +1,14 @@
 MIT License
 
 Copyright (c) 2026 Browser Use
+Copyright (c) 2026 Pratyush Garg
+
+This project began as a fork of browser-use/jev-ultrafast, which is MIT
+licensed. The `jev_ultrafast` package is that upstream work, kept under its own
+name; the `journey_evals` package and everything built around it are this
+project's own contribution. Both are covered by the terms below, and the
+upstream copyright notice is retained as that licence requires. See NOTICE for
+the full provenance.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

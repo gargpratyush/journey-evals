@@ -4,6 +4,16 @@ version = "0.1.0"
 description = "Evidence-backed evaluations for browser journeys and AI agents."
 readme = "README.md"
 license = "MIT"
+license-files = ["LICENSE", "NOTICE"]
+authors = [{ name = "Pratyush Garg" }]
+keywords = ["testing", "e2e", "browser", "evaluation", "agents", "llm-as-a-judge", "qa"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Software Development :: Testing",
+  "Topic :: Software Development :: Quality Assurance",
+]
 requires-python = ">=3.12"
 dependencies = ["browser-harness==0.1.13", "httpx[http2]>=0.28,<1"]
 
@@ -15,6 +25,12 @@ langchain-demo = ["langchain>=1,<2", "langgraph>=1,<2", "langchain-openai>=1,<2"
 [project.scripts]
 jev = "jev_ultrafast.demo:main"
 journey-evals = "journey_evals.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/gargpratyush/jev-test"
+Documentation = "https://github.com/gargpratyush/jev-test/blob/main/docs/guide.md"
+Source = "https://github.com/gargpratyush/jev-test"
+Issues = "https://github.com/gargpratyush/jev-test/issues"
 
 [build-system]
 requires = ["hatchling"]
