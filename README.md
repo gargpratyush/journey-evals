@@ -35,8 +35,20 @@ rests on, so a model-graded pass is never mistaken for a proof.
 
 ## Install
 
-Neither the Python nor the npm distribution is published yet, so install from a
-checkout:
+```bash
+pip install journey-evals
+```
+
+Or with [pipx](https://pipx.pypa.io/) or [uv](https://docs.astral.sh/uv/), which keep
+it out of your project environment:
+
+```bash
+pipx install journey-evals
+uv tool install journey-evals
+```
+
+The npm distribution is not published yet. To work on Journey Evals itself, install
+from a checkout:
 
 ```bash
 git clone https://github.com/gargpratyush/journey-evals.git

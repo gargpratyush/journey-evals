@@ -105,7 +105,36 @@ stop. That is the failure mode this tool exists to prevent.
 | An OpenAI-compatible text model | Only needed for journeys that type free text into fields. |
 | Network egress | To your model provider. The application under test may be entirely local. |
 
+### Install from PyPI
+
+```bash
+pip install journey-evals
+journey-evals install-browser     # ~150 MB, downloaded explicitly, never behind your back
+journey-evals doctor              # interpreter, browser, credentials
+```
+
+Or with [pipx](https://pipx.pypa.io/) or [uv](https://docs.astral.sh/uv/), which keep the tool out
+of your project environment:
+
+```bash
+pipx install journey-evals
+uv tool install journey-evals
+```
+
+From source, to work on Journey Evals itself:
+
+```bash
+git clone https://github.com/gargpratyush/journey-evals.git
+cd journey-evals
+uv sync                  # or: python -m venv .venv && pip install -e .
+```
+
 ### Install from npm
+
+> **Not published yet.** The npm shim is built and tested in this repository, but it is not on the
+> registry, so the commands below do not work today. Use PyPI above. This section describes what
+> the shim does once it is published; `npx` is written throughout the rest of this guide and
+> `journey-evals` works identically.
 
 ```bash
 npm install --save-dev journey-evals
@@ -137,12 +166,7 @@ Uninstalling the npm package removes the private environment with it. The pinned
 your user cache (`%LOCALAPPDATA%\journey-evals`, `~/Library/Caches/journey-evals`,
 `~/.cache/journey-evals`) and is shared between projects.
 
-### Install from PyPI, or from source
-
-```bash
-pip install journey-evals          # the same CLI, without the Node shim
-journey-evals install-browser
-```
+### Install from source
 
 ```bash
 git clone https://github.com/gargpratyush/journey-evals.git
