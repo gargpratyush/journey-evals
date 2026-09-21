@@ -27,10 +27,10 @@ jev = "jev_ultrafast.demo:main"
 journey-evals = "journey_evals.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/gargpratyush/jev-test"
-Documentation = "https://github.com/gargpratyush/jev-test/blob/main/docs/guide.md"
-Source = "https://github.com/gargpratyush/jev-test"
-Issues = "https://github.com/gargpratyush/jev-test/issues"
+Homepage = "https://github.com/gargpratyush/journey-evals"
+Documentation = "https://github.com/gargpratyush/journey-evals/blob/main/docs/guide.md"
+Source = "https://github.com/gargpratyush/journey-evals"
+Issues = "https://github.com/gargpratyush/journey-evals/issues"
 
 [build-system]
 requires = ["hatchling"]
@@ -46,6 +46,24 @@ packages = ["journey_evals", "jev_ultrafast"]
 # to drive. In a checkout the source tree is still the one that runs; see journey_evals/paths.py.
 [tool.hatch.build.targets.wheel.force-include]
 "examples" = "journey_evals/_examples"
+
+# A source distribution should be enough to build, test and read the project. It is not an archive
+# of how the project was developed: `artifacts/` holds this campaign's own run receipts, `plans/`
+# holds its planning, and the documentation media is large and already on the repository page.
+[tool.hatch.build.targets.sdist]
+exclude = [
+  "artifacts",
+  "artifacts/**",
+  "/artifacts/feasibility",
+  "plans",
+  "npm",
+  "docs/demo.gif",
+  "docs/demo.mp4",
+  "docs/inspector.png",
+  "docs/flights-result.png",
+  "docs/media",
+  "docs/banner.svg",
+]
 
 [dependency-groups]
 dev = ["pytest>=8.4,<9", "ruff>=0.14,<1", "pillow>=11,<13"]

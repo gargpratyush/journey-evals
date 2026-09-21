@@ -13,10 +13,10 @@
   ],
   "license": "MIT",
   "author": "Pratyush Garg",
-  "homepage": "https://github.com/gargpratyush/jev-test#readme",
+  "homepage": "https://github.com/gargpratyush/journey-evals#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/gargpratyush/jev-test.git"
+    "url": "https://github.com/gargpratyush/journey-evals.git"
   },
   "bin": {
     "journey-evals": "bin/journey-evals.js"

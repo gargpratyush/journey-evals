@@ -39,8 +39,8 @@ Neither the Python nor the npm distribution is published yet, so install from a
 checkout:
 
 ```bash
-git clone https://github.com/gargpratyush/jev-test.git
-cd jev-test
+git clone https://github.com/gargpratyush/journey-evals.git
+cd journey-evals
 python -m venv .venv
 .venv/bin/pip install -e .          # Windows: .\.venv\Scripts\pip3.exe install -e .
 ```

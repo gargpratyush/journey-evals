@@ -145,8 +145,8 @@ journey-evals install-browser
 ```
 
 ```bash
-git clone https://github.com/gargpratyush/jev-test.git
-cd jev-test
+git clone https://github.com/gargpratyush/journey-evals.git
+cd journey-evals
 uv sync                  # or: python -m venv .venv && pip install -e .
 ```
 

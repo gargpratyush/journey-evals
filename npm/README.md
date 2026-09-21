@@ -51,6 +51,6 @@ Inconclusive is deliberately not a pass.
 ## Documentation
 
 Full guide, journey format, CI recipes and framework integration:
-<https://github.com/gargpratyush/jev-test/blob/feasibility/docs/guide.md>
+<https://github.com/gargpratyush/journey-evals/blob/main/docs/guide.md>
 
 MIT licensed.
