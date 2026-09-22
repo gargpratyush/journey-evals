@@ -4,6 +4,8 @@
 
 A page that says "Success" is never accepted as proof that anything succeeded.
 
+https://github.com/user-attachments/assets/594e52fb-de06-4074-98ed-3414d8b89002
+
 Journey Evals takes a *journey*: a starting URL, a plain-language task, the checks
 you care about, and — separately — a contract that proves the work really happened.
 It drives an owned browser through the task, then writes a versioned report backed
