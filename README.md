@@ -427,6 +427,10 @@ the unchanged oracle actually ran. There is no `--fix` command.
 
 ## Documentation
 
+- **[docs/how-it-works.md](docs/how-it-works.md)** — the plain-language explainer: how
+  the browser agent drives a page (including how it types when the decision model can
+  only pick from a menu), what is built on top of it, what stacks it works with, and
+  where it could go next.
 - **[docs/guide.md](docs/guide.md)** — the developer guide: writing journeys for your
   own application, connecting a LangGraph agent, reading a report, CI, full command
   reference.
